@@ -4,6 +4,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 
+const dotenv = require('dotenv');
+const webpack = require('webpack');
+dotenv.config();
+
 const port = process.env.PORT || 3000;
 
 module.exports = {
@@ -13,9 +17,12 @@ module.exports = {
     // 개발환경
     mode: 'development',
 
-    devtool : 'eval',
+    devtool : 'inline-source-map',
 
     resolve : {
+        alias: {
+            "@": path.resolve(__dirname, "src/"),
+        },
         extensions : ['.js', '.jsx']
     },
 
@@ -37,6 +44,9 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         presets: ['@babel/preset-env', '@babel/preset-react'],
+                        plugins: [
+                            "@babel/proposal-class-properties",
+                        ]
                     },
                 },
             },
@@ -59,6 +69,9 @@ module.exports = {
         new CleanWebpackPlugin(), // 웹팩 실행시마다 dist 폴더 정리
         new HtmlWebpackPlugin({
             template: 'public/index.html',
+        }),
+        new webpack.DefinePlugin({
+            'process.env': JSON.stringify(process.env),
         }),
     ],
 
