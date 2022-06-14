@@ -2,6 +2,8 @@ const path = require("path");
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const {CleanWebpackPlugin} = require('clean-webpack-plugin')
+
 const port = process.env.PORT || 3000;
 
 module.exports = {
@@ -54,6 +56,7 @@ module.exports = {
     },
 
     plugins: [
+        new CleanWebpackPlugin(), // 웹팩 실행시마다 dist 폴더 정리
         new HtmlWebpackPlugin({
             template: 'public/index.html',
         }),
