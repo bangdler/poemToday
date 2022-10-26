@@ -45,7 +45,7 @@ module.exports = {
             position: 'before',
           },
           {
-            pattern: '@/*',
+            pattern: '@/**',
             group: 'external',
             position: 'after',
           },
@@ -57,6 +57,7 @@ module.exports = {
         'newlines-between': 'always',
       },
     ],
+    'react/prop-types': 'off',
   },
   ignorePatterns: ['temp.js', 'node_modules/'],
   settings: {

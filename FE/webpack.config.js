@@ -1,11 +1,10 @@
 const path = require('path');
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-
 const dotenv = require('dotenv');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
+
 dotenv.config();
 
 const port = process.env.PORT || 3000;
@@ -26,7 +25,7 @@ module.exports = {
   },
 
   // 애플리케이션 시작 경로
-  entry: './src/index.jsx',
+  entry: path.resolve(__dirname, 'src/index.jsx'),
 
   // 번들된 파일 경로
   output: {
