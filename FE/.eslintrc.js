@@ -33,6 +33,35 @@ module.exports = {
     // prettier 규칙을 어기면 error 발생
     'prettier/prettier': ['error'],
     'import/no-unresolved': ['off', { caseSensitive: false }],
+    'no-console': 'error',
+    'import/order': [
+      'error',
+      {
+        groups: ['builtin', 'external', ['parent', 'sibling'], 'index'],
+        pathGroups: [
+          {
+            pattern: 'react',
+            group: 'builtin',
+            position: 'before',
+          },
+          {
+            pattern: '@/*',
+            group: 'external',
+            position: 'after',
+          },
+        ],
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
+        'newlines-between': 'always',
+      },
+    ],
   },
   ignorePatterns: ['temp.js', 'node_modules/'],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
 };

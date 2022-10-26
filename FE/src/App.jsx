@@ -1,9 +1,13 @@
 import React from 'react';
 
+import Router from '@/Router';
+
 function App() {
   return (
     <>
-      <div className="app">React App</div>
+      <div className="app">
+        <Router />
+      </div>
     </>
   );
 }
