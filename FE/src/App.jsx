@@ -8,9 +8,6 @@ function App() {
   return (
     <>
       <div className="app">
-        <div>
-          <h2>app</h2>
-        </div>
         <ThemeProvider>
           <GlobalStyle />
           <Router />
