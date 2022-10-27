@@ -59,6 +59,10 @@ module.exports = {
         test: /\.txt$/,
         use: 'raw-loader',
       },
+      {
+        test: /\.svg$/i,
+        use: ['@svgr/webpack', 'url-loader'],
+      },
     ],
   },
 
