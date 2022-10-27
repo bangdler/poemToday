@@ -6,7 +6,8 @@ import { theme } from '@/style/theme.js';
 const ThemeContext = createContext({});
 
 export function ThemeProvider({ children }) {
-  const [themeMode, setThemeMode] = useState('light');
+  const localTheme = localStorage.getItem('theme') || 'light';
+  const [themeMode, setThemeMode] = useState(localTheme);
   const themeObject = themeMode === 'light' ? theme.lightTheme : theme.darkTheme;
   return (
     <ThemeContext.Provider value={{ themeMode, setThemeMode }}>
@@ -21,8 +22,10 @@ export function useThemeMode() {
   const toggleThemeMode = () => {
     if (themeMode === 'light') {
       setThemeMode('dark');
+      localStorage.setItem('theme', 'dark');
     } else {
       setThemeMode('light');
+      localStorage.setItem('theme', 'light');
     }
   };
 
