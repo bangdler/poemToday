@@ -13,6 +13,8 @@ export const GlobalStyle = createGlobalStyle`
 		height: 100vh;
 		background: ${({ theme }) => theme.mode.bgColor};
 		color: ${({ theme }) => theme.mode.textColor};
+		transition-property: background-color, color;
+		transition-duration: 0.5s;
 	}
 	
 	.app {

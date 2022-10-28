@@ -18,8 +18,10 @@ export default function GNB() {
 }
 
 const S_Nav = styled.nav`
+  height: 100%;
   font-size: 2rem;
   flex-grow: 1;
+  ${({ theme }) => theme.mixin.flexBox({})};
   > ul {
     ${({ theme }) => theme.mixin.flexBox({})};
     :hover li:not(:hover) {
