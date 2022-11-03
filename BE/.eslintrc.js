@@ -33,7 +33,7 @@ module.exports = {
     // prettier 규칙을 어기면 error 발생
     'prettier/prettier': ['error'],
     'import/no-unresolved': ['off', { caseSensitive: false }],
-    'no-console': 'error',
+    'no-console': 'off',
     'import/order': [
       'error',
       {
