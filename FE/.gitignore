@@ -3,7 +3,7 @@
 
 # dependencies
 /node_modules
-
+/server/db.json
 # production
 /build
 
