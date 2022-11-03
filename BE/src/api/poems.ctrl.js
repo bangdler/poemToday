@@ -9,7 +9,7 @@ const poems = [
 ];
 
 // post - peom 작성
-exports.write = ctx => {
+export const write = ctx => {
   const { title, body } = ctx.request.body;
   const poem = { id: poemId++, title, body };
   poems.push(poem);
@@ -17,12 +17,12 @@ exports.write = ctx => {
 };
 
 // get - poem 목록 조회
-exports.list = ctx => {
+export const list = ctx => {
   ctx.body = poems;
 };
 
 // get - 특정 poem 조회
-exports.read = ctx => {
+export const read = ctx => {
   const { id } = ctx.params;
   const poem = poems.find(it => it.id === +id);
   // 없는 경우
@@ -37,7 +37,7 @@ exports.read = ctx => {
 };
 
 // delete - 특정 poem 제거
-exports.remove = ctx => {
+export const remove = ctx => {
   const { id } = ctx.params;
   const index = poems.findIndex(it => it.id === +id);
   if (index === -1) {
@@ -52,7 +52,7 @@ exports.remove = ctx => {
 };
 
 // put - poem 수정 (통으로 data 교체)
-exports.replace = ctx => {
+export const replace = ctx => {
   const { id } = ctx.params;
   const index = poems.findIndex(it => it.id === +id);
   if (index === -1) {
@@ -70,7 +70,7 @@ exports.replace = ctx => {
 };
 
 // patch - poem 수정 (주어진 필드)
-exports.update = ctx => {
+export const update = ctx => {
   const { id } = ctx.params;
   const index = poems.findIndex(it => it.id === +id);
   if (index === -1) {

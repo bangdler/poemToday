@@ -1,9 +1,9 @@
-const Router = require('koa-router');
+import Router from 'koa-router';
 
-const poems = require('./poems');
+import poems from './poems.js';
 
 const api = new Router();
 
 api.use('/poems', poems.routes());
 
-module.exports = api;
+export default api;

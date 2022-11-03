@@ -1,6 +1,6 @@
-const Router = require('koa-router');
+import Router from 'koa-router';
 
-const poemsCtrl = require('./poems.ctrl');
+import * as poemsCtrl from './poems.ctrl.js';
 
 const poems = new Router();
 
@@ -11,4 +11,4 @@ poems.delete('/:id', poemsCtrl.remove);
 poems.put('/:id', poemsCtrl.replace);
 poems.patch('/:id', poemsCtrl.update);
 
-module.exports = poems;
+export default poems;
