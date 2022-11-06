@@ -1,88 +1,70 @@
-let poemId = 1;
-
-const poems = [
-  {
-    id: poemId,
-    title: '제목',
-    body: '내용',
-  },
-];
+import Poem from '../models/poem.js';
 
 // post - peom 작성
-export const write = ctx => {
-  const { title, body } = ctx.request.body;
-  const poem = { id: poemId++, title, body };
-  poems.push(poem);
-  ctx.body = poem;
+export const write = async ctx => {
+  const { title, body, author, category } = ctx.request.body;
+  const poem = new Poem({
+    title,
+    body,
+    author,
+    category,
+  });
+  try {
+    await poem.save();
+    ctx.body = poem;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };
 
 // get - poem 목록 조회
-export const list = ctx => {
-  ctx.body = poems;
+export const list = async ctx => {
+  try {
+    const poems = await Poem.find().exec();
+    ctx.body = poems;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };
 
 // get - 특정 poem 조회
-export const read = ctx => {
+export const read = async ctx => {
   const { id } = ctx.params;
-  const poem = poems.find(it => it.id === +id);
-  // 없는 경우
-  if (!poem) {
-    ctx.status = 404;
-    ctx.body = {
-      message: 'poem 이 존재하지 않습니다.',
-    };
-    return;
+  try {
+    const poem = await Poem.findById(id).exec();
+    // 없는 경우
+    if (!poem) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.body = poem;
+  } catch (e) {
+    ctx.throw(500, e);
   }
-  ctx.body = poem;
 };
 
 // delete - 특정 poem 제거
-export const remove = ctx => {
+export const remove = async ctx => {
   const { id } = ctx.params;
-  const index = poems.findIndex(it => it.id === +id);
-  if (index === -1) {
-    ctx.status = 404;
-    ctx.body = {
-      message: 'poem 이 존재하지 않습니다.',
-    };
-    return;
+  try {
+    await Poem.findByIdAndRemove(id).exec();
+    ctx.status = 204; // No Content (성공은 했으나 응답 데이터 없음)
+  } catch (e) {
+    ctx.throw(500, e);
   }
-  poems.splice(index, 1);
-  ctx.status = 204; // No Content
-};
-
-// put - poem 수정 (통으로 data 교체)
-export const replace = ctx => {
-  const { id } = ctx.params;
-  const index = poems.findIndex(it => it.id === +id);
-  if (index === -1) {
-    ctx.status = 404;
-    ctx.body = {
-      message: 'poem 이 존재하지 않습니다.',
-    };
-    return;
-  }
-  poems[index] = {
-    id,
-    ...ctx.request.body,
-  };
-  ctx.body = poems[index];
 };
 
 // patch - poem 수정 (주어진 필드)
-export const update = ctx => {
+export const update = async ctx => {
   const { id } = ctx.params;
-  const index = poems.findIndex(it => it.id === +id);
-  if (index === -1) {
-    ctx.status = 404;
-    ctx.body = {
-      message: 'poem 이 존재하지 않습니다.',
-    };
-    return;
+  try {
+    const poem = await Poem.findByIdAndUpdate(id, ctx.request.body, { new: true }).exec();
+    if (!poem) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.body = poem;
+  } catch (e) {
+    ctx.throw(500, e);
   }
-  poems[index] = {
-    ...poems[index],
-    ...ctx.request.body,
-  };
-  ctx.body = poems[index];
 };
