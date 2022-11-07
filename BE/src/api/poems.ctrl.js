@@ -1,4 +1,18 @@
+import mongoose from 'mongoose';
+
 import Poem from '../models/poem.js';
+
+const { ObjectId } = mongoose.Types;
+
+// 클라이언트 요청 id 체크 후 잘못된 경우 400 error
+export const checkObjectId = (ctx, next) => {
+  const { id } = ctx.params;
+  if (!ObjectId.isValid(id)) {
+    ctx.status = 400;
+    return;
+  }
+  return next();
+};
 
 // post - peom 작성
 export const write = async ctx => {
