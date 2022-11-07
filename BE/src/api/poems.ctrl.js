@@ -1,10 +1,11 @@
+import Joi from 'joi';
 import mongoose from 'mongoose';
 
 import Poem from '../models/poem.js';
 
 const { ObjectId } = mongoose.Types;
 
-// 클라이언트 요청 id 체크 후 잘못된 경우 400 error
+// 클라이언트 요청 url id 체크 후 잘못된 경우 400 error
 export const checkObjectId = (ctx, next) => {
   const { id } = ctx.params;
   if (!ObjectId.isValid(id)) {
@@ -16,6 +17,22 @@ export const checkObjectId = (ctx, next) => {
 
 // post - peom 작성
 export const write = async ctx => {
+  // req.body 검증
+  const schema = Joi.object().keys({
+    title: Joi.string().required(),
+    body: Joi.string().required(),
+    author: Joi.string().required(),
+    category: Joi.array().items(Joi.string()).required(),
+  });
+
+  const result = schema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
+  // 요청이 제대로 왔을 경우 데이타베이스 등록
   const { title, body, author, category } = ctx.request.body;
   const poem = new Poem({
     title,
@@ -70,6 +87,22 @@ export const remove = async ctx => {
 
 // patch - poem 수정 (주어진 필드)
 export const update = async ctx => {
+  // req.body 검증
+  const schema = Joi.object().keys({
+    title: Joi.string(),
+    body: Joi.string(),
+    author: Joi.string(),
+    category: Joi.array().items(Joi.string()),
+  });
+
+  const result = schema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
+  // 요청이 제대로 왔을 경우 데이터 수정
   const { id } = ctx.params;
   try {
     const poem = await Poem.findByIdAndUpdate(id, ctx.request.body, { new: true }).exec();
