@@ -12,6 +12,7 @@
   "author": "bangdler",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "dotenv": "^16.0.3",
     "joi": "^17.7.0",
     "koa": "^2.13.4",
