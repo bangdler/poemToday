@@ -1,6 +1,7 @@
 import Joi from 'joi';
 
 import User from '../models/user.js';
+import { ACCESS_TOKEN, JWT_EXPIRATION_TYPE_COOKIE } from '../utils/constants.js';
 
 // 회원가입
 export const register = async ctx => {
@@ -33,6 +34,12 @@ export const register = async ctx => {
 
     // 클라이언트에 보낼 응답 데이터에서 hashedPassword 제거
     ctx.body = user.serialize();
+
+    const token = user.generateToken();
+    ctx.cookies.set(ACCESS_TOKEN, token, {
+      maxAge: JWT_EXPIRATION_TYPE_COOKIE,
+      httpOnly: true,
+    });
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -67,11 +74,30 @@ export const login = async ctx => {
     }
 
     ctx.body = user.serialize();
+
+    const token = user.generateToken();
+    ctx.cookies.set(ACCESS_TOKEN, token, {
+      maxAge: JWT_EXPIRATION_TYPE_COOKIE,
+      httpOnly: true,
+    });
   } catch (e) {
     ctx.throw(500, e);
   }
 };
 
-export const check = async ctx => {};
+// 로그인 상태 확인
+export const check = async ctx => {
+  const { user } = ctx.state;
+  if (!user) {
+    // 로그인 상태 아님
+    ctx.status = 401;
+    return;
+  }
 
-export const logout = async ctx => {};
+  ctx.body = user;
+};
+
+export const logout = async ctx => {
+  ctx.cookies.set(ACCESS_TOKEN);
+  ctx.status = 204;
+};

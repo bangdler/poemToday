@@ -5,6 +5,7 @@ import Router from 'koa-router';
 import mongoose from 'mongoose';
 
 import api from './api/index.js';
+import jwtMiddleware from './utils/jwtMiddleware.js';
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ mongoose
 router.use('/api', api.routes());
 
 app.use(bodyParser());
+// 토큰 검증 미들웨어
+app.use(jwtMiddleware);
 
 app.use(router.routes()).use(router.allowedMethods());
 
