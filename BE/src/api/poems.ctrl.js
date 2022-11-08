@@ -5,14 +5,33 @@ import Poem from '../models/poem.js';
 
 const { ObjectId } = mongoose.Types;
 
-// 클라이언트 요청 url id 체크 후 잘못된 경우 400 error
-export const checkObjectId = (ctx, next) => {
+export const checkOwnPoem = (ctx, next) => {
+  const { user, poem } = ctx.state;
+  if (poem.user._id.toString() !== user._id) {
+    ctx.status = 403; // forbidden;
+    return;
+  }
+  return next();
+};
+
+export const getPoemById = async (ctx, next) => {
   const { id } = ctx.params;
+  // 클라이언트 요청 url id 체크 후 잘못된 경우 400 error
   if (!ObjectId.isValid(id)) {
     ctx.status = 400;
     return;
   }
-  return next();
+  try {
+    const poem = await Poem.findById(id);
+    if (!poem) {
+      ctx.status = 404;
+      return;
+    }
+    ctx.state.poem = poem;
+    return next();
+  } catch (e) {
+    ctx.throw(500, e);
+  }
 };
 
 // post - peom 작성
@@ -39,6 +58,7 @@ export const write = async ctx => {
     body,
     author,
     category,
+    user: ctx.state.user,
   });
   try {
     await poem.save();
@@ -78,18 +98,7 @@ export const list = async ctx => {
 
 // get - 특정 poem 조회
 export const read = async ctx => {
-  const { id } = ctx.params;
-  try {
-    const poem = await Poem.findById(id).exec();
-    // 없는 경우
-    if (!poem) {
-      ctx.status = 404;
-      return;
-    }
-    ctx.body = poem;
-  } catch (e) {
-    ctx.throw(500, e);
-  }
+  ctx.body = ctx.state.poem;
 };
 
 // delete - 특정 poem 제거
@@ -132,4 +141,14 @@ export const update = async ctx => {
   } catch (e) {
     ctx.throw(500, e);
   }
+};
+
+// getPoemById 사용으로 인한 미사용 함수
+export const checkObjectId = (ctx, next) => {
+  const { id } = ctx.params;
+  if (!ObjectId.isValid(id)) {
+    ctx.status = 400;
+    return;
+  }
+  return next();
 };
