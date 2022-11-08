@@ -70,21 +70,28 @@ export const write = async ctx => {
 
 // get - poem 목록 조회
 export const list = async ctx => {
-  const page = parseInt(ctx.query.page || '1', 10);
+  const { username, category, page } = ctx.query;
 
-  if (page < 1) {
+  const curPage = parseInt(page || '1', 10);
+
+  if (curPage < 1) {
     ctx.status = 400;
     return;
   }
 
+  const query = {
+    ...(username ? { 'user.username': username } : {}),
+    ...(category ? { category: category } : {}),
+  };
+
   try {
-    const poems = await Poem.find()
+    const poems = await Poem.find(query)
       .sort({ _id: -1 })
       .limit(10)
-      .skip((page - 1) * 10)
+      .skip((curPage - 1) * 10)
       .exec();
     // 마지막 페이지 알려주기
-    const poemCount = await Poem.countDocuments().exec();
+    const poemCount = await Poem.countDocuments(query).exec();
     ctx.set('Last-Page', Math.ceil(poemCount / 10));
     // body 200자 이상 제한하기
     // 인스턴스 형태에서 json 으로 변환하여 사용해야함. 이 방법 또는 .skip() 뒤에 .lean() 추가하여 사용
