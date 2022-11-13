@@ -4,12 +4,12 @@ import styled from 'styled-components';
 
 import BlindText from '@/components/common/BlindText';
 
-export default function Logo({ name, link }) {
+export default function Logo({ name, link, blindText }) {
   return (
     <S_Logo>
       <Link to={link}>
         {name}
-        <BlindText text={'홈으로 이동합니다.'} />
+        <BlindText text={blindText} />
       </Link>
     </S_Logo>
   );

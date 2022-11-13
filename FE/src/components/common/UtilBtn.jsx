@@ -16,7 +16,6 @@ const S_Button = styled.button`
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  margin: 0 5px;
   background-color: ${({ theme }) => theme.mode.bgColor};
   box-shadow: 0 5px 10px rgba(40, 40, 40, 1);
 
