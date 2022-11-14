@@ -1,3 +1,5 @@
+import { css } from 'styled-components';
+
 export const lightTheme = {
   bgColor: '#f8f7f4',
   textColor: '#31302e',
@@ -16,7 +18,7 @@ const device = {
 };
 
 const mixin = {
-  flexBox: ({ direction = 'row', align = 'center', justify = 'center' }) => `
+  flexBox: ({ direction = 'row', align = 'center', justify = 'center' }) => css`
     display: flex;
     flex-direction: ${direction};
     align-items: ${align};
