@@ -3,11 +3,11 @@ import styled from 'styled-components';
 
 import palette from '@/style/palette';
 
-export default function InputBox({ title, onChange, value, type = 'text' }) {
+export default function InputBox({ title, onChange, name, value, type = 'text', autoComplete = 'off' }) {
   return (
     <S_Wrapper>
       <S_Title>{title}</S_Title>
-      <S_Input type={type} onChange={onChange} value={value} autoComplete="new-password" />
+      <S_Input type={type} onChange={onChange} name={name} value={value} autoComplete={autoComplete} />
     </S_Wrapper>
   );
 }

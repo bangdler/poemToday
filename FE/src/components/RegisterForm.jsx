@@ -1,37 +1,55 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import ErrorBox from '@/components/common/ErrorBox';
 import InputBox from '@/components/common/InputBox';
 import { S_Button } from '@/components/common/styleButtons';
 import StyleLink from '@/components/common/StyleLink';
+import { AuthContext, AuthDispatchContext } from '@/context/AuthProvider';
 import palette from '@/style/palette';
 
 export default function RegisterForm() {
-  const [loginState, setLoginState] = useState({ id: '', password: '', confirm: '' });
+  const authForm = useContext(AuthContext);
+  const { initializeForm, changeForm } = useContext(AuthDispatchContext);
   const [verifications, setVerifications] = useState({ state: true, type: 200 });
 
-  const changeId = ({ target }) => {
-    setLoginState({ ...loginState, id: target.value });
-  };
+  useEffect(() => {
+    initializeForm({ field: 'register' });
+  }, []);
 
-  const changePassword = ({ target }) => {
-    setLoginState({ ...loginState, password: target.value });
-  };
-
-  const changeConfirm = ({ target }) => {
-    setLoginState({ ...loginState, confirm: target.value });
+  const onChange = ({ target }) => {
+    changeForm({ field: 'register', key: target.name, value: target.value });
   };
 
   const closeErrorBox = () => {
-    setVerifications(true);
+    setVerifications({ state: true, type: 200 });
   };
 
   return (
     <S_Wrapper>
-      <InputBox title={'아이디'} value={loginState.id} onChange={changeId} />
-      <InputBox title={'비밀번호'} value={loginState.password} type={'password'} onChange={changePassword} />
-      <InputBox title={'비밀번호 확인'} value={loginState.confirm} type={'password'} onChange={changeConfirm} />
+      <InputBox
+        title={'아이디'}
+        name={'username'}
+        value={authForm.register.username}
+        onChange={onChange}
+        autoComplete={'username'}
+      />
+      <InputBox
+        title={'비밀번호'}
+        name={'password'}
+        value={authForm.register.password}
+        type={'password'}
+        onChange={onChange}
+        autoComplete={'new-password'}
+      />
+      <InputBox
+        title={'비밀번호 확인'}
+        name={'passwordConfirm'}
+        value={authForm.register.passwordConfirm}
+        type={'password'}
+        onChange={onChange}
+        autoComplete={'new-password'}
+      />
       {!verifications.state && <ErrorBox errorNote={''} onClick={closeErrorBox} />}
       <S_CyanButton size={'fullWidth'}>회원가입</S_CyanButton>
       <S_Container>

@@ -1,22 +1,24 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import ErrorBox from '@/components/common/ErrorBox';
 import InputBox from '@/components/common/InputBox';
 import { S_Button } from '@/components/common/styleButtons';
 import StyleLink from '@/components/common/StyleLink';
+import { AuthContext, AuthDispatchContext } from '@/context/AuthProvider';
 import palette from '@/style/palette';
 
 export default function LoginForm() {
-  const [loginState, setLoginState] = useState({ id: '', password: '' });
+  const authForm = useContext(AuthContext);
+  const { initializeForm, changeForm } = useContext(AuthDispatchContext);
   const [verifications, setVerifications] = useState({ state: true, type: 200 });
 
-  const changeId = ({ target }) => {
-    setLoginState({ ...loginState, id: target.value });
-  };
+  useEffect(() => {
+    initializeForm({ field: 'login' });
+  }, []);
 
-  const changePassword = ({ target }) => {
-    setLoginState({ ...loginState, password: target.value });
+  const onChange = ({ target }) => {
+    changeForm({ field: 'login', key: target.name, value: target.value });
   };
 
   const closeErrorBox = () => {
@@ -33,8 +35,21 @@ export default function LoginForm() {
 
   return (
     <S_Wrapper>
-      <InputBox title={'아이디'} value={loginState.id} onChange={changeId} />
-      <InputBox title={'비밀번호'} value={loginState.password} type={'password'} onChange={changePassword} />
+      <InputBox
+        title={'아이디'}
+        name={'username'}
+        value={authForm.login.username}
+        onChange={onChange}
+        autoComplete={'username'}
+      />
+      <InputBox
+        title={'비밀번호'}
+        name={'password'}
+        value={authForm.login.password}
+        type={'password'}
+        onChange={onChange}
+        autoComplete={'new-password'}
+      />
       {!verifications.state && <ErrorBox errorNote={errorNotes[verifications.type]} onClick={closeErrorBox} />}
       <S_CyanButton size={'fullWidth'}>로그인</S_CyanButton>
       <S_Container>
