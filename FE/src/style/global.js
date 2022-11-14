@@ -36,12 +36,16 @@ export const GlobalStyle = createGlobalStyle`
 		border: none;
 		outline: none;
 		background-color: transparent;
+		font-family: 'Gamja Flower';
+		box-sizing: border-box;
 	}
 
 	button {
 		border: none;
 		cursor: pointer;
 		background: none;
+		font-family: 'Gamja Flower';
+		padding: 0;
 	}
 	
 	a {

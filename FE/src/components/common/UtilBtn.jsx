@@ -2,28 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 
 import BlindText from '@/components/common/BlindText';
+import { S_CircleBtn } from '@/components/common/styleButtons';
 
 export default function UtilBtn({ children, blindText, onClick }) {
   return (
-    <S_Button onClick={onClick}>
+    <S_CircleBtn onClick={onClick}>
       <BlindText text={blindText} />
-      {children}
-    </S_Button>
+      <S_SvgContainer>{children}</S_SvgContainer>
+    </S_CircleBtn>
   );
 }
 
-const S_Button = styled.button`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: ${({ theme }) => theme.mode.bgColor};
-  box-shadow: 0 5px 10px rgba(40, 40, 40, 1);
-
+const S_SvgContainer = styled.div`
   > svg {
     fill: ${({ theme }) => theme.mode.textColor};
-  }
-
-  :hover {
-    background-color: rgba(0, 0, 0, 0.2);
   }
 `;
