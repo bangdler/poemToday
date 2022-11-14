@@ -48,7 +48,6 @@ const S_Header = styled.header`
   top: 0;
   left: 0;
   height: 72px;
-  font-family: 'Gamja Flower';
   border-bottom: ${({ position }) => (position === 'up' ? `1px solid #eee` : ``)};
   transform: ${({ position }) => (position === 'down' ? `translateY(-72px)` : `translateY(0)`)};
   transition: transform 0.5s ease-out;

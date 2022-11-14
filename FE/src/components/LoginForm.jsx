@@ -20,7 +20,7 @@ export default function LoginForm() {
   };
 
   const closeErrorBox = () => {
-    setVerifications(true);
+    setVerifications({ state: true, type: 200 });
   };
 
   // TODO: 서버 error 종류 400(아이디, 비번 형식 오류), 401(없는 아이디, 잘못된 비번), 409(회원가입시 아이디중복),

@@ -17,6 +17,7 @@ export const GlobalStyle = createGlobalStyle`
 		color: ${({ theme }) => theme.mode.textColor};
 		transition-property: background-color, color;
 		transition-duration: 0.5s;
+		font-family: 'Gamja Flower';
 	}
 	
 	.app {
@@ -36,7 +37,6 @@ export const GlobalStyle = createGlobalStyle`
 		border: none;
 		outline: none;
 		background-color: transparent;
-		font-family: 'Gamja Flower';
 		box-sizing: border-box;
 	}
 

@@ -14,6 +14,8 @@ export default function UtilBtn({ children, blindText, onClick }) {
 }
 
 const S_SvgContainer = styled.div`
+  ${({ theme }) => theme.mixin.flexBox({})}
+
   > svg {
     fill: ${({ theme }) => theme.mode.textColor};
   }

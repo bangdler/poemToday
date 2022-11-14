@@ -7,12 +7,12 @@ export default React.memo(function ErrorBox({ errorNote, onClick }) {
   const [timer, setTimer] = useState(6);
 
   useEffect(() => {
-    setTimeout(() => onClick(), timer * 1000);
+    setTimeout(() => onClick(), (timer + 1) * 1000);
   }, []);
 
   useEffect(() => {
     if (timer < 0) return;
-    setInterval(() => setTimer(timer - 1), 1000);
+    setInterval(() => setTimer(timer - 1), 1100);
   }, [timer]);
 
   return (
@@ -39,8 +39,8 @@ const S_Wrapper = styled.div`
   top: 1rem;
   right: 1rem;
   ${({ theme }) => theme.mixin.flexBox({ direction: 'column' })}
-  transition: all 1s;
-  opacity: ${({ timer }) => (timer === 6 || timer === 1 ? 0 : 1)};
+  transition: all 1.5s;
+  opacity: ${({ timer }) => (timer === 6 || timer <= 1 ? 0 : 1)};
 `;
 
 const S_Wrapper2 = styled.div`

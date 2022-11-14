@@ -40,7 +40,7 @@ export const S_CircleBtn = styled.button`
   height: 36px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.mode.bgColor};
-  box-shadow: 0 5px 10px rgba(40, 40, 40, 1);
+  box-shadow: 0 3px 3px rgba(40, 40, 40, 1);
   :hover {
     background-color: rgba(0, 0, 0, 0.2);
   }
