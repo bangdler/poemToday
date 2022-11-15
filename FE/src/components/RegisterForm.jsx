@@ -5,24 +5,49 @@ import ErrorBox from '@/components/common/ErrorBox';
 import InputBox from '@/components/common/InputBox';
 import { S_Button } from '@/components/common/styleButtons';
 import StyleLink from '@/components/common/StyleLink';
-import { AuthContext, AuthDispatchContext } from '@/context/AuthProvider';
+import { AuthContext, AuthDispatchContext, useSubmitAuth } from '@/context/AuthProvider';
 import palette from '@/style/palette';
+import { ServerErrorNotes } from '@/utils/constants';
 
 export default function RegisterForm() {
   const authForm = useContext(AuthContext);
   const { initializeForm, changeForm } = useContext(AuthDispatchContext);
-  const [verifications, setVerifications] = useState({ state: true, type: 200 });
+  const [authLoading, submitAuth] = useSubmitAuth();
+  const [verifications, setVerifications] = useState({ state: true, errorMsg: '' });
 
   useEffect(() => {
     initializeForm({ field: 'register' });
   }, []);
+
+  useEffect(() => {
+    if (authForm.authError) {
+      console.log('오류 발생');
+      console.log(authForm.authError);
+      const errorStatus = authForm.authError.response.status;
+      setVerifications({ state: false, errorMsg: ServerErrorNotes[errorStatus] });
+    }
+    if (authForm.authResponse) {
+      console.log('회원가입 성공');
+      console.log(authForm.authResponse);
+      // 유저 체크
+    }
+  }, [authForm.authResponse, authForm.authError]);
 
   const onChange = ({ target }) => {
     changeForm({ field: 'register', key: target.name, value: target.value });
   };
 
   const closeErrorBox = () => {
-    setVerifications({ state: true, type: 200 });
+    setVerifications({ state: true, errorMsg: '' });
+  };
+
+  const onSubmit = e => {
+    e.preventDefault();
+    if (authForm.register.password !== authForm.register.passwordConfirm) {
+      setVerifications({ state: false, errorMsg: '비밀번호가 일치하지 않습니다.' });
+      return;
+    }
+    submitAuth({ type: 'register' });
   };
 
   return (
@@ -50,8 +75,10 @@ export default function RegisterForm() {
         onChange={onChange}
         autoComplete={'new-password'}
       />
-      {!verifications.state && <ErrorBox errorNote={''} onClick={closeErrorBox} />}
-      <S_CyanButton size={'fullWidth'}>회원가입</S_CyanButton>
+      {!verifications.state && <ErrorBox errorNote={verifications.errorMsg} onClick={closeErrorBox} />}
+      <S_CyanButton size={'fullWidth'} disabled={authLoading.register} onClick={onSubmit}>
+        회원가입
+      </S_CyanButton>
       <S_Container>
         <StyleLink url={'/login'} content={'로그인'} />
       </S_Container>

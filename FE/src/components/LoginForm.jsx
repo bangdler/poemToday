@@ -5,32 +5,44 @@ import ErrorBox from '@/components/common/ErrorBox';
 import InputBox from '@/components/common/InputBox';
 import { S_Button } from '@/components/common/styleButtons';
 import StyleLink from '@/components/common/StyleLink';
-import { AuthContext, AuthDispatchContext } from '@/context/AuthProvider';
+import { AuthContext, AuthDispatchContext, useSubmitAuth } from '@/context/AuthProvider';
 import palette from '@/style/palette';
+import { ServerErrorNotes } from '@/utils/constants';
 
 export default function LoginForm() {
   const authForm = useContext(AuthContext);
   const { initializeForm, changeForm } = useContext(AuthDispatchContext);
-  const [verifications, setVerifications] = useState({ state: true, type: 200 });
+  const [authLoading, submitAuth] = useSubmitAuth();
+  const [verifications, setVerifications] = useState({ state: true, errorMsg: '' });
 
   useEffect(() => {
     initializeForm({ field: 'login' });
   }, []);
+
+  useEffect(() => {
+    if (authForm.authError) {
+      console.log('오류 발생');
+      console.log(authForm.authError);
+      setVerifications({ state: false, errorMsg: ServerErrorNotes[authForm.authError.status] });
+    }
+    if (authForm.authResponse) {
+      console.log('로그인성공');
+      console.log(authForm.authResponse);
+      //유저 체크
+    }
+  }, [authForm.authResponse, authForm.authError]);
 
   const onChange = ({ target }) => {
     changeForm({ field: 'login', key: target.name, value: target.value });
   };
 
   const closeErrorBox = () => {
-    setVerifications({ state: true, type: 200 });
+    setVerifications({ state: true, errorMsg: '' });
   };
 
-  // TODO: 서버 error 종류 400(아이디, 비번 형식 오류), 401(없는 아이디, 잘못된 비번), 409(회원가입시 아이디중복),
-  const errorNotes = {
-    400: '아이디, 비밀번호 형식이 잘못되었습니다.',
-    401: '없는 아이디거나 잘못된 비밀번호입니다.',
-    409: '이미 존재하는 아이디입니다.',
-    500: '서버 응답 오류',
+  const onSubmit = e => {
+    e.preventDefault();
+    submitAuth({ type: 'login' });
   };
 
   return (
@@ -50,8 +62,10 @@ export default function LoginForm() {
         onChange={onChange}
         autoComplete={'new-password'}
       />
-      {!verifications.state && <ErrorBox errorNote={errorNotes[verifications.type]} onClick={closeErrorBox} />}
-      <S_CyanButton size={'fullWidth'}>로그인</S_CyanButton>
+      {!verifications.state && <ErrorBox errorNote={verifications.errorMsg} onClick={closeErrorBox} />}
+      <S_CyanButton size={'fullWidth'} disabled={authLoading.login} onClick={onSubmit}>
+        로그인
+      </S_CyanButton>
       <S_Container>
         <StyleLink url={'/register'} content={'회원가입'} />
       </S_Container>

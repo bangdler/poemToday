@@ -82,5 +82,10 @@ module.exports = {
     host: 'localhost',
     port: port,
     open: true, // open page when start
+    proxy: {
+      '/api/*': {
+        target: 'http://localhost:4000',
+      },
+    },
   },
 };
