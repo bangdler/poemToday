@@ -56,6 +56,7 @@ export default function RegisterForm() {
 
   const onSubmit = e => {
     e.preventDefault();
+    closeErrorBox();
     if (authForm.register.password !== authForm.register.passwordConfirm) {
       setVerifications({ state: false, errorMsg: '비밀번호가 일치하지 않습니다.' });
       return;

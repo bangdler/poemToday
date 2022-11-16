@@ -56,6 +56,7 @@ export default function LoginForm() {
 
   const onSubmit = e => {
     e.preventDefault();
+    closeErrorBox();
     submitAuth({ field: 'login' });
   };
 

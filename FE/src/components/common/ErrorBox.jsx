@@ -1,30 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { S_TextBtn } from '@/components/common/styleButtons';
 
 export default React.memo(function ErrorBox({ errorNote, onClick }) {
-  const [timer, setTimer] = useState(6);
+  let timer = useRef(null);
+  let start;
+  let enterTime;
 
   useEffect(() => {
-    setTimeout(() => onClick(), (timer + 1) * 1000);
+    if (!timer.current) {
+      timer.current = setTimeout(() => onClick(), 3 * 1000);
+    }
+    start = Date.now();
+    return () => clearTimeout(timer.current);
   }, []);
 
-  useEffect(() => {
-    if (timer < 0) return;
-    setInterval(() => setTimer(timer - 1), 1100);
-  }, [timer]);
+  const handleMouseEnter = () => {
+    enterTime = Date.now();
+    clearTimeout(timer.current);
+  };
+
+  const handleMouseLeave = () => {
+    const diff = (enterTime - start) / 1000;
+    timer.current = setTimeout(() => onClick(), 3 * 1000 - diff);
+  };
 
   return (
     <>
-      <S_Wrapper timer={timer}>
+      <S_Wrapper onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         <S_Wrapper2>
           <S_Message>{errorNote}</S_Message>
           <S_WhiteTextBtn size={'xs'} onClick={onClick}>
             닫기
           </S_WhiteTextBtn>
         </S_Wrapper2>
-        <p>{timer}초 뒤에 자동 닫힘</p>
+        <S_ProgressBar>
+          <S_Progress></S_Progress>
+        </S_ProgressBar>
       </S_Wrapper>
     </>
   );
@@ -39,8 +52,24 @@ const S_Wrapper = styled.div`
   top: 1rem;
   right: 1rem;
   ${({ theme }) => theme.mixin.flexBox({ direction: 'column' })}
-  transition: all 1.5s;
-  opacity: ${({ timer }) => (timer === 6 || timer <= 1 ? 0 : 1)};
+  animation: fade 3s ease-in-out;
+  animation-fill-mode: forwards;
+  @keyframes fade {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    4%,
+    96% {
+      opacity: 1;
+    }
+  }
+  &:hover {
+    animation-play-state: paused;
+    * {
+      animation-play-state: paused;
+    }
+  }
 `;
 
 const S_Wrapper2 = styled.div`
@@ -57,5 +86,32 @@ const S_WhiteTextBtn = styled(S_TextBtn)`
   color: white;
   &:hover {
     color: rgba(0, 0, 0, 0.2);
+  }
+`;
+
+const S_ProgressBar = styled.div`
+  width: 100%;
+  height: 8px;
+  background: #e1e1e1;
+  position: relative;
+  border-radius: 2px;
+`;
+
+const S_Progress = styled.div`
+  background: red;
+  position: absolute;
+  height: 100%;
+  border-radius: inherit;
+  left: 0;
+  top: 0;
+  animation: progress 3s linear;
+  animation-fill-mode: forwards;
+  @keyframes progress {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
   }
 `;
