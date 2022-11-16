@@ -1,19 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import ErrorBox from '@/components/common/ErrorBox';
 import InputBox from '@/components/common/InputBox';
 import { S_Button } from '@/components/common/styleButtons';
 import StyleLink from '@/components/common/StyleLink';
-import { AuthContext, AuthDispatchContext, useSubmitAuth } from '@/context/AuthProvider';
+import { AuthContext, AuthDispatchContext, useAuth } from '@/context/AuthProvider';
 import palette from '@/style/palette';
 import { ServerErrorNotes } from '@/utils/constants';
 
 export default function RegisterForm() {
   const authForm = useContext(AuthContext);
   const { initializeForm, changeForm } = useContext(AuthDispatchContext);
-  const [authLoading, submitAuth] = useSubmitAuth();
+  const { authLoading, submitAuth, checkUser } = useAuth();
   const [verifications, setVerifications] = useState({ state: true, errorMsg: '' });
+  const navigate = useNavigate();
 
   useEffect(() => {
     initializeForm({ field: 'register' });
@@ -25,13 +27,24 @@ export default function RegisterForm() {
       console.log(authForm.authError);
       const errorStatus = authForm.authError.response.status;
       setVerifications({ state: false, errorMsg: ServerErrorNotes[errorStatus] });
+      return;
     }
     if (authForm.authResponse) {
       console.log('회원가입 성공');
       console.log(authForm.authResponse);
       // 유저 체크
+      checkUser();
     }
+    setVerifications({ state: true, errorMsg: '' });
   }, [authForm.authResponse, authForm.authError]);
+
+  useEffect(() => {
+    if (authForm.user) {
+      console.log('check API 성공');
+      console.log(authForm.user);
+      navigate('/');
+    }
+  }, [authForm.user]);
 
   const onChange = ({ target }) => {
     changeForm({ field: 'register', key: target.name, value: target.value });
@@ -47,7 +60,7 @@ export default function RegisterForm() {
       setVerifications({ state: false, errorMsg: '비밀번호가 일치하지 않습니다.' });
       return;
     }
-    submitAuth({ type: 'register' });
+    submitAuth({ field: 'register' });
   };
 
   return (
@@ -97,7 +110,14 @@ const S_Wrapper = styled.form`
 
 const S_CyanButton = styled(S_Button)`
   background-color: ${palette.cyan[5]};
-  &:hover { background-color: ${palette.cyan[4]}
+  &:hover:enabled {
+    background-color: ${palette.cyan[4]};
+  }
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background-color: ${palette.cyan[5]};
+  }
 `;
 
 const S_Container = styled.div`
