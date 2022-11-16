@@ -50,13 +50,17 @@ export default function LoginForm() {
     changeForm({ field: 'login', key: target.name, value: target.value });
   };
 
-  const closeErrorBox = () => {
+  const closeErrorBox = async () => {
     setVerifications({ state: true, errorMsg: '' });
   };
 
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault();
-    closeErrorBox();
+    await closeErrorBox();
+    if ([authForm.login.username, authForm.login.password].includes('')) {
+      setVerifications({ state: false, errorMsg: '빈 칸을 모두 입력하세요.' });
+      return;
+    }
     submitAuth({ field: 'login' });
   };
 

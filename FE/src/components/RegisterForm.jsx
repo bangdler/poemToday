@@ -50,15 +50,21 @@ export default function RegisterForm() {
     changeForm({ field: 'register', key: target.name, value: target.value });
   };
 
-  const closeErrorBox = () => {
+  const closeErrorBox = async () => {
     setVerifications({ state: true, errorMsg: '' });
   };
 
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault();
-    closeErrorBox();
+    await closeErrorBox();
+    if ([authForm.register.username, authForm.register.password, authForm.register.passwordConfirm].includes('')) {
+      setVerifications({ state: false, errorMsg: '빈 칸을 모두 입력하세요.' });
+      return;
+    }
     if (authForm.register.password !== authForm.register.passwordConfirm) {
       setVerifications({ state: false, errorMsg: '비밀번호가 일치하지 않습니다.' });
+      changeForm({ field: 'register', key: 'password', value: '' });
+      changeForm({ field: 'register', key: 'passwordConfirm', value: '' });
       return;
     }
     submitAuth({ field: 'register' });
