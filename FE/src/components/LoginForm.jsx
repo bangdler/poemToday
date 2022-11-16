@@ -8,13 +8,13 @@ import { S_Button } from '@/components/common/styleButtons';
 import StyleLink from '@/components/common/StyleLink';
 import { AuthContext, AuthDispatchContext, useAuth } from '@/context/AuthProvider';
 import palette from '@/style/palette';
-import { ServerErrorNotes } from '@/utils/constants';
+import { ServerErrorMessages } from '@/utils/constants';
 
 export default function LoginForm() {
   const authForm = useContext(AuthContext);
   const { initializeForm, changeForm } = useContext(AuthDispatchContext);
   const { authLoading, submitAuth, checkUser } = useAuth();
-  const [verifications, setVerifications] = useState({ state: true, errorMsg: '' });
+  const [error, setError] = useState({ state: false, message: '' });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function LoginForm() {
       console.log('오류 발생');
       console.log(authForm.authError);
       const errorStatus = authForm.authError.response.status;
-      setVerifications({ state: false, errorMsg: ServerErrorNotes[errorStatus] });
+      setError({ state: true, message: ServerErrorMessages[errorStatus] });
       return;
     }
     if (authForm.authResponse) {
@@ -35,7 +35,7 @@ export default function LoginForm() {
       //유저 체크
       checkUser();
     }
-    setVerifications({ state: true, errorMsg: '' });
+    setError({ state: false, message: '' });
   }, [authForm.authResponse, authForm.authError]);
 
   useEffect(() => {
@@ -43,6 +43,11 @@ export default function LoginForm() {
       console.log('check API 성공');
       console.log(authForm.user);
       navigate('/');
+      try {
+        localStorage.setItem('user', JSON.stringify(authForm.user));
+      } catch (e) {
+        console.log('localStorage is not working');
+      }
     }
   }, [authForm.user]);
 
@@ -51,14 +56,14 @@ export default function LoginForm() {
   };
 
   const closeErrorBox = async () => {
-    setVerifications({ state: true, errorMsg: '' });
+    setError({ state: false, message: '' });
   };
 
   const onSubmit = async e => {
     e.preventDefault();
     await closeErrorBox();
     if ([authForm.login.username, authForm.login.password].includes('')) {
-      setVerifications({ state: false, errorMsg: '빈 칸을 모두 입력하세요.' });
+      setError({ state: true, message: '빈 칸을 모두 입력하세요.' });
       return;
     }
     submitAuth({ field: 'login' });
@@ -81,12 +86,12 @@ export default function LoginForm() {
         onChange={onChange}
         autoComplete={'new-password'}
       />
-      {!verifications.state && <ErrorBox errorNote={verifications.errorMsg} onClick={closeErrorBox} />}
+      {error.state && <ErrorBox errorMessage={error.message} onClick={closeErrorBox} />}
       <S_CyanButton size={'fullWidth'} disabled={authLoading.login} onClick={onSubmit}>
         로그인
       </S_CyanButton>
       <S_Container>
-        <StyleLink url={'/register'} content={'회원가입'} />
+        <StyleLink to={'/register'}>회원가입</StyleLink>
       </S_Container>
     </S_Wrapper>
   );

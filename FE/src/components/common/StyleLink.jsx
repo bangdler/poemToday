@@ -2,15 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function StyleLink({ url, content }) {
-  return (
-    <S_Wrapper>
-      <Link to={url}>{content}</Link>
-    </S_Wrapper>
-  );
+export default function StyleLink(props) {
+  return <S_Link {...props} />;
 }
 
-const S_Wrapper = styled.div`
+const S_Link = styled(Link)`
   font-size: 1.6rem;
   color: ${({ theme }) => theme.mode.textColor};
   border-bottom: ${({ theme }) => theme.mode.borderColor};

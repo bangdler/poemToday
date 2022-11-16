@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { S_TextBtn } from '@/components/common/styleButtons';
 
-export default React.memo(function ErrorBox({ errorNote, onClick }) {
+export default React.memo(function ErrorBox({ errorMessage, onClick }) {
   let timer = useRef(null);
   let start;
   let enterTime;
@@ -30,7 +30,7 @@ export default React.memo(function ErrorBox({ errorNote, onClick }) {
     <>
       <S_Wrapper onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         <S_Wrapper2>
-          <S_Message>{errorNote}</S_Message>
+          <S_Message>{errorMessage}</S_Message>
           <S_WhiteTextBtn size={'xs'} onClick={onClick}>
             닫기
           </S_WhiteTextBtn>

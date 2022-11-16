@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useMemo, useCallback, useContext, useState } from 'react';
+import React, { createContext, useReducer, useMemo, useCallback, useContext, useState, useEffect } from 'react';
 
 import * as api from '@/api/auth.js';
 
@@ -34,7 +34,9 @@ const authFormReducer = (state, action) => {
     case 'CHECK_USER_SUCCESS':
       return { ...state, user: action.response, userError: null };
     case 'CHECK_USER_FAILURE':
-      return { ...state, userError: action.error };
+      return { ...state, user: null, userError: action.error };
+    case 'SET_USER':
+      return { ...state, user: action.user };
     default:
       return state;
   }
@@ -86,9 +88,17 @@ export default function AuthProvider({ children }) {
       error,
     });
   }, []);
+
+  const setUser = useCallback(({ user }) => {
+    authFormDispatch({
+      type: 'SET_USER',
+      user,
+    });
+  }, []);
+
   const memoizedAuthDispatches = useMemo(
-    () => ({ initializeForm, changeForm, authSuccess, authFail, checkUserSuccess, checkUserFail }),
-    [initializeForm, changeForm, authSuccess, authFail, checkUserSuccess, checkUserFail]
+    () => ({ initializeForm, changeForm, authSuccess, authFail, checkUserSuccess, checkUserFail, setUser }),
+    [initializeForm, changeForm, authSuccess, authFail, checkUserSuccess, checkUserFail, setUser]
   );
 
   return (
@@ -100,13 +110,12 @@ export default function AuthProvider({ children }) {
 
 export const useAuth = () => {
   const authForm = useContext(AuthContext);
-  const { authSuccess, authFail, checkUserSuccess, checkUserFail } = useContext(AuthDispatchContext);
-  const [authLoading, setAuthLoading] = useState({ login: false, register: false, check: false });
+  const { authSuccess, authFail, checkUserSuccess, checkUserFail, setUser } = useContext(AuthDispatchContext);
+  const [authLoading, setAuthLoading] = useState({ login: false, register: false, check: false, logout: false });
 
   const submitAuth = async ({ field }) => {
     const loadingStart = { ...authLoading, [field]: true };
     setAuthLoading(loadingStart);
-
     try {
       const response = await api[field]({ username: authForm[field].username, password: authForm[field].password });
       authSuccess({ response: response.data });
@@ -125,10 +134,25 @@ export const useAuth = () => {
       checkUserSuccess({ response: response.data });
     } catch (e) {
       checkUserFail({ error: e });
+      localStorage.removeItem('user');
     }
     const loadingFinish = { ...authLoading, check: false };
     setAuthLoading(loadingFinish);
   };
 
-  return { authLoading, submitAuth, checkUser };
+  const logoutUser = async () => {
+    const loadingStart = { ...authLoading, logout: true };
+    setAuthLoading(loadingStart);
+    try {
+      await api.logout();
+      setUser({ user: null });
+      localStorage.removeItem('user');
+    } catch (e) {
+      console.log(e);
+    }
+    const loadingFinish = { ...authLoading, logout: false };
+    setAuthLoading(loadingFinish);
+  };
+
+  return { authLoading, submitAuth, checkUser, logoutUser };
 };
