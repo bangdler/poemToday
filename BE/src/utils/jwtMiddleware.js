@@ -7,6 +7,7 @@ const jwtMiddleware = async (ctx, next) => {
   const token = ctx.cookies.get(ACCESS_TOKEN);
   if (!token) return next();
   try {
+    // 토큰 유효 여부, 만료 여부 확인
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     ctx.state.user = {
       _id: decoded._id,
