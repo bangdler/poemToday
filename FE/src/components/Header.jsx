@@ -32,13 +32,16 @@ export default function Header() {
   }, []);
 
   return (
-    <S_Header position={position}>
-      <S_Wrapper>
-        <Logo name={'Today Poem'} link={'/'} blindText={'홈으로 이동합니다.'} />
-        <GNB />
-        <UtilArea />
-      </S_Wrapper>
-    </S_Header>
+    <>
+      <S_Header position={position}>
+        <S_Wrapper>
+          <Logo name={'Today Poem'} link={'/'} blindText={'홈으로 이동합니다.'} />
+          <GNB />
+          <UtilArea />
+        </S_Wrapper>
+      </S_Header>
+      <S_Spacer />
+    </>
   );
 }
 
@@ -66,4 +69,8 @@ const S_Wrapper = styled.div`
     max-width: 1824px;
   }
   ${({ theme }) => theme.mixin.flexBox({ justify: 'space-between' })};
+`;
+
+const S_Spacer = styled.div`
+  height: 72px;
 `;
