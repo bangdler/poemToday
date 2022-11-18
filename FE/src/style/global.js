@@ -38,6 +38,7 @@ export const GlobalStyle = createGlobalStyle`
 		outline: none;
 		background-color: transparent;
 		box-sizing: border-box;
+		font-family: 'Gamja Flower';
 	}
 
 	button {
