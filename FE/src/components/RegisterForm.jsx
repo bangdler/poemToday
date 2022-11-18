@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 import ErrorBox from '@/components/common/ErrorBox';
 import InputBox from '@/components/common/InputBox';
-import { S_Button } from '@/components/common/styleButtons';
 import StyleLink from '@/components/common/StyleLink';
+import { S_Button } from '@/components/commonStyled/styleButtons';
 import { AuthContext, AuthDispatchContext, useAuth } from '@/context/AuthProvider';
 import palette from '@/style/palette';
 import { ServerErrorMessages } from '@/utils/constants';

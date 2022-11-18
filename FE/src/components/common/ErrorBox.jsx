@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
-import { S_TextBtn } from '@/components/common/styleButtons';
+import { S_TextBtn } from '@/components/commonStyled/styleButtons';
 
 export default React.memo(function ErrorBox({ errorMessage, onClick }) {
   let timer = useRef(null);

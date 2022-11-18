@@ -3,23 +3,22 @@ import styled, { css } from 'styled-components';
 export const S_Button = styled.button`
   border-radius: 4px;
   padding: 0.25rem 1rem;
-  color: ${({ theme }) => theme.mode.textColor};
   background-color: ${({ theme }) => theme.mode.bgColor};
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.2);
   }
   ${({ size }) => {
-    if (size === 'xs') {
-      return css`
-        height: 20px;
-        font-size: 1rem;
-      `;
-    }
     if (size === 'small') {
       return css`
-        height: 32px;
+        height: 24px;
         font-size: 1.2rem;
+      `;
+    }
+    if (size === 'medium') {
+      return css`
+        height: 46px;
+        font-size: 2rem;
         font-weight: bold;
       `;
     }

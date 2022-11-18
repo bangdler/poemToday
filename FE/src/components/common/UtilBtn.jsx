@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import BlindText from '@/components/common/BlindText';
-import { S_CircleBtn } from '@/components/common/styleButtons';
+import { S_CircleBtn } from '@/components/commonStyled/styleButtons';
 
 export default function UtilBtn({ children, blindText, onClick }) {
   return (

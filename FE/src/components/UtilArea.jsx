@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 
 import { ReactComponent as Search } from '@/assets/icons/search.svg';
-import { S_TextBtn } from '@/components/common/styleButtons';
 import StyleLink from '@/components/common/StyleLink';
 import UtilBtn from '@/components/common/UtilBtn';
+import { S_TextBtn } from '@/components/commonStyled/styleButtons';
 import ThemeBtn from '@/components/ThemeBtn';
 import { AuthContext, useAuth } from '@/context/AuthProvider';
 
