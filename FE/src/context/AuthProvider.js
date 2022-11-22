@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useMemo, useCallback, useContext, useState, useEffect } from 'react';
+import React, { createContext, useReducer, useMemo, useCallback, useContext, useState } from 'react';
 
 import * as api from '@/api/auth.js';
 
@@ -21,7 +21,7 @@ const initialAuthForm = {
   userError: null,
 };
 
-const authFormReducer = (state, action) => {
+const authReducer = (state, action) => {
   switch (action.type) {
     case 'INITIALIZE':
       return { ...state, [action.field]: initialAuthForm[action.field], authError: null, authResponse: null };
@@ -43,7 +43,7 @@ const authFormReducer = (state, action) => {
 };
 
 export default function AuthProvider({ children }) {
-  const [authForm, authFormDispatch] = useReducer(authFormReducer, initialAuthForm);
+  const [authForm, authFormDispatch] = useReducer(authReducer, initialAuthForm);
 
   const initializeForm = useCallback(({ field }) => {
     authFormDispatch({
