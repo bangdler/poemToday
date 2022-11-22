@@ -6,4 +6,9 @@ export const register = ({ username, password }) => client.post('/api/auth/regis
 
 export const check = () => client.get('/api/auth/check');
 
-export const logout = () => client.post('api/auth/logout');
+export const logout = () => client.post('/api/auth/logout');
+
+export const list = () => client.get('/api/poems/list');
+
+export const write = ({ title, author, body, category }) =>
+  client.post('/api/poems', { title, author, body, category });
