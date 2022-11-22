@@ -6,7 +6,7 @@ const PoemSchema = new Schema({
   title: String,
   body: String,
   author: String,
-  category: [String],
+  category: [Object],
   publishedDate: {
     type: Date,
     default: Date.now,

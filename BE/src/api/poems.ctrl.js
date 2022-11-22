@@ -41,7 +41,9 @@ export const write = async ctx => {
     title: Joi.string().required(),
     body: Joi.string().required(),
     author: Joi.string().required(),
-    category: Joi.array().items(Joi.string()).required(),
+    category: Joi.array()
+      .items(Joi.object({ checked: Joi.boolean(), name: Joi.string(), color: Joi.string() }))
+      .required(),
   });
 
   const result = schema.validate(ctx.request.body);
@@ -126,7 +128,7 @@ export const update = async ctx => {
     title: Joi.string(),
     body: Joi.string(),
     author: Joi.string(),
-    category: Joi.array().items(Joi.string()),
+    category: Joi.array().items(Joi.object()),
   });
 
   const result = schema.validate(ctx.request.body);
