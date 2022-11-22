@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { CategoryStyle } from '@/style/common';
+
 export default function CheckBox({ onChange, checked, value, text, color }) {
   return (
     <S_Label htmlFor={value} checked={checked} color={color}>
@@ -11,14 +13,9 @@ export default function CheckBox({ onChange, checked, value, text, color }) {
 }
 
 const S_Label = styled.label`
-  height: 22px;
-  width: 66px;
-  border-radius: 4px;
-  ${({ theme }) => theme.mixin.flexBox({})}
-  background-color: ${({ color }) => color};
+  ${CategoryStyle};
   opacity: ${({ checked }) => (checked ? 1 : 0.4)};
   cursor: pointer;
-  padding: 0.2rem;
 `;
 
 const S_CheckInput = styled.input.attrs(() => ({ type: 'checkbox' }))`
@@ -27,13 +24,10 @@ const S_CheckInput = styled.input.attrs(() => ({ type: 'checkbox' }))`
   cursor: pointer;
   margin-right: 0.3rem;
   &:checked ~ span {
-    color: ${({ theme }) => theme.mode.textColor};
+    color: black;
   }
 `;
 
 const S_Text = styled.span`
-  text-align: center;
-  font-size: 1.6rem;
   color: rgba(0, 0, 0, 0.2);
-  user-select: none;
 `;
