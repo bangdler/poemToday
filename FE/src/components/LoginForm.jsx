@@ -4,11 +4,12 @@ import styled from 'styled-components';
 
 import ErrorBox from '@/components/common/ErrorBox';
 import InputBox from '@/components/common/InputBox';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import StyleLink from '@/components/common/StyleLink';
 import { S_Button } from '@/components/commonStyled/styleButtons';
 import { AuthContext, AuthDispatchContext, useAuth } from '@/context/AuthProvider';
 import palette from '@/style/palette';
-import { ServerErrorMessages } from '@/utils/constants';
+import { LoginServerErrorMessages } from '@/utils/constants';
 
 export default function LoginForm() {
   const authForm = useContext(AuthContext);
@@ -26,7 +27,7 @@ export default function LoginForm() {
       console.log('오류 발생');
       console.log(authForm.authError);
       const errorStatus = authForm.authError.response.status;
-      setError({ state: true, message: ServerErrorMessages[errorStatus] });
+      setError({ state: true, message: LoginServerErrorMessages[errorStatus] });
       return;
     }
     if (authForm.authResponse) {
@@ -88,7 +89,7 @@ export default function LoginForm() {
       />
       {error.state && <ErrorBox errorMessage={error.message} onClick={closeErrorBox} />}
       <S_CyanButton size={'fullWidth'} disabled={authLoading.login} onClick={onSubmit}>
-        로그인
+        로그인 {authLoading.login && <LoadingSpinner width={'20px'} color={`red`} />}
       </S_CyanButton>
       <S_Container>
         <StyleLink to={'/register'}>회원가입</StyleLink>

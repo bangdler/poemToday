@@ -1,32 +1,44 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import ErrorBox from '@/components/common/ErrorBox';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { S_Button } from '@/components/commonStyled/styleButtons';
 import { PoemContext, usePoem } from '@/context/PoemProvider';
 import palette from '@/style/palette';
+import { PostPoemServerErrorMessages } from '@/utils/constants';
 
 export default function WriteActionButtons() {
   const { poemLoading, postPoemToServer } = usePoem();
   const poemData = useContext(PoemContext);
   const navigate = useNavigate();
+  const [error, setError] = useState({ state: false, message: '' });
 
   useEffect(() => {
     if (poemData.response === null) return;
     console.log('전송완료');
     console.log(poemData.response);
+    //TODO: poem id 로 라우팅
   }, [poemData.response]);
 
   useEffect(() => {
     if (poemData.error === null) return;
     console.log('전송실패');
     console.log(poemData.error);
+    const errorStatus = poemData.error.response.status;
+    setError({ state: true, message: PostPoemServerErrorMessages[errorStatus] });
   }, [poemData.error]);
+
+  const closeErrorBox = async () => {
+    setError({ state: false, message: '' });
+  };
 
   const onSubmit = async e => {
     e.preventDefault();
+    await closeErrorBox();
     if ([poemData.title, poemData.body, poemData.author].includes('')) {
-      alert('빈칸을 입력하세요');
+      setError({ state: true, message: '제목, 저자, 내용을 모두 입력하세요.' });
       return;
     }
     postPoemToServer();
@@ -35,12 +47,13 @@ export default function WriteActionButtons() {
   return (
     <>
       <S_Wrapper>
-        <S_CyanButton size={'medium'} onClick={() => navigate('/')}>
+        <S_CyanButton size={'medium'} onClick={() => navigate(-1)}>
           취소하기
         </S_CyanButton>
         <S_CyanButton size={'medium'} disabled={poemLoading} onClick={onSubmit}>
-          작성하기
+          작성하기 {poemLoading && <LoadingSpinner width={'20px'} color={`red`} />}
         </S_CyanButton>
+        {error.state && <ErrorBox errorMessage={error.message} onClick={closeErrorBox} />}
       </S_Wrapper>
     </>
   );

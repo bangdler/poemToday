@@ -4,6 +4,7 @@ export const S_Button = styled.button`
   border-radius: 4px;
   padding: 0.25rem 1rem;
   background-color: ${({ theme }) => theme.mode.bgColor};
+  ${({ theme }) => theme.mixin.flexBox({})}
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.2);
