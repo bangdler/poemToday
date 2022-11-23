@@ -44,10 +44,15 @@ export default function WriteActionButtons() {
     postPoemToServer();
   };
 
+  const onClickCancel = e => {
+    e.preventDefault();
+    navigate(-1);
+  };
+
   return (
     <>
       <S_Wrapper>
-        <S_CyanButton size={'medium'} onClick={() => navigate(-1)}>
+        <S_CyanButton size={'medium'} onClick={onClickCancel}>
           취소하기
         </S_CyanButton>
         <S_CyanButton size={'medium'} disabled={poemLoading} onClick={onSubmit}>
