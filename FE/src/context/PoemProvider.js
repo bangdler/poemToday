@@ -96,7 +96,6 @@ export const usePoem = () => {
 
   const postPoemToServer = async () => {
     setPoemLoading(true);
-    console.log(poemData);
     try {
       const response = await api.write({
         title: poemData.title,
