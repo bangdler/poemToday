@@ -36,4 +36,5 @@ export default function Write() {
 
 const S_FormLayout = styled.form`
   padding: 1rem;
+  max-width: 768px;
 `;

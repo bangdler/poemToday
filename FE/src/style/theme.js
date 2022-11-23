@@ -4,12 +4,16 @@ export const lightTheme = {
   bgColor: '#f8f7f4',
   textColor: '#31302e',
   borderColor: '1px solid #eaeaea',
+  cardColor: '#f8f7f4',
+  hoverBgColor: '#dee2e6',
 };
 
 export const darkTheme = {
   bgColor: '#1e1e22',
   textColor: '#ccc',
   borderColor: '1px solid #2c2d33',
+  cardColor: '#333',
+  hoverBgColor: '#495057',
 };
 
 const device = {

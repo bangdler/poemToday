@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components';
 
+import palette from '@/style/palette';
+
 export const S_Button = styled.button`
   border-radius: 4px;
   padding: 0.25rem 1rem;
@@ -7,7 +9,7 @@ export const S_Button = styled.button`
   ${({ theme }) => theme.mixin.flexBox({})}
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: ${({ theme }) => theme.mode.hoverBgColor};
   }
   ${({ size }) => {
     if (size === 'small') {
@@ -40,9 +42,9 @@ export const S_CircleBtn = styled.button`
   height: 36px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.mode.bgColor};
-  box-shadow: 0 3px 3px rgba(40, 40, 40, 1);
+  box-shadow: 0 2px 2px ${palette.gray[4]};
   :hover {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: ${({ theme }) => theme.mode.hoverBgColor};
   }
 `;
 
@@ -51,6 +53,6 @@ export const S_TextBtn = styled.button`
   color: ${({ theme }) => theme.mode.textColor};
   border-bottom: ${({ theme }) => theme.mode.borderColor};
   &:hover {
-    border-color: rgba(0, 0, 0, 0.2);
+    border-color: ${({ theme }) => theme.mode.hoverBgColor};
   }
 `;
