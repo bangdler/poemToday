@@ -19,8 +19,6 @@ const poemReducer = (state, action) => {
   switch (action.type) {
     case 'INITIALIZE':
       return initialPoemData;
-    case 'SET':
-      return action.data;
     case 'CHANGE':
       return { ...state, [action.key]: action.value };
     case 'POST_POEM_SUCCESS':
@@ -80,20 +78,6 @@ export const usePoem = () => {
 
   const [poemLoading, setPoemLoading] = useState(false);
 
-  const getPoemListFromServer = async () => {
-    let response;
-    setPoemLoading(true);
-    try {
-      const poemList = await api.list();
-      response = poemList;
-    } catch (e) {
-      console.log(e);
-      response = e;
-    }
-    setPoemLoading(false);
-    return response;
-  };
-
   const postPoemToServer = async () => {
     setPoemLoading(true);
     try {
@@ -111,5 +95,5 @@ export const usePoem = () => {
     setPoemLoading(false);
   };
 
-  return { poemLoading, getPoemListFromServer, postPoemToServer };
+  return { poemLoading, postPoemToServer };
 };

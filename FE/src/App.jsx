@@ -1,6 +1,7 @@
 import React from 'react';
 
 import AuthProvider from '@/context/AuthProvider';
+import PoemListProvider from '@/context/PoemListProvider';
 import PoemProvider from '@/context/PoemProvider';
 import { ThemeProvider } from '@/context/ThemeProvider';
 import UserProvider from '@/context/UserProvider';
@@ -14,10 +15,12 @@ function App() {
         <ThemeProvider>
           <UserProvider>
             <AuthProvider>
-              <PoemProvider>
-                <GlobalStyle />
-                <Router />
-              </PoemProvider>
+              <PoemListProvider>
+                <PoemProvider>
+                  <GlobalStyle />
+                  <Router />
+                </PoemProvider>
+              </PoemListProvider>
             </AuthProvider>
           </UserProvider>
         </ThemeProvider>

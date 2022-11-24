@@ -2,11 +2,14 @@ import React, { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 
 import Header from '@/components/Header';
+import { PoemListContext, usePoemList } from '@/context/PoemListProvider';
 import { UserDispatchContext, useUser } from '@/context/UserProvider';
 
 export default function Home() {
   const { setUser } = useContext(UserDispatchContext);
   const { checkUser } = useUser();
+  const poemListData = useContext(PoemListContext);
+  const { getPoemListFromServer } = usePoemList();
 
   useEffect(() => {
     try {
@@ -18,6 +21,11 @@ export default function Home() {
       console.log('localStorage is not working');
     }
   }, []);
+
+  useEffect(() => {
+    getPoemListFromServer();
+  }, []);
+
 
   return (
     <>
