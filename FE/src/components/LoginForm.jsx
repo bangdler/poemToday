@@ -8,18 +8,22 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import StyleLink from '@/components/common/StyleLink';
 import { S_Button } from '@/components/commonStyled/styleButtons';
 import { AuthContext, AuthDispatchContext, useAuth } from '@/context/AuthProvider';
+import { UserContext, useUser } from '@/context/UserProvider';
 import palette from '@/style/palette';
 import { LoginServerErrorMessages } from '@/utils/constants';
 
 export default function LoginForm() {
   const authForm = useContext(AuthContext);
   const { initializeForm, changeForm } = useContext(AuthDispatchContext);
-  const { authLoading, submitAuth, checkUser } = useAuth();
+  const { authLoading, submitAuth } = useAuth();
+  const userData = useContext(UserContext);
+  const { checkUser } = useUser();
   const [error, setError] = useState({ state: false, message: '' });
   const navigate = useNavigate();
 
   useEffect(() => {
     initializeForm({ field: 'login' });
+    return () => initializeForm({ field: 'login' });
   }, []);
 
   useEffect(() => {
@@ -40,17 +44,17 @@ export default function LoginForm() {
   }, [authForm.authResponse, authForm.authError]);
 
   useEffect(() => {
-    if (authForm.user) {
+    if (userData.user) {
       console.log('check API 성공');
-      console.log(authForm.user);
+      console.log(userData.user);
       navigate('/');
       try {
-        localStorage.setItem('user', JSON.stringify(authForm.user));
+        localStorage.setItem('user', JSON.stringify(userData.user));
       } catch (e) {
         console.log('localStorage is not working');
       }
     }
-  }, [authForm.user]);
+  }, [userData.user]);
 
   const onChange = ({ target }) => {
     changeForm({ field: 'login', key: target.name, value: target.value });
