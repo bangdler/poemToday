@@ -51,7 +51,7 @@ export const S_CircleBtn = styled.button`
 export const S_TextBtn = styled.button`
   font-size: 1.6rem;
   color: ${({ theme }) => theme.mode.textColor};
-  border-bottom: ${({ theme }) => theme.mode.borderColor};
+  border-bottom: 1px solid ${({ theme }) => theme.mode.borderColor};
   &:hover {
     border-color: ${({ theme }) => theme.mode.hoverBgColor};
   }

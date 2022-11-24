@@ -5,7 +5,7 @@ export const S_TitleInput = styled.input`
   width: 50%;
   font-size: 2.4rem;
   color: ${({ theme }) => theme.mode.textColor};
-  border-bottom: ${({ theme }) => theme.mode.borderColor};
+  border-bottom: 1px solid ${({ theme }) => theme.mode.borderColor};
 `;
 
 export const S_AuthorInput = styled.input`
@@ -13,5 +13,5 @@ export const S_AuthorInput = styled.input`
   width: 30%;
   font-size: 2rem;
   color: ${({ theme }) => theme.mode.textColor};
-  border-bottom: ${({ theme }) => theme.mode.borderColor};
+  border-bottom: 1px solid ${({ theme }) => theme.mode.borderColor};
 `;

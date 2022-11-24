@@ -15,7 +15,7 @@ export default function ThemeButton_practice() {
 
 const S_Button = styled.button`
   background-color: ${({ theme }) => theme.mode.bgColor};
-  border: ${({ theme }) => theme.mode.borderColor};
+  border: 1px solid ${({ theme }) => theme.mode.borderColor};
   padding: 0 15px;
   font-size: 20px;
   display: flex;

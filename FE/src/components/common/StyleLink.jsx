@@ -9,7 +9,7 @@ export default function StyleLink(props) {
 const S_Link = styled(Link)`
   font-size: 1.6rem;
   color: ${({ theme }) => theme.mode.textColor};
-  border-bottom: ${({ theme }) => theme.mode.borderColor};
+  border-bottom: 1px solid ${({ theme }) => theme.mode.borderColor};
   &:hover {
     border-color: rgba(0, 0, 0, 0.2);
   }

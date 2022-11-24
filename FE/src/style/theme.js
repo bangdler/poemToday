@@ -3,7 +3,7 @@ import { css } from 'styled-components';
 export const lightTheme = {
   bgColor: '#f8f7f4',
   textColor: '#31302e',
-  borderColor: '1px solid #eaeaea',
+  borderColor: '#eaeaea',
   cardColor: '#f8f7f4',
   hoverBgColor: '#dee2e6',
 };
@@ -11,7 +11,7 @@ export const lightTheme = {
 export const darkTheme = {
   bgColor: '#1e1e22',
   textColor: '#ccc',
-  borderColor: '1px solid #2c2d33',
+  borderColor: '#2c2d33',
   cardColor: '#333',
   hoverBgColor: '#495057',
 };
@@ -27,6 +27,16 @@ const mixin = {
     flex-direction: ${direction};
     align-items: ${align};
     justify-content: ${justify};
+  `,
+  ellipsis: ({ lineNum, lineHeight }) => css`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: ${lineNum}; /* 라인수 */
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    line-height: ${lineHeight};
+    height: ${lineNum * lineHeight}; /* line-height 가 1.2em 이고 3라인을 자르기 때문에 height는 1.2em * 3 = 3.6em */
   `,
 };
 

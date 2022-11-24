@@ -9,10 +9,10 @@ export default function QuillEditor({ placeholder, value, ...rest }) {
   const toolbarOptions = useMemo(
     () => [
       // ['link', 'image', 'video'],
-      [{ font: [] }],
+      // [{ font: [] }],
       [{ header: [1, 2, 3, false] }],
       ['bold', 'italic', 'underline', 'strike'],
-      ['blockquote', 'code-block'],
+      ['blockquote'],
       [{ list: 'ordered' }, { list: 'bullet' }],
       [{ color: [] }, { background: [] }],
       [{ align: [] }],
@@ -50,5 +50,6 @@ const S_ReactQuill = styled(ReactQuill)`
   .ql-container {
     min-height: 300px;
     font-size: 1.6rem;
+    font-family: 'Gamja Flower';
   }
 `;

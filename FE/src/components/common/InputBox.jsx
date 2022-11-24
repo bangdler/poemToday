@@ -26,7 +26,7 @@ const S_Title = styled.h2`
 
 const S_Input = styled.input`
   width: 100%;
-  border-bottom: ${({ theme }) => theme.mode.borderColor};
+  border-bottom: 1px solid ${({ theme }) => theme.mode.borderColor};
   font-size: 2rem;
   color: ${({ theme }) => theme.mode.textColor};
   &:focus {
