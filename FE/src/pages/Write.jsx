@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import Editor from '@/components/Editor';
 import Header from '@/components/Header';
 import WriteActionButtons from '@/components/WriteActionButtons';
-import { AuthContext, useAuth } from '@/context/AuthProvider';
+import { UserContext, useUser } from '@/context/UserProvider';
 
 export default function Write() {
-  const authForm = useContext(AuthContext);
-  const { checkUser } = useAuth();
+  const userData = useContext(UserContext);
+  const { checkUser } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,11 +17,11 @@ export default function Write() {
   }, []);
 
   useEffect(() => {
-    if (authForm.userError) {
+    if (userData.error) {
       alert('로그인이 필요합니다.');
       navigate('/login');
     }
-  }, [authForm.userError]);
+  }, [userData.error]);
 
   return (
     <>
