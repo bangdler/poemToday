@@ -1,12 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import styled from 'styled-components';
 
 import GNB from '@/components/GNB';
 import Logo from '@/components/Logo';
 import UtilArea from '@/components/UtilArea';
+import { UserContext, useUser } from '@/context/UserProvider';
 import { firstAndDebounce } from '@/utils/util';
 
 export default function Header() {
+  const userData = useContext(UserContext);
+  const { logoutUser } = useUser();
   const [position, setPosition] = useState('top');
   const curPageY = useRef(0);
 
@@ -36,8 +39,8 @@ export default function Header() {
       <S_Header position={position}>
         <S_Wrapper>
           <Logo name={'Today Poem'} link={'/'} blindText={'홈으로 이동합니다.'} />
-          <GNB />
-          <UtilArea />
+          <GNB user={userData.user} />
+          <UtilArea user={userData.user} logoutUser={logoutUser} />
         </S_Wrapper>
       </S_Header>
       <S_Spacer />

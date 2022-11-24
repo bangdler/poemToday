@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import CheckBox from '@/components/common/CheckBox';
 import QuillEditor from '@/components/common/QuillEditor';
 import { S_AuthorInput, S_TitleInput } from '@/components/commonStyled/styleInputs';
-import { AuthContext } from '@/context/AuthProvider';
 import { PoemContext, PoemDispatchContext } from '@/context/PoemProvider';
+import { UserContext } from '@/context/UserProvider';
 
 export default function Editor() {
-  const authForm = useContext(AuthContext);
+  const userData = useContext(UserContext);
   const poemData = useContext(PoemContext);
   const { changePoemData } = useContext(PoemDispatchContext);
 
@@ -38,7 +38,7 @@ export default function Editor() {
   useEffect(() => {
     const selfPoemCategory = poemData.category[0];
     if (selfPoemCategory.checked) {
-      changePoemData({ key: 'author', value: authForm.user.username });
+      changePoemData({ key: 'author', value: userData.user.username });
     } else {
       changePoemData({ key: 'author', value: '' });
     }

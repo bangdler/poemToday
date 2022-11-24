@@ -7,11 +7,8 @@ import StyleLink from '@/components/common/StyleLink';
 import UtilBtn from '@/components/common/UtilBtn';
 import { S_TextBtn } from '@/components/commonStyled/styleButtons';
 import ThemeBtn from '@/components/ThemeBtn';
-import { AuthContext, useAuth } from '@/context/AuthProvider';
 
-export default function UtilArea() {
-  const authForm = useContext(AuthContext);
-  const { logoutUser } = useAuth();
+export default function UtilArea({ user, logoutUser }) {
   const navigate = useNavigate();
 
   const clickCancelBtn = () => {
@@ -25,7 +22,7 @@ export default function UtilArea() {
         <Search width={22} height={22} viewBox="0 0 16 16" />
       </UtilBtn>
       <ThemeBtn />
-      {authForm.user ? (
+      {user ? (
         <S_TextBtn size={'xs'} onClick={clickCancelBtn}>
           로그아웃
         </S_TextBtn>

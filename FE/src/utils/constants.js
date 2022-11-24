@@ -6,6 +6,7 @@ export const LoginServerErrorMessages = {
   401: '없는 아이디거나 잘못된 비밀번호입니다.',
   409: '이미 존재하는 아이디입니다.',
   500: '서버 응답 오류',
+  504: '서버 요청 실패(게이트웨이 시간초과)',
 };
 
 export const PostPoemServerErrorMessages = {
