@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ReactComponent as Search } from '@/assets/icons/search.svg';
@@ -11,6 +12,12 @@ import { AuthContext, useAuth } from '@/context/AuthProvider';
 export default function UtilArea() {
   const authForm = useContext(AuthContext);
   const { logoutUser } = useAuth();
+  const navigate = useNavigate();
+
+  const clickCancelBtn = () => {
+    logoutUser();
+    navigate('/');
+  };
 
   return (
     <S_Wrapper>
@@ -19,7 +26,7 @@ export default function UtilArea() {
       </UtilBtn>
       <ThemeBtn />
       {authForm.user ? (
-        <S_TextBtn size={'xs'} onClick={logoutUser}>
+        <S_TextBtn size={'xs'} onClick={clickCancelBtn}>
           로그아웃
         </S_TextBtn>
       ) : (
