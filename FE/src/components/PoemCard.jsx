@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import ReactQuill from 'react-quill';
 import styled from 'styled-components';
 

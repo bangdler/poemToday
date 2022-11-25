@@ -1,14 +1,14 @@
 import React, { useContext, useEffect } from 'react';
-import styled from 'styled-components';
 
 import Header from '@/components/Header';
+import PoemCardContainer from '@/components/PoemCardContainer';
 import { PoemListContext, usePoemList } from '@/context/PoemListProvider';
 import { UserDispatchContext, useUser } from '@/context/UserProvider';
 
 export default function Home() {
   const { setUser } = useContext(UserDispatchContext);
   const { checkUser } = useUser();
-  const poemListData = useContext(PoemListContext);
+  const { poemList, error } = useContext(PoemListContext);
   const { getPoemListFromServer } = usePoemList();
 
   useEffect(() => {
@@ -26,21 +26,11 @@ export default function Home() {
     getPoemListFromServer();
   }, []);
 
-
   return (
     <>
       <Header />
-      <S_Div></S_Div>
-      <S_Div2></S_Div2>
+      <p>{error ? error : ''}</p>
+      <PoemCardContainer poemList={poemList} />
     </>
   );
 }
-
-const S_Div = styled.div`
-  height: 1000px;
-`;
-
-const S_Div2 = styled.div`
-  background-color: #ffd700;
-  height: 1000px;
-`;

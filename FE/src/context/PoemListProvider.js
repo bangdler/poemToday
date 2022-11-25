@@ -59,7 +59,7 @@ export default function PoemListProvider({ children }) {
 }
 
 export const usePoemList = () => {
-  const { getListSuccess } = useContext(PoemListDispatchContext);
+  const { getListSuccess, getListFail } = useContext(PoemListDispatchContext);
   const [poemListLoading, setPoemListLoading] = useState(false);
 
   const getPoemListFromServer = async () => {
@@ -69,7 +69,7 @@ export const usePoemList = () => {
       getListSuccess({ response: response.data });
     } catch (e) {
       console.log(e);
-      // get fail
+      getListFail({ error: e });
     }
     setPoemListLoading(false);
   };
