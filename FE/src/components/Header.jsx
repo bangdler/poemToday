@@ -54,9 +54,11 @@ const S_Header = styled.header`
   top: 0;
   left: 0;
   height: 72px;
+  background-color: ${({ theme }) => theme.mode.bgColor};
   border-bottom: ${({ position }) => (position === 'up' ? `1px solid #eee` : ``)};
   transform: ${({ position }) => (position === 'down' ? `translateY(-72px)` : `translateY(0)`)};
   transition: transform 0.5s ease-out;
+  z-index: 10; // quill 컴포넌트 내부에 z-index 가 있는 것으로 추정되어 적용함.
 `;
 
 const S_Wrapper = styled.div`

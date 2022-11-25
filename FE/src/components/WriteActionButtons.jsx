@@ -20,6 +20,7 @@ export default function WriteActionButtons() {
     console.log('전송완료');
     console.log(poemData.response);
     //TODO: poem id 로 라우팅
+    navigate('/');
   }, [poemData.response]);
 
   useEffect(() => {
