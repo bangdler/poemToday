@@ -11,6 +11,7 @@ export default function Home() {
   const { poemList, error } = useContext(PoemListContext);
   const { getPoemListFromServer } = usePoemList();
 
+  console.log('render home');
   useEffect(() => {
     try {
       const user = localStorage.getItem('user');

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import PoemCard from '@/components/PoemCard';
@@ -10,6 +10,7 @@ export default function PoemCardContainer({ poemList }) {
         <PoemCard
           key={poemCard._id}
           id={poemCard._id}
+          username={poemCard.user.username}
           title={poemCard.title}
           body={poemCard.body}
           category={poemCard.category}
