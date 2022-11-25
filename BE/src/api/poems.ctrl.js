@@ -2,6 +2,7 @@ import Joi from 'joi';
 import mongoose from 'mongoose';
 
 import Poem from '../models/poem.js';
+import { shortenQuillTypeBody } from '../utils/shortenQuillTypeBody.js';
 
 const { ObjectId } = mongoose.Types;
 
@@ -99,7 +100,7 @@ export const list = async ctx => {
     // 인스턴스 형태에서 json 으로 변환하여 사용해야함. 이 방법 또는 .skip() 뒤에 .lean() 추가하여 사용
     ctx.body = poems
       .map(poem => poem.toJSON())
-      .map(poem => ({ ...poem, body: poem.body.length < 200 ? poem.body : `${poem.body.slice(0, 200)}...` }));
+      .map(poem => ({ ...poem, body: poem.body.length < 200 ? poem.body : `${shortenQuillTypeBody(poem.body)}...` }));
   } catch (e) {
     ctx.throw(500, e);
   }
