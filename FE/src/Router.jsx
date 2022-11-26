@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
-import PoemViewer from '@/pages/PoemViewer';
+import PoemDetail from '@/pages/PoemDetail';
 import Register from '@/pages/Register';
 import Write from '@/pages/Write';
 
@@ -16,7 +16,7 @@ export default function Router() {
         <Route path="/register" element={<Register />} />
         <Route path="/write" element={<Write />} />
         <Route path="/@:username">
-          <Route path=":poemId" element={<PoemViewer />} />
+          <Route path=":poemId" element={<PoemDetail />} />
         </Route>
       </Routes>
     </BrowserRouter>

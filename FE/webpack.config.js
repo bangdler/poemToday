@@ -31,6 +31,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'), //빌드 위치
     filename: 'app.js', //웹팩 빌드 후 최종적으로 만들어질 파일
+    publicPath: '/',
   },
 
   module: {
