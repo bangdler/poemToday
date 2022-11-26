@@ -6,6 +6,7 @@ export const lightTheme = {
   borderColor: '#eaeaea',
   cardColor: '#f8f7f4',
   hoverBgColor: '#dee2e6',
+  dimColor: 'rgba(249,249,249,0.85)',
 };
 
 export const darkTheme = {
@@ -14,6 +15,7 @@ export const darkTheme = {
   borderColor: '#2c2d33',
   cardColor: '#333',
   hoverBgColor: '#495057',
+  dimColor: 'rgba(0,0,0,0.85)',
 };
 
 const device = {
