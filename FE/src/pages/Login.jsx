@@ -1,16 +1,16 @@
 import React from 'react';
 
-import Modal from '@/components/common/Modal';
+import LoginRegisterLayout from '@/components/common/LoginRegisterLayout';
 import LoginForm from '@/components/LoginForm';
 import Logo from '@/components/Logo';
 
 export default function Login() {
   return (
     <>
-      <Modal>
+      <LoginRegisterLayout>
         <Logo name={'Today Poem'} link={'/'} blindText={'홈으로 이동합니다.'} />
         <LoginForm />
-      </Modal>
+      </LoginRegisterLayout>
     </>
   );
 }

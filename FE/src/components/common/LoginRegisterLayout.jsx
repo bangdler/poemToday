@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import palette from '@/style/palette';
 
-export default function Modal({ children }) {
+export default function LoginRegisterLayout({ children }) {
   return (
     <S_DimLayer>
       <S_InnerBox>{children}</S_InnerBox>
