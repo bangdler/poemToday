@@ -5,13 +5,14 @@ import styled from 'styled-components';
 import ErrorBox from '@/components/common/ErrorBox';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { S_Button } from '@/components/commonStyled/styleButtons';
-import { PoemContext, usePoem } from '@/context/PoemProvider';
+import { PoemContext, PoemDispatchContext, usePoem } from '@/context/PoemProvider';
 import palette from '@/style/palette';
 import { PostPoemServerErrorMessages } from '@/utils/constants';
 
 export default function WriteActionButtons() {
   const { poemLoading, postPoemToServer } = usePoem();
   const poemData = useContext(PoemContext);
+  const { initializePoem } = useContext(PoemDispatchContext);
   const navigate = useNavigate();
   const [error, setError] = useState({ state: false, message: '' });
 
@@ -21,6 +22,8 @@ export default function WriteActionButtons() {
     console.log(poemData.response);
     //TODO: poem id 로 라우팅
     navigate('/');
+
+    return () => initializePoem();
   }, [poemData.response]);
 
   useEffect(() => {

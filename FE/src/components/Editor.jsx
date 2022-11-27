@@ -42,7 +42,7 @@ export default function Editor() {
     } else {
       changePoemData({ key: 'author', value: '' });
     }
-  }, [poemData.category]);
+  }, [poemData.category[0]]);
 
   return (
     <S_Wrapper>
