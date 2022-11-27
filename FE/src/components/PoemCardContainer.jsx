@@ -3,20 +3,22 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import Pagination from '@/components/Pagination';
 import PoemCard from '@/components/PoemCard';
 import { PoemListContext, usePoemList } from '@/context/PoemListProvider';
 import { GetPoemListServerErrorMessages } from '@/utils/constants';
 
 export default function PoemCardContainer() {
-  const { poemList, error } = useContext(PoemListContext);
+  const { poemList, error, lastPage } = useContext(PoemListContext);
   const { poemListLoading, getPoemListFromServer } = usePoemList();
   const { username } = useParams();
   const [searchParams] = useSearchParams();
 
+  const page = parseInt(searchParams.get('page'), 10) || 1;
+
   useEffect(() => {
-    const page = parseInt(searchParams.get('page'), 10) || 1;
     getPoemListFromServer({ page, username });
-  }, []);
+  }, [page, username]);
 
   return (
     <>
@@ -32,10 +34,13 @@ export default function PoemCardContainer() {
           />
         ))}
       </S_Container>
-      <S_Wrapper>
-        {error && <S_Error>{GetPoemListServerErrorMessages[error.response.status]}</S_Error>}
-        {poemListLoading && <LoadingSpinner width={'100px'} color={`red`} />}
-      </S_Wrapper>
+      {poemList.length && <Pagination username={username} page={page} lastPage={lastPage} />}
+      {!poemList.length && (
+        <S_Wrapper>
+          {error && <S_Error>{GetPoemListServerErrorMessages[error.response.status]}</S_Error>}
+          {poemListLoading && <LoadingSpinner width={'100px'} color={`red`} />}
+        </S_Wrapper>
+      )}
     </>
   );
 }
@@ -52,9 +57,9 @@ const S_Container = styled.div`
 
 const S_Wrapper = styled.div`
   ${({ theme }) => theme.mixin.flexBox({})}
+  height: 200px;
 `;
 
 const S_Error = styled.p`
-  height: 200px;
   font-size: 3rem;
 `;

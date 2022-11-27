@@ -68,7 +68,7 @@ export const usePoemList = () => {
     setPoemListLoading(true);
     try {
       const response = await poemsApi.list({ page, username });
-      getListSuccess({ poemList: response.data, lastPage: response.headers['last-page'] });
+      getListSuccess({ poemList: response.data, lastPage: parseInt(response.headers['last-page'], 10) });
     } catch (e) {
       console.log(e);
       getListFail({ error: e });
