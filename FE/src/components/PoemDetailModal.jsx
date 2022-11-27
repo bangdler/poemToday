@@ -2,11 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import PoemCard from '@/components/PoemCard';
-
 export default function PoemDetailModal({ children }) {
   const navigate = useNavigate();
   const [pop, setPop] = useState(true);
+
+  const disableScroll = () => {
+    const scrollBarCompensation = window.innerWidth - document.body.offsetWidth;
+    document.body.style.overflow = 'hidden';
+    document.querySelector('#root').style.paddingRight = `${scrollBarCompensation}px`;
+  };
+
+  const enableScroll = () => {
+    document.body.style.overflow = '';
+    document.querySelector('#root').style.paddingRight = '';
+  };
+
+  const onClick = () => {
+    setPop(false);
+  };
 
   useEffect(() => {
     if (!pop) {
@@ -16,22 +29,20 @@ export default function PoemDetailModal({ children }) {
     }
   }, [pop]);
 
-  const onClick = () => {
-    setPop(false);
-  };
+  useEffect(() => {
+    disableScroll();
+    return () => enableScroll();
+  }, []);
 
   return (
     <S_DimLayer onClick={() => onClick()}>
-      <S_InnerBox pop={pop}>
-        {children}
-        <PoemCard id={'id'} username={'username'} title={'title'} body={'body'} category={[]} />
-      </S_InnerBox>
+      <S_InnerBox pop={pop}>{children}</S_InnerBox>
     </S_DimLayer>
   );
 }
 
 const S_DimLayer = styled.div`
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   bottom: 0;
