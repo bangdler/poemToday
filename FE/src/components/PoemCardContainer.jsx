@@ -13,7 +13,6 @@ export default function PoemCardContainer() {
   const { username } = useParams();
   const [searchParams] = useSearchParams();
 
-  console.log(username, searchParams);
   useEffect(() => {
     const page = parseInt(searchParams.get('page'), 10) || 1;
     getPoemListFromServer({ page, username });

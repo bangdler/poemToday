@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useMemo, useCallback, useContext, useState } from 'react';
 
-import * as api from '@/api/auth.js';
+import * as authApi from '@/api/auth.js';
 
 export const UserContext = createContext();
 export const UserDispatchContext = createContext();
@@ -67,7 +67,7 @@ export const useUser = () => {
     const loadingStart = { ...userLoading, check: true };
     setUserLoading(loadingStart);
     try {
-      const response = await api.check();
+      const response = await authApi.check();
       checkUserSuccess({ response: response.data });
     } catch (e) {
       checkUserFail({ error: e });
@@ -81,7 +81,7 @@ export const useUser = () => {
     const loadingStart = { ...userLoading, logout: true };
     setUserLoading(loadingStart);
     try {
-      await api.logout();
+      await authApi.logout();
       setUser({ user: null });
       localStorage.removeItem('user');
     } catch (e) {

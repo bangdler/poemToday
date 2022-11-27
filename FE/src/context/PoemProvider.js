@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useMemo, useCallback, useContext, useState } from 'react';
 
-import * as api from '@/api/auth';
+import * as poemsApi from '@/api/poems';
 import { Categories } from '@/utils/constants';
 
 export const PoemContext = createContext();
@@ -81,7 +81,7 @@ export const usePoem = () => {
   const postPoemToServer = async () => {
     setPoemLoading(true);
     try {
-      const response = await api.write({
+      const response = await poemsApi.write({
         title: poemData.title,
         author: poemData.author,
         body: poemData.body,

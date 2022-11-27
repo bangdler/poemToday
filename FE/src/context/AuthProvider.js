@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useMemo, useCallback, useContext, useState } from 'react';
 
-import * as api from '@/api/auth.js';
+import * as authApi from '@/api/auth.js';
 
 export const AuthContext = createContext();
 export const AuthDispatchContext = createContext();
@@ -88,7 +88,7 @@ export const useAuth = () => {
     const loadingStart = { ...authLoading, [field]: true };
     setAuthLoading(loadingStart);
     try {
-      const response = await api[field]({ username: authForm[field].username, password: authForm[field].password });
+      const response = await authApi[field]({ username: authForm[field].username, password: authForm[field].password });
       authSuccess({ response: response.data });
     } catch (e) {
       authFail({ error: e });
