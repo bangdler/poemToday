@@ -2,16 +2,12 @@ import React, { useContext, useEffect } from 'react';
 
 import Header from '@/components/Header';
 import PoemCardContainer from '@/components/PoemCardContainer';
-import { PoemListContext, usePoemList } from '@/context/PoemListProvider';
 import { UserDispatchContext, useUser } from '@/context/UserProvider';
 
 export default function Home() {
   const { setUser } = useContext(UserDispatchContext);
   const { checkUser } = useUser();
-  const { poemList, error } = useContext(PoemListContext);
-  const { getPoemListFromServer } = usePoemList();
 
-  console.log('render home');
   useEffect(() => {
     try {
       const user = localStorage.getItem('user');
@@ -23,15 +19,10 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    getPoemListFromServer();
-  }, []);
-
   return (
     <>
       <Header />
-      <p>{error ? error : ''}</p>
-      <PoemCardContainer poemList={poemList} />
+      <PoemCardContainer />
     </>
   );
 }
