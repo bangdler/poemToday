@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -27,7 +27,9 @@ export default function UtilArea({ user, logoutUser }) {
           로그아웃
         </S_TextBtn>
       ) : (
-        <StyleLink to={'/login'}>로그인</StyleLink>
+        <StyleLink to={'/login'} size={'small'}>
+          로그인
+        </StyleLink>
       )}
     </S_Wrapper>
   );

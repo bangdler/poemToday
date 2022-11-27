@@ -110,7 +110,9 @@ export default function RegisterForm() {
         회원가입 {authLoading.register && <LoadingSpinner width={'20px'} color={`red`} />}
       </S_CyanButton>
       <S_Container>
-        <StyleLink to={'/login'}>로그인</StyleLink>
+        <StyleLink to={'/login'} size={'small'}>
+          로그인
+        </StyleLink>
       </S_Container>
     </S_Wrapper>
   );

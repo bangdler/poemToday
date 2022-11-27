@@ -96,7 +96,9 @@ export default function LoginForm() {
         로그인 {authLoading.login && <LoadingSpinner width={'20px'} color={`red`} />}
       </S_CyanButton>
       <S_Container>
-        <StyleLink to={'/register'}>회원가입</StyleLink>
+        <StyleLink to={'/register'} size={'small'}>
+          회원가입
+        </StyleLink>
       </S_Container>
     </S_Wrapper>
   );
