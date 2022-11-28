@@ -10,52 +10,53 @@ import { UserContext } from '@/context/UserProvider';
 export default function Editor() {
   const userData = useContext(UserContext);
   const poemData = useContext(PoemContext);
+  const poemWrite = poemData.write;
   const { changePoemData } = useContext(PoemDispatchContext);
 
   const changeTitle = ({ target }) => {
-    changePoemData({ key: 'title', value: target.value });
+    changePoemData({ field: 'write', key: 'title', value: target.value });
   };
 
   const changeAuthor = ({ target }) => {
-    changePoemData({ key: 'author', value: target.value });
+    changePoemData({ field: 'write', key: 'author', value: target.value });
   };
 
   const changeCategory = ({ target }) => {
-    const category = poemData.category.map(it => {
+    const category = poemWrite.category.map(it => {
       if (it.name === target.id) {
         return { ...it, checked: target.checked };
       } else {
         return it;
       }
     });
-    changePoemData({ key: 'category', value: category });
+    changePoemData({ field: 'write', key: 'category', value: category });
   };
 
   const changeBody = value => {
-    changePoemData({ key: 'body', value: value });
+    changePoemData({ field: 'write', key: 'body', value: value });
   };
 
   useEffect(() => {
-    const selfPoemCategory = poemData.category[0];
+    const selfPoemCategory = poemWrite.category[0];
     if (selfPoemCategory.checked) {
-      changePoemData({ key: 'author', value: userData.user.username });
+      changePoemData({ field: 'write', key: 'author', value: userData.user.username });
     } else {
-      changePoemData({ key: 'author', value: '' });
+      changePoemData({ field: 'write', key: 'author', value: '' });
     }
-  }, [poemData.category[0]]);
+  }, [poemWrite.category[0]]);
 
   return (
     <S_Wrapper>
-      <S_TitleInput placeholder={'제목을 입력하세요.'} value={poemData.title} onChange={changeTitle} />
+      <S_TitleInput placeholder={'제목을 입력하세요.'} value={poemWrite.title} onChange={changeTitle} />
       <S_Wrapper2>
-        <S_AuthorInput placeholder={'저자를 입력하세요.'} value={poemData.author} onChange={changeAuthor} />
+        <S_AuthorInput placeholder={'저자를 입력하세요.'} value={poemWrite.author} onChange={changeAuthor} />
         <S_CategoryContainer>
-          {poemData.category.map(({ name, color, checked }, idx) => (
+          {poemWrite.category.map(({ name, color, checked }, idx) => (
             <CheckBox key={idx} value={name} text={name} color={color} checked={checked} onChange={changeCategory} />
           ))}
         </S_CategoryContainer>
       </S_Wrapper2>
-      <QuillEditor value={poemData.body} onChange={changeBody} />
+      <QuillEditor value={poemWrite.body} onChange={changeBody} />
     </S_Wrapper>
   );
 }

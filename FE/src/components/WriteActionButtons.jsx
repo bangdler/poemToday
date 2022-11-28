@@ -10,29 +10,31 @@ import palette from '@/style/palette';
 import { PostPoemServerErrorMessages } from '@/utils/constants';
 
 export default function WriteActionButtons() {
-  const { poemLoading, postPoemToServer } = usePoem();
+  const { poemLoading, writePoemToServer } = usePoem();
   const poemData = useContext(PoemContext);
-  const { initializePoem } = useContext(PoemDispatchContext);
+  const poemWrite = poemData.write
+  const { initializePoem, initializeError } = useContext(PoemDispatchContext);
   const navigate = useNavigate();
   const [error, setError] = useState({ state: false, message: '' });
 
   useEffect(() => {
-    if (poemData.response === null) return;
+    if (poemWrite.response === null) return;
+    const response = poemWrite.response;
     console.log('전송완료');
-    console.log(poemData.response);
-    //TODO: poem id 로 라우팅
-    navigate('/');
+    console.log(poemWrite.response);
+    navigate(`/@${response.user.username}/${response._id}`);
 
-    return () => initializePoem();
-  }, [poemData.response]);
+    return () => initializePoem({ field: 'write' });
+  }, [poemWrite.response]);
 
   useEffect(() => {
-    if (poemData.error === null) return;
+    if (poemWrite.error === null) return;
     console.log('전송실패');
-    console.log(poemData.error);
-    const errorStatus = poemData.error.response.status;
+    console.log(poemWrite.error);
+    const errorStatus = poemWrite.error.response.status;
     setError({ state: true, message: PostPoemServerErrorMessages[errorStatus] });
-  }, [poemData.error]);
+    return () => initializeError({ field: 'write' });
+  }, [poemWrite.error]);
 
   const closeErrorBox = async () => {
     setError({ state: false, message: '' });
@@ -41,11 +43,11 @@ export default function WriteActionButtons() {
   const onSubmit = async e => {
     e.preventDefault();
     await closeErrorBox();
-    if ([poemData.title, poemData.body, poemData.author].includes('')) {
+    if ([poemWrite.title, poemWrite.body, poemWrite.author].includes('')) {
       setError({ state: true, message: '제목, 저자, 내용을 모두 입력하세요.' });
       return;
     }
-    postPoemToServer();
+    writePoemToServer();
   };
 
   const onClickCancel = e => {
@@ -59,8 +61,8 @@ export default function WriteActionButtons() {
         <S_CyanButton size={'medium'} onClick={onClickCancel}>
           취소하기
         </S_CyanButton>
-        <S_CyanButton size={'medium'} disabled={poemLoading} onClick={onSubmit}>
-          작성하기 {poemLoading && <LoadingSpinner width={'20px'} color={`red`} />}
+        <S_CyanButton size={'medium'} disabled={poemLoading.write} onClick={onSubmit}>
+          작성하기 {poemLoading.write && <LoadingSpinner width={'20px'} color={`red`} />}
         </S_CyanButton>
         {error.state && <ErrorBox errorMessage={error.message} onClick={closeErrorBox} />}
       </S_Wrapper>

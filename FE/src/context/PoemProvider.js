@@ -6,7 +6,7 @@ import { Categories } from '@/utils/constants';
 export const PoemContext = createContext();
 export const PoemDispatchContext = createContext();
 
-const initialPoemData = {
+const initialForm = {
   title: '',
   body: '',
   author: '',
@@ -15,16 +15,21 @@ const initialPoemData = {
   error: null,
 };
 
+const initialPoemData = {
+  write: initialForm,
+  edit: initialForm,
+};
+
 const poemReducer = (state, action) => {
   switch (action.type) {
     case 'INITIALIZE':
-      return initialPoemData;
+      return { ...state, [action.field]: initialForm };
     case 'CHANGE':
-      return { ...state, [action.key]: action.value };
+      return { ...state, write: { ...state[action.field], [action.key]: action.value } };
     case 'POST_POEM_SUCCESS':
-      return { ...state, response: action.response, error: null };
+      return { ...state, write: { ...state[action.field], response: action.response, error: null } };
     case 'POST_POEM_FAIL':
-      return { ...state, response: null, error: action.error };
+      return { ...state, write: { ...state[action.field], response: null, error: action.error } };
     default:
       return state;
   }
@@ -33,36 +38,49 @@ const poemReducer = (state, action) => {
 export default function PoemProvider({ children }) {
   const [poemData, poemDataDispatch] = useReducer(poemReducer, initialPoemData);
 
-  const initializePoem = useCallback(() => {
+  const initializePoem = useCallback(({ field }) => {
     poemDataDispatch({
       type: 'INITIALIZE',
+      field,
     });
   }, []);
 
-  const changePoemData = useCallback(({ key, value }) => {
+  const initializeError = useCallback(({ field }) => {
     poemDataDispatch({
       type: 'CHANGE',
+      field,
+      key: 'error',
+      value: null,
+    });
+  }, []);
+
+  const changePoemData = useCallback(({ field, key, value }) => {
+    poemDataDispatch({
+      type: 'CHANGE',
+      field,
       key,
       value,
     });
   }, []);
 
-  const postPoemSuccess = useCallback(({ response }) => {
+  const postPoemSuccess = useCallback(({ field, response }) => {
     poemDataDispatch({
       type: 'POST_POEM_SUCCESS',
+      field,
       response,
     });
   }, []);
 
-  const postPoemFail = useCallback(({ error }) => {
+  const postPoemFail = useCallback(({ field, error }) => {
     poemDataDispatch({
       type: 'POST_POEM_FAIL',
+      field,
       error,
     });
   }, []);
   const memoizedPoemDispatches = useMemo(
-    () => ({ initializePoem, postPoemSuccess, postPoemFail, changePoemData }),
-    [initializePoem, postPoemSuccess, postPoemFail, changePoemData]
+    () => ({ initializePoem, initializeError, postPoemSuccess, postPoemFail, changePoemData }),
+    [initializePoem, initializeError, postPoemSuccess, postPoemFail, changePoemData]
   );
 
   return (
@@ -76,24 +94,26 @@ export const usePoem = () => {
   const poemData = useContext(PoemContext);
   const { postPoemSuccess, postPoemFail } = useContext(PoemDispatchContext);
 
-  const [poemLoading, setPoemLoading] = useState(false);
+  const [poemLoading, setPoemLoading] = useState({ write: false });
 
-  const postPoemToServer = async () => {
-    setPoemLoading(true);
+  const writePoemToServer = async () => {
+    const loadingStart = { ...poemLoading, write: true };
+    setPoemLoading(loadingStart);
     try {
       const response = await poemsApi.write({
-        title: poemData.title,
-        author: poemData.author,
-        body: poemData.body,
-        category: poemData.category,
+        title: poemData.write.title,
+        author: poemData.write.author,
+        body: poemData.write.body,
+        category: poemData.write.category,
       });
-      postPoemSuccess({ response: response.data });
+      postPoemSuccess({ field: 'write', response: response.data });
     } catch (e) {
       console.log(e);
-      postPoemFail({ error: e });
+      postPoemFail({ field: 'write', error: e });
     }
-    setPoemLoading(false);
+    const loadingFinish = { ...poemLoading, write: false };
+    setPoemLoading(loadingFinish);
   };
 
-  return { poemLoading, postPoemToServer };
+  return { poemLoading, writePoemToServer };
 };
