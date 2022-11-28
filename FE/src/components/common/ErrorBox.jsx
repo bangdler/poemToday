@@ -44,8 +44,9 @@ export default React.memo(function ErrorBox({ errorMessage, onClick }) {
 });
 
 const S_Wrapper = styled.div`
+  z-index: 15;
   background-color: tomato;
-  color: white;
+  color: ${({ theme }) => theme.mode.textColor};
   border-radius: 10px;
   padding: 1.6rem;
   position: absolute;
@@ -83,9 +84,10 @@ const S_Message = styled.p`
 `;
 
 const S_WhiteTextBtn = styled(S_TextBtn)`
-  color: white;
+  color: ${({ theme }) => theme.mode.textColor};
+  border-bottom: 1px solid ${({ theme }) => theme.mode.borderColor};
   &:hover {
-    color: rgba(0, 0, 0, 0.2);
+    border-color: ${({ theme }) => theme.mode.textColor};
   }
 `;
 
