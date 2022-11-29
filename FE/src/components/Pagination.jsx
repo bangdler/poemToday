@@ -1,5 +1,6 @@
 import qs from 'qs';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import StyleLink from '@/components/common/StyleLink';
@@ -7,21 +8,34 @@ import { S_Button } from '@/components/commonStyled/styleButtons';
 import palette from '@/style/palette';
 
 export default function Pagination({ username, page, lastPage }) {
+  const navigate = useNavigate();
   const buildUrl = ({ username, page }) => {
     const query = qs.stringify({ page });
     return username ? `/@${username}?${query}` : `/?${query}`;
   };
 
+  const clickPrev = () => {
+    navigate(buildUrl({ username, page: page - 1 }));
+  };
+
+  const clickNext = () => {
+    navigate(buildUrl({ username, page: page + 1 }));
+  };
+
+  const clickStartPage = () => {
+    navigate(buildUrl({ username, page: 1 }));
+  };
+
+  const clickLastPage = () => {
+    navigate(buildUrl({ username, page: lastPage }));
+  };
+
   return (
     <S_Wrapper>
-      <S_CyanButton size="medium" disabled={page === 1} to={page === 1 ? undefined : buildUrl({ username, page: 1 })}>
+      <S_CyanButton size="medium" disabled={page === 1} onClick={clickStartPage}>
         {'<<'}
       </S_CyanButton>
-      <S_CyanButton
-        size="medium"
-        disabled={page === 1}
-        to={page === 1 ? undefined : buildUrl({ username, page: page - 1 })}
-      >
+      <S_CyanButton size="medium" disabled={page === 1} onClick={clickPrev}>
         이전
       </S_CyanButton>
       {Array.from({ length: lastPage }, (_, idx) => idx + 1).map((num, idx) => (
@@ -29,18 +43,10 @@ export default function Pagination({ username, page, lastPage }) {
           <S_Page cur={page === num}>{num}</S_Page>
         </StyleLink>
       ))}
-      <S_CyanButton
-        size="medium"
-        disabled={page === lastPage}
-        to={page === lastPage ? undefined : buildUrl({ username, page: page + 1 })}
-      >
+      <S_CyanButton size="medium" disabled={page === lastPage} onClick={clickNext}>
         다음
       </S_CyanButton>
-      <S_CyanButton
-        size="medium"
-        disabled={page === lastPage}
-        to={page === lastPage ? undefined : buildUrl({ username, page: lastPage })}
-      >
+      <S_CyanButton size="medium" disabled={page === lastPage} onClick={clickLastPage}>
         {'>>'}
       </S_CyanButton>
     </S_Wrapper>
