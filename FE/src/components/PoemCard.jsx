@@ -21,7 +21,7 @@ export default function PoemCard({ id, username, title, body, category }) {
           }
         })}
       </S_CategoryContainer>
-      <S_Line />
+      {category.filter(it => it.checked).length && <S_Line />}
       <S_ReactQuill readOnly={true} value={body} modules={{ toolbar: null }} />
     </S_Wrapper>
   );

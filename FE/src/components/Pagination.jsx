@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import StyleLink from '@/components/common/StyleLink';
-import { S_Button } from '@/components/commonStyled/styleButtons';
-import palette from '@/style/palette';
+import { S_CyanButton } from '@/components/commonStyled/styleButtons';
 
 export default function Pagination({ username, page, lastPage }) {
   const navigate = useNavigate();
+
   const buildUrl = ({ username, page }) => {
     const query = qs.stringify({ page });
     return username ? `/@${username}?${query}` : `/?${query}`;
@@ -59,18 +59,7 @@ const S_Wrapper = styled.div`
   > * {
     margin: 0 1rem;
   }
-`;
-
-const S_CyanButton = styled(S_Button)`
-  background-color: ${palette.cyan[5]};
-  &:hover:enabled {
-    background-color: ${palette.cyan[4]};
-  }
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-    background-color: ${palette.cyan[5]};
-  }
+  margin-bottom: 2rem;
 `;
 
 const S_Page = styled.p`

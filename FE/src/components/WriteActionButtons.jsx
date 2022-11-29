@@ -4,9 +4,8 @@ import styled from 'styled-components';
 
 import ErrorBox from '@/components/common/ErrorBox';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import { S_Button } from '@/components/commonStyled/styleButtons';
+import { S_CyanButton } from '@/components/commonStyled/styleButtons';
 import { PoemContext, PoemDispatchContext, usePoem } from '@/context/PoemProvider';
-import palette from '@/style/palette';
 import { PostPoemServerErrorMessages } from '@/utils/constants';
 
 export default function WriteActionButtons() {
@@ -74,17 +73,5 @@ const S_Wrapper = styled.div`
   ${({ theme }) => theme.mixin.flexBox({ justify: 'flex-end' })}
   > * {
     margin-left: 2rem;
-  }
-`;
-
-const S_CyanButton = styled(S_Button)`
-  background-color: ${palette.cyan[5]};
-  &:hover:enabled {
-    background-color: ${palette.cyan[4]};
-  }
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-    background-color: ${palette.cyan[5]};
   }
 `;

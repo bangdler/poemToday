@@ -6,10 +6,9 @@ import ErrorBox from '@/components/common/ErrorBox';
 import InputBox from '@/components/common/InputBox';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import StyleLink from '@/components/common/StyleLink';
-import { S_Button } from '@/components/commonStyled/styleButtons';
+import { S_CyanButton } from '@/components/commonStyled/styleButtons';
 import { AuthContext, AuthDispatchContext, useAuth } from '@/context/AuthProvider';
 import { UserContext, useUser } from '@/context/UserProvider';
-import palette from '@/style/palette';
 import { LoginServerErrorMessages } from '@/utils/constants';
 
 export default function LoginForm() {
@@ -110,18 +109,6 @@ const S_Wrapper = styled.form`
   padding: 1.6rem;
   > * {
     margin: 10px 0;
-  }
-`;
-
-const S_CyanButton = styled(S_Button)`
-  background-color: ${palette.cyan[5]};
-  &:hover:enabled {
-    background-color: ${palette.cyan[4]};
-  }
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-    background-color: ${palette.cyan[5]};
   }
 `;
 
