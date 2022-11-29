@@ -22,7 +22,7 @@ export default function PoemCardContainer() {
 
   return (
     <>
-      <S_Container>
+      <S_CardContainer>
         {poemList.map(poemCard => (
           <PoemCard
             key={poemCard._id}
@@ -33,7 +33,7 @@ export default function PoemCardContainer() {
             category={poemCard.category}
           />
         ))}
-      </S_Container>
+      </S_CardContainer>
       {poemList.length && <Pagination username={username} page={page} lastPage={lastPage} />}
       {!poemList.length && (
         <S_Wrapper>
@@ -45,7 +45,7 @@ export default function PoemCardContainer() {
   );
 }
 
-const S_Container = styled.div`
+const S_CardContainer = styled.div`
   margin: 40px 20px;
   display: grid;
   column-gap: 20px;

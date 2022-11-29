@@ -69,14 +69,14 @@ const S_Wrapper = styled.div`
 
 const S_Wrapper2 = styled.div`
   ${({ theme }) => theme.mixin.flexBox({ justify: 'flex-start' })}
-  > * {
+  > *:not(:last-child) {
     margin-right: 2rem;
   }
 `;
 
 const S_CategoryContainer = styled.div`
   ${({ theme }) => theme.mixin.flexBox({})}
-  > * {
+  > *:not(:last-child) {
     margin-right: 1rem;
   }
 `;

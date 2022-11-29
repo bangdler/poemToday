@@ -12,7 +12,7 @@ import { PostPoemServerErrorMessages } from '@/utils/constants';
 export default function WriteActionButtons() {
   const { poemLoading, writePoemToServer } = usePoem();
   const poemData = useContext(PoemContext);
-  const poemWrite = poemData.write
+  const poemWrite = poemData.write;
   const { initializePoem, initializeError } = useContext(PoemDispatchContext);
   const navigate = useNavigate();
   const [error, setError] = useState({ state: false, message: '' });
