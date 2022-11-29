@@ -4,7 +4,7 @@ export const lightTheme = {
   bgColor: '#f8f7f4',
   textColor: '#31302e',
   borderColor: '#eaeaea',
-  cardColor: '#f8f7f4',
+  cardColor: '#fff',
   hoverBgColor: '#dee2e6',
   dimColor: 'rgba(249,249,249,0.85)',
 };

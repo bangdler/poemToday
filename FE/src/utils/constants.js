@@ -19,6 +19,12 @@ export const GetPoemListServerErrorMessages = {
   500: '서버 응답 오류',
 };
 
+export const GetPoemByIdServerErrorMessages = {
+  400: '잘못된 요청입니다.',
+  404: '없는 Poem 입니다.',
+  500: '서버 응답 오류',
+};
+
 export const Categories = [
   { checked: false, name: '자작시', color: palette.yellow[2] },
   { checked: false, name: '사랑시', color: palette.red[1] },

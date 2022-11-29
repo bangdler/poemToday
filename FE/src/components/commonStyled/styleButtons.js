@@ -68,3 +68,15 @@ export const S_CyanButton = styled(S_Button)`
     background-color: ${palette.cyan[5]};
   }
 `;
+
+export const S_RedButton = styled(S_Button)`
+  background-color: ${palette.red[4]};
+  &:hover:enabled {
+    background-color: ${palette.red[2]};
+  }
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background-color: ${palette.red[4]};
+  }
+`;
