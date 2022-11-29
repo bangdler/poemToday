@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
-export default function PoemDetailModal({ children }) {
-  const navigate = useNavigate();
-  const [pop, setPop] = useState(true);
-
+export default function PoemDetailModal({ pop, closeModal, children }) {
   const disableScroll = () => {
     const scrollBarCompensation = window.innerWidth - document.body.offsetWidth;
     document.body.style.overflow = 'hidden';
@@ -17,25 +13,13 @@ export default function PoemDetailModal({ children }) {
     document.querySelector('#root').style.paddingRight = '';
   };
 
-  const onClick = () => {
-    setPop(false);
-  };
-
-  useEffect(() => {
-    if (!pop) {
-      setTimeout(() => {
-        navigate(-1);
-      }, 500);
-    }
-  }, [pop]);
-
   useEffect(() => {
     disableScroll();
     return () => enableScroll();
   }, []);
 
   return (
-    <S_DimLayer onClick={() => onClick()}>
+    <S_DimLayer onClick={closeModal}>
       <S_InnerBox pop={pop}>{children}</S_InnerBox>
     </S_DimLayer>
   );
