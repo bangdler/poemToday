@@ -18,18 +18,19 @@ const initialForm = {
 const initialPoemData = {
   write: initialForm,
   edit: initialForm,
+  read: { response: null, error: null },
 };
 
 const poemReducer = (state, action) => {
   switch (action.type) {
     case 'INITIALIZE':
-      return { ...state, [action.field]: initialForm };
+      return { ...state, [action.field]: initialPoemData[action.field] };
     case 'CHANGE':
-      return { ...state, write: { ...state[action.field], [action.key]: action.value } };
-    case 'POST_POEM_SUCCESS':
-      return { ...state, write: { ...state[action.field], response: action.response, error: null } };
-    case 'POST_POEM_FAIL':
-      return { ...state, write: { ...state[action.field], response: null, error: action.error } };
+      return { ...state, [action.field]: { ...state[action.field], [action.key]: action.value } };
+    case 'POEMS_API_SUCCESS':
+      return { ...state, [action.field]: { ...state[action.field], response: action.response, error: null } };
+    case 'POEM_API_FAIL':
+      return { ...state, [action.field]: { ...state[action.field], response: null, error: action.error } };
     default:
       return state;
   }
@@ -63,24 +64,24 @@ export default function PoemProvider({ children }) {
     });
   }, []);
 
-  const postPoemSuccess = useCallback(({ field, response }) => {
+  const poemsApiSuccess = useCallback(({ field, response }) => {
     poemDataDispatch({
-      type: 'POST_POEM_SUCCESS',
+      type: 'POEMS_API_SUCCESS',
       field,
       response,
     });
   }, []);
 
-  const postPoemFail = useCallback(({ field, error }) => {
+  const poemsApiFail = useCallback(({ field, error }) => {
     poemDataDispatch({
-      type: 'POST_POEM_FAIL',
+      type: 'POEMS_API_FAIL',
       field,
       error,
     });
   }, []);
   const memoizedPoemDispatches = useMemo(
-    () => ({ initializePoem, initializeError, postPoemSuccess, postPoemFail, changePoemData }),
-    [initializePoem, initializeError, postPoemSuccess, postPoemFail, changePoemData]
+    () => ({ initializePoem, initializeError, poemsApiSuccess, poemsApiFail, changePoemData }),
+    [initializePoem, initializeError, poemsApiSuccess, poemsApiFail, changePoemData]
   );
 
   return (
@@ -92,9 +93,9 @@ export default function PoemProvider({ children }) {
 
 export const usePoem = () => {
   const poemData = useContext(PoemContext);
-  const { postPoemSuccess, postPoemFail } = useContext(PoemDispatchContext);
+  const { poemsApiSuccess, poemsApiFail } = useContext(PoemDispatchContext);
 
-  const [poemLoading, setPoemLoading] = useState({ write: false });
+  const [poemLoading, setPoemLoading] = useState({ write: false, read: false });
 
   const writePoemToServer = async () => {
     const loadingStart = { ...poemLoading, write: true };
@@ -106,14 +107,27 @@ export const usePoem = () => {
         body: poemData.write.body,
         category: poemData.write.category,
       });
-      postPoemSuccess({ field: 'write', response: response.data });
+      poemsApiSuccess({ field: 'write', response: response.data });
     } catch (e) {
       console.log(e);
-      postPoemFail({ field: 'write', error: e });
+      poemsApiFail({ field: 'write', error: e });
     }
     const loadingFinish = { ...poemLoading, write: false };
     setPoemLoading(loadingFinish);
   };
 
-  return { poemLoading, writePoemToServer };
+  const getPoemByIdFromServer = async ({ id }) => {
+    const loadingStart = { ...poemLoading, read: true };
+    setPoemLoading(loadingStart);
+    try {
+      const response = await poemsApi.read({ id });
+      poemsApiSuccess({ field: 'read', response: response.data });
+    } catch (e) {
+      console.log(e);
+      poemsApiFail({ field: 'read', error: e });
+    }
+    const loadingFinish = { ...poemLoading, read: false };
+    setPoemLoading(loadingFinish);
+  };
+  return { poemLoading, writePoemToServer, getPoemByIdFromServer };
 };
