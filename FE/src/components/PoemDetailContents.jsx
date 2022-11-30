@@ -1,4 +1,4 @@
-import React from 'react';
+import React  from 'react';
 import ReactQuill from 'react-quill';
 import styled from 'styled-components';
 
@@ -6,7 +6,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { S_Category } from '@/components/commonStyled/styleDivs';
 import { GetPoemByIdServerErrorMessages } from '@/utils/constants';
 
-export default function PoemDetailContents({ response, error, loading }) {
+export default function PoemDetailContents({ getPoemResponse, getPoemError, loading }) {
   const getPublishedDate = responseDate => {
     const [date, time] = responseDate.split('T');
     const timeFormat = time.split(':').slice(0, 2).join(':');
@@ -15,15 +15,15 @@ export default function PoemDetailContents({ response, error, loading }) {
 
   return (
     <S_ContentsWrapper onClick={e => e.stopPropagation()}>
-      {response && (
+      {getPoemResponse && (
         <>
-          <S_Title>{response.title}</S_Title>
+          <S_Title>{getPoemResponse.title}</S_Title>
           <S_Line />
           <S_Wrapper>
-            <S_Author>저자: {response.author}</S_Author>
-            <S_Date>작성일시: {getPublishedDate(response.publishedDate)}</S_Date>
+            <S_Author>저자: {getPoemResponse.author}</S_Author>
+            <S_Date>작성일시: {getPublishedDate(getPoemResponse.publishedDate)}</S_Date>
             <S_CategoryContainer>
-              {response.category.map((it, idx) => {
+              {getPoemResponse.category.map((it, idx) => {
                 if (it.checked) {
                   return (
                     <S_Category key={idx} color={it.color}>
@@ -35,12 +35,12 @@ export default function PoemDetailContents({ response, error, loading }) {
             </S_CategoryContainer>
           </S_Wrapper>
           <S_Line />
-          <S_ReactQuill readOnly={true} value={response.body} modules={{ toolbar: null }} />
+          <S_ReactQuill readOnly={true} value={getPoemResponse.body} modules={{ toolbar: null }} />
         </>
       )}
-      {(error || loading) && (
+      {(getPoemError || loading) && (
         <S_ErrorWrapper>
-          {error && <S_Error>{GetPoemByIdServerErrorMessages[error.response.status]}</S_Error>}
+          {getPoemError && <S_Error>{GetPoemByIdServerErrorMessages[getPoemError.response.status]}</S_Error>}
           {loading && <LoadingSpinner width={'100px'} color={`red`} />}
         </S_ErrorWrapper>
       )}
@@ -60,7 +60,6 @@ const S_Title = styled.h2`
   text-align: center;
   ${({ theme }) => theme.mixin.flexBox({})};
   ${({ theme }) => theme.mixin.ellipsis({ lineNum: 2, lineHeight: '4.2rem' })};
-  user-select: none;
 `;
 
 const S_Wrapper = styled.div`

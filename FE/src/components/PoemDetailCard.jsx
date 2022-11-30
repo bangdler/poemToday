@@ -8,31 +8,58 @@ import { PoemContext, PoemDispatchContext, usePoem } from '@/context/PoemProvide
 import { UserContext } from '@/context/UserProvider';
 
 export default function PoemDetailCard({ closeModal }) {
-  const userData = useContext(UserContext);
   const { username, poemId } = useParams();
+  const userData = useContext(UserContext);
   const poemData = useContext(PoemContext);
-  const { initializePoem } = useContext(PoemDispatchContext);
-  const { response, error } = poemData.read;
-  const { poemLoading, getPoemByIdFromServer } = usePoem();
+  const { initializePoem, setPoemData } = useContext(PoemDispatchContext);
+  const { poemLoading, getPoemByIdFromServer, removePoemByIdFromServer } = usePoem();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getPoemByIdFromServer({ id: poemId });
-    return () => initializePoem({ field: 'read' });
+    return () => {
+      initializePoem({ field: 'read' });
+      initializePoem({ field: 'remove' });
+    };
   }, []);
 
-  const checkOwnPoem = () => {
-    if (!userData.user || !response) return false;
-    return userData.user._id === response.user._id;
+  const owePoem = (userData.user && userData.user._id) === (poemData.read.response && poemData.read.response.user._id);
+
+  const onEdit = () => {
+    const curPoemForm = {
+      title: poemData.read.title,
+      author: poemData.read.author,
+      body: poemData.read.body,
+      category: poemData.read.category,
+      response: null,
+      error: null,
+    };
+    setPoemData({ field: 'edit', state: curPoemForm });
+    navigate(`/edit/${poemId}`);
+  };
+
+  const onRemove = () => {
+    if (window.confirm('정말 삭제하시겠습니까?')) {
+      removePoemByIdFromServer({ id: poemId });
+    }
   };
 
   return (
     <S_CardWrapper onClick={e => e.stopPropagation()}>
-      <PoemDetailContents error={error} response={response} loading={poemLoading.read} />
-      <PoemDetailActionButtons
-        error={error}
+      <PoemDetailContents
+        getPoemError={poemData.read.error}
+        getPoemResponse={poemData.read.response}
         loading={poemLoading.read}
+        username={username}
+      />
+      <PoemDetailActionButtons
         closeModal={closeModal}
-        ownPoem={checkOwnPoem()}
+        onEdit={onEdit}
+        onRemove={onRemove}
+        ownPoem={owePoem}
+        removePoemResponse={poemData.remove.response}
+        removePoemError={poemData.remove.error}
+        loading={poemLoading.remove}
       />
     </S_CardWrapper>
   );

@@ -19,17 +19,20 @@ const initialPoemData = {
   write: initialForm,
   edit: initialForm,
   read: { response: null, error: null },
+  remove: { response: null, error: null },
 };
 
 const poemReducer = (state, action) => {
   switch (action.type) {
     case 'INITIALIZE':
       return { ...state, [action.field]: initialPoemData[action.field] };
+    case 'SET':
+      return { ...state, [action.field]: action.state };
     case 'CHANGE':
       return { ...state, [action.field]: { ...state[action.field], [action.key]: action.value } };
     case 'POEMS_API_SUCCESS':
       return { ...state, [action.field]: { ...state[action.field], response: action.response, error: null } };
-    case 'POEM_API_FAIL':
+    case 'POEMS_API_FAIL':
       return { ...state, [action.field]: { ...state[action.field], response: null, error: action.error } };
     default:
       return state;
@@ -79,9 +82,18 @@ export default function PoemProvider({ children }) {
       error,
     });
   }, []);
+
+  const setPoemData = useCallback(({ field, state }) => {
+    poemDataDispatch({
+      type: 'SET',
+      field,
+      state,
+    });
+  }, []);
+
   const memoizedPoemDispatches = useMemo(
-    () => ({ initializePoem, initializeError, poemsApiSuccess, poemsApiFail, changePoemData }),
-    [initializePoem, initializeError, poemsApiSuccess, poemsApiFail, changePoemData]
+    () => ({ initializePoem, initializeError, poemsApiSuccess, poemsApiFail, changePoemData, setPoemData }),
+    [initializePoem, initializeError, poemsApiSuccess, poemsApiFail, changePoemData, setPoemData]
   );
 
   return (
@@ -95,7 +107,7 @@ export const usePoem = () => {
   const poemData = useContext(PoemContext);
   const { poemsApiSuccess, poemsApiFail } = useContext(PoemDispatchContext);
 
-  const [poemLoading, setPoemLoading] = useState({ write: false, read: false });
+  const [poemLoading, setPoemLoading] = useState({ write: false, read: false, remove: false });
 
   const writePoemToServer = async () => {
     const loadingStart = { ...poemLoading, write: true };
@@ -129,5 +141,20 @@ export const usePoem = () => {
     const loadingFinish = { ...poemLoading, read: false };
     setPoemLoading(loadingFinish);
   };
-  return { poemLoading, writePoemToServer, getPoemByIdFromServer };
+
+  const removePoemByIdFromServer = async ({ id }) => {
+    const loadingStart = { ...poemLoading, remove: true };
+    setPoemLoading(loadingStart);
+    try {
+      const response = await poemsApi.remove({ id });
+      poemsApiSuccess({ field: 'remove', response: response.data });
+    } catch (e) {
+      console.log(e);
+      poemsApiFail({ field: 'remove', error: e });
+    }
+    const loadingFinish = { ...poemLoading, remove: false };
+    setPoemLoading(loadingFinish);
+  };
+
+  return { poemLoading, writePoemToServer, getPoemByIdFromServer, removePoemByIdFromServer };
 };
