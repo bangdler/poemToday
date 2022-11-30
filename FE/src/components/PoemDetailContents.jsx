@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import ReactQuill from 'react-quill';
 import styled from 'styled-components';
 
@@ -8,10 +8,11 @@ import { GetPoemByIdServerErrorMessages } from '@/utils/constants';
 
 export default function PoemDetailContents({ getPoemResponse, getPoemError, loading }) {
   const getPublishedDate = responseDate => {
-    const [date, time] = responseDate.split('T');
-    const timeFormat = time.split(':').slice(0, 2).join(':');
-    return `${date} ${timeFormat}`;
+    const koreaDate = new Date(responseDate).toLocaleString();
+    return koreaDate.substring(0, koreaDate.length - 3);
   };
+
+  const filteredCategory = getPoemResponse ? getPoemResponse.category.filter(it => it.checked) : [];
 
   return (
     <S_ContentsWrapper onClick={e => e.stopPropagation()}>
@@ -21,18 +22,17 @@ export default function PoemDetailContents({ getPoemResponse, getPoemError, load
           <S_Line />
           <S_Wrapper>
             <S_Author>저자: {getPoemResponse.author}</S_Author>
+            <S_Writer>작성자: {getPoemResponse.user.username}</S_Writer>
             <S_Date>작성일시: {getPublishedDate(getPoemResponse.publishedDate)}</S_Date>
-            <S_CategoryContainer>
-              {getPoemResponse.category.map((it, idx) => {
-                if (it.checked) {
-                  return (
-                    <S_Category key={idx} color={it.color}>
-                      {it.name}
-                    </S_Category>
-                  );
-                }
-              })}
-            </S_CategoryContainer>
+            {!!filteredCategory.length && (
+              <S_CategoryContainer>
+                {filteredCategory.map((it, idx) => (
+                  <S_Category key={idx} color={it.color}>
+                    {it.name}
+                  </S_Category>
+                ))}
+              </S_CategoryContainer>
+            )}
           </S_Wrapper>
           <S_Line />
           <S_ReactQuill readOnly={true} value={getPoemResponse.body} modules={{ toolbar: null }} />
@@ -64,7 +64,7 @@ const S_Title = styled.h2`
 
 const S_Wrapper = styled.div`
   ${({ theme }) => theme.mixin.flexBox({ direction: 'column', align: 'flex-end' })};
-  > * {
+  > *:not(:last-child) {
     margin-bottom: 1rem;
   }
 `;
@@ -73,8 +73,13 @@ const S_Author = styled.p`
   color: ${({ theme }) => theme.mode.textColor};
 `;
 
+const S_Writer = styled.p`
+  font-size: 1.6rem;
+  color: ${({ theme }) => theme.mode.textColor};
+`;
+
 const S_Date = styled.p`
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   color: ${({ theme }) => theme.mode.textColor};
 `;
 
