@@ -53,7 +53,7 @@ export default function WriteActionButtons({ field, poemForm }) {
 
   const onClickCancel = e => {
     e.preventDefault();
-    navigate(-1);
+    navigate('/');
   };
 
   return (

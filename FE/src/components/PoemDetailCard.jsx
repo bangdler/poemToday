@@ -27,15 +27,15 @@ export default function PoemDetailCard({ closeModal }) {
 
   const onEdit = () => {
     const curPoemForm = {
-      title: poemData.read.title,
-      author: poemData.read.author,
-      body: poemData.read.body,
-      category: poemData.read.category,
+      title: poemData.read.response.title,
+      author: poemData.read.response.author,
+      body: poemData.read.response.body,
+      category: poemData.read.response.category,
       response: null,
       error: null,
     };
     setPoemData({ field: 'edit', state: curPoemForm });
-    navigate(`/edit/${poemId}`);
+    navigate(`/edit/@${username}/${poemId}`);
   };
 
   const onRemove = () => {

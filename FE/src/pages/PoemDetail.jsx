@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import PoemDetailCard from '@/components/PoemDetailCard';
@@ -16,7 +16,7 @@ export default function PoemDetail() {
   useEffect(() => {
     if (!pop) {
       setTimeout(() => {
-        navigate(-1);
+        navigate('/');
       }, 500);
     }
   }, [pop]);
