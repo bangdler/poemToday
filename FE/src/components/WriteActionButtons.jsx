@@ -5,35 +5,33 @@ import styled from 'styled-components';
 import ErrorBox from '@/components/common/ErrorBox';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { S_CyanButton } from '@/components/commonStyled/styleButtons';
-import { PoemContext, PoemDispatchContext, usePoem } from '@/context/PoemProvider';
+import { PoemDispatchContext, usePoem } from '@/context/PoemProvider';
 import { PostPoemServerErrorMessages } from '@/utils/constants';
 
-export default function WriteActionButtons() {
+export default function WriteActionButtons({ field, poemForm }) {
   const { poemLoading, writePoemToServer } = usePoem();
-  const poemData = useContext(PoemContext);
-  const poemWrite = poemData.write;
   const { initializePoem, initializeError } = useContext(PoemDispatchContext);
   const navigate = useNavigate();
   const [error, setError] = useState({ state: false, message: '' });
 
   useEffect(() => {
-    if (poemWrite.response === null) return;
-    const response = poemWrite.response;
+    if (poemForm.response === null) return;
+    const response = poemForm.response;
     console.log('전송완료');
-    console.log(poemWrite.response);
+    console.log(poemForm.response);
     navigate(`/@${response.user.username}/${response._id}`);
 
-    return () => initializePoem({ field: 'write' });
-  }, [poemWrite.response]);
+    return () => initializePoem({ field });
+  }, [poemForm.response]);
 
   useEffect(() => {
-    if (poemWrite.error === null) return;
+    if (poemForm.error === null) return;
     console.log('전송실패');
-    console.log(poemWrite.error);
-    const errorStatus = poemWrite.error.response.status;
+    console.log(poemForm.error);
+    const errorStatus = poemForm.error.response.status;
     setError({ state: true, message: PostPoemServerErrorMessages[errorStatus] });
-    return () => initializeError({ field: 'write' });
-  }, [poemWrite.error]);
+    return () => initializeError({ field });
+  }, [poemForm.error]);
 
   const closeErrorBox = async () => {
     setError({ state: false, message: '' });
@@ -42,7 +40,7 @@ export default function WriteActionButtons() {
   const onSubmit = async e => {
     e.preventDefault();
     await closeErrorBox();
-    if ([poemWrite.title, poemWrite.body, poemWrite.author].includes('')) {
+    if ([poemForm.title, poemForm.body, poemForm.author].includes('')) {
       setError({ state: true, message: '제목, 저자, 내용을 모두 입력하세요.' });
       return;
     }

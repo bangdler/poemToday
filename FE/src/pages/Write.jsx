@@ -1,10 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 
-import Editor from '@/components/Editor';
 import Header from '@/components/Header';
-import WriteActionButtons from '@/components/WriteActionButtons';
+import WriteForm from '@/components/WriteForm';
 import { UserContext, useUser } from '@/context/UserProvider';
 
 export default function Write() {
@@ -26,15 +24,7 @@ export default function Write() {
   return (
     <>
       <Header />
-      <S_FormLayout>
-        <Editor />
-        <WriteActionButtons />
-      </S_FormLayout>
+      <WriteForm />
     </>
   );
 }
-
-const S_FormLayout = styled.form`
-  padding: 1rem;
-  max-width: 768px;
-`;
