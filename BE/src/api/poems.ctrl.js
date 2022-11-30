@@ -84,12 +84,12 @@ export const list = async ctx => {
 
   const query = {
     ...(username ? { 'user.username': username } : {}),
-    ...(category ? { category: category } : {}),
+    // ...(category ? { category: category } : {}),
   };
 
   try {
     const poems = await Poem.find(query)
-      .sort({ _id: -1 })
+      .sort({ publishedDate: -1, _id: -1 })
       .limit(10)
       .skip((curPage - 1) * 10)
       .exec();
@@ -142,7 +142,14 @@ export const update = async ctx => {
   // 요청이 제대로 왔을 경우 데이터 수정
   const { id } = ctx.params;
   try {
-    const poem = await Poem.findByIdAndUpdate(id, ctx.request.body, { new: true }).exec();
+    const poem = await Poem.findByIdAndUpdate(
+      id,
+      {
+        ...ctx.request.body,
+        publishedDate: Date.now(),
+      },
+      { new: true }
+    ).exec();
     if (!poem) {
       ctx.status = 404;
       return;
