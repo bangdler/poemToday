@@ -1,4 +1,3 @@
-// TODO: 서버 error 종류 400(아이디, 비번 형식 오류), 401(없는 아이디, 잘못된 비번), 409(회원가입시 아이디중복),
 import palette from '@/style/palette';
 
 export const LoginServerErrorMessages = {
@@ -21,12 +20,19 @@ export const GetPoemListServerErrorMessages = {
 
 export const GetPoemByIdServerErrorMessages = {
   400: '잘못된 요청입니다.',
-  404: '없는 Poem 입니다.',
+  404: '존재하지 않는 Poem 입니다.',
   500: '서버 응답 오류',
 };
 
 export const DeletePoemByIdServerErrorMessages = {
   403: '작성자만 삭제할 수 있습니다.',
+  500: '서버 응답 오류',
+};
+
+export const UpdatePoemByIdServerErrorMessages = {
+  400: '잘못된 요청입니다.',
+  403: '작성자만 수정할 수 있습니다.',
+  404: '존재하지 않는 Poem 입니다.',
   500: '서버 응답 오류',
 };
 

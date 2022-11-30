@@ -107,7 +107,7 @@ export const usePoem = () => {
   const poemData = useContext(PoemContext);
   const { poemsApiSuccess, poemsApiFail } = useContext(PoemDispatchContext);
 
-  const [poemLoading, setPoemLoading] = useState({ write: false, read: false, remove: false });
+  const [poemLoading, setPoemLoading] = useState({ write: false, read: false, remove: false, edit: false });
 
   const writePoemToServer = async () => {
     const loadingStart = { ...poemLoading, write: true };
@@ -156,5 +156,25 @@ export const usePoem = () => {
     setPoemLoading(loadingFinish);
   };
 
-  return { poemLoading, writePoemToServer, getPoemByIdFromServer, removePoemByIdFromServer };
+  const updatePoemByIdToServer = async ({ id }) => {
+    const loadingStart = { ...poemLoading, edit: true };
+    setPoemLoading(loadingStart);
+    try {
+      const response = await poemsApi.update({
+        id,
+        title: poemData.edit.title,
+        author: poemData.edit.author,
+        body: poemData.edit.body,
+        category: poemData.edit.category,
+      });
+      poemsApiSuccess({ field: 'edit', response: response.data });
+    } catch (e) {
+      console.log(e);
+      poemsApiFail({ field: 'edit', error: e });
+    }
+    const loadingFinish = { ...poemLoading, edit: false };
+    setPoemLoading(loadingFinish);
+  };
+
+  return { poemLoading, writePoemToServer, getPoemByIdFromServer, removePoemByIdFromServer, updatePoemByIdToServer};
 };
