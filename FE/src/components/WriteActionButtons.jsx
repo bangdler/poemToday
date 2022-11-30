@@ -29,6 +29,10 @@ export default function WriteActionButtons({ field, poemForm }) {
     console.log('전송실패');
     console.log(poemForm.error);
     const errorStatus = poemForm.error.response.status;
+    if (errorStatus === '401') {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+    }
     setError({ state: true, message: PostPoemServerErrorMessages[errorStatus] });
     return () => initializeError({ field });
   }, [poemForm.error]);

@@ -49,7 +49,7 @@ const S_Wrapper = styled.div`
   color: ${({ theme }) => theme.mode.textColor};
   border-radius: 10px;
   padding: 1.6rem;
-  position: absolute;
+  position: fixed;
   top: 1rem;
   right: 1rem;
   ${({ theme }) => theme.mixin.flexBox({ direction: 'column' })}
