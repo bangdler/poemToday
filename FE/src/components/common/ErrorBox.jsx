@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { S_TextBtn } from '@/components/commonStyled/styleButtons';
 
-export default React.memo(function ErrorBox({ errorMessage, onClick }) {
+export default React.memo(function ErrorBox({ visible, errorMessage, onClick }) {
   let timer = useRef(null);
   let start;
   let enterTime;
@@ -26,6 +26,7 @@ export default React.memo(function ErrorBox({ errorMessage, onClick }) {
     timer.current = setTimeout(() => onClick(), 3 * 1000 - diff);
   };
 
+  if (!visible) return null;
   return (
     <>
       <S_Wrapper onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>

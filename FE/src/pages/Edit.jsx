@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import EditForm from '@/components/writeForm/EditForm';
 import Header from '@/components/header/Header';
+import EditForm from '@/components/writeForm/EditForm';
 import { UserContext, useUser } from '@/context/UserProvider';
 
 export default function Edit() {

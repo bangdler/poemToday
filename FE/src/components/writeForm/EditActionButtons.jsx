@@ -63,8 +63,8 @@ export default function EditActionButtons({ field, poemForm, id, username }) {
         <S_CyanButton size={'medium'} disabled={poemLoading.edit} onClick={onSubmit}>
           수정하기 {poemLoading.edit && <LoadingSpinner width={'20px'} color={`red`} />}
         </S_CyanButton>
-        {error.state && <ErrorBox errorMessage={error.message} onClick={closeErrorBox} />}
       </S_Wrapper>
+      <ErrorBox visible={error.state} errorMessage={error.message} onClick={closeErrorBox} />
     </>
   );
 }

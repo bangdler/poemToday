@@ -1,7 +1,7 @@
 import React from 'react';
 
-import LoginRegisterLayout from '@/components/common/LoginRegisterLayout';
 import LoginForm from '@/components/authForm/LoginForm';
+import LoginRegisterLayout from '@/components/authForm/LoginRegisterLayout';
 import Logo from '@/components/common/Logo';
 
 export default function Login() {

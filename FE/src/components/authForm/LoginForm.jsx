@@ -74,32 +74,34 @@ export default function LoginForm() {
   };
 
   return (
-    <S_Wrapper>
-      <InputBox
-        title={'아이디'}
-        name={'username'}
-        value={authForm.login.username}
-        onChange={onChange}
-        autoComplete={'username'}
-      />
-      <InputBox
-        title={'비밀번호'}
-        name={'password'}
-        value={authForm.login.password}
-        type={'password'}
-        onChange={onChange}
-        autoComplete={'new-password'}
-      />
-      {error.state && <ErrorBox errorMessage={error.message} onClick={closeErrorBox} />}
-      <S_CyanButton size={'fullWidth'} disabled={authLoading.login} onClick={onSubmit}>
-        로그인 {authLoading.login && <LoadingSpinner width={'20px'} color={`red`} />}
-      </S_CyanButton>
-      <S_Container>
-        <StyleLink to={'/register'} size={'small'}>
-          회원가입
-        </StyleLink>
-      </S_Container>
-    </S_Wrapper>
+    <>
+      <S_Wrapper>
+        <InputBox
+          title={'아이디'}
+          name={'username'}
+          value={authForm.login.username}
+          onChange={onChange}
+          autoComplete={'username'}
+        />
+        <InputBox
+          title={'비밀번호'}
+          name={'password'}
+          value={authForm.login.password}
+          type={'password'}
+          onChange={onChange}
+          autoComplete={'new-password'}
+        />
+        <S_CyanButton size={'fullWidth'} disabled={authLoading.login} onClick={onSubmit}>
+          로그인 {authLoading.login && <LoadingSpinner width={'20px'} color={`red`} />}
+        </S_CyanButton>
+        <S_Container>
+          <StyleLink to={'/register'} size={'small'}>
+            회원가입
+          </StyleLink>
+        </S_Container>
+      </S_Wrapper>
+      <ErrorBox visible={error.state} errorMessage={error.message} onClick={closeErrorBox} />
+    </>
   );
 }
 

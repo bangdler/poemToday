@@ -65,8 +65,8 @@ export default function WriteActionButtons({ field, poemForm }) {
         <S_CyanButton size={'medium'} disabled={poemLoading.write} onClick={onSubmit}>
           작성하기 {poemLoading.write && <LoadingSpinner width={'20px'} color={`red`} />}
         </S_CyanButton>
-        {error.state && <ErrorBox errorMessage={error.message} onClick={closeErrorBox} />}
       </S_Wrapper>
+      <ErrorBox visible={error.state} errorMessage={error.message} onClick={closeErrorBox} />
     </>
   );
 }

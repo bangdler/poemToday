@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import palette from '@/style/palette';
+import { DimLayerStyle } from '@/style/common';
 
 export default function LoginRegisterLayout({ children }) {
   return (
@@ -12,20 +12,14 @@ export default function LoginRegisterLayout({ children }) {
 }
 
 const S_DimLayer = styled.div`
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  background: ${palette.gray[2]};
-  ${({ theme }) => theme.mixin.flexBox({})};
+  ${DimLayerStyle};
 `;
 
 const S_InnerBox = styled.div`
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
   padding: 2rem;
   width: 360px;
-  background-color: ${({ theme }) => theme.mode.bgColor};
+  background: ${({ theme }) => theme.mode.bgColor};
   color: ${({ theme }) => theme.mode.textColor};
   border-radius: 2px;
 `;

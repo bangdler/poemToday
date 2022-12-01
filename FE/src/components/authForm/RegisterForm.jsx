@@ -80,40 +80,42 @@ export default function RegisterForm() {
   };
 
   return (
-    <S_Wrapper>
-      <InputBox
-        title={'아이디'}
-        name={'username'}
-        value={authForm.register.username}
-        onChange={onChange}
-        autoComplete={'username'}
-      />
-      <InputBox
-        title={'비밀번호'}
-        name={'password'}
-        value={authForm.register.password}
-        type={'password'}
-        onChange={onChange}
-        autoComplete={'new-password'}
-      />
-      <InputBox
-        title={'비밀번호 확인'}
-        name={'passwordConfirm'}
-        value={authForm.register.passwordConfirm}
-        type={'password'}
-        onChange={onChange}
-        autoComplete={'new-password'}
-      />
-      {error.state && <ErrorBox errorMessage={error.message} onClick={closeErrorBox} />}
-      <S_CyanButton size={'fullWidth'} disabled={authLoading.register} onClick={onSubmit}>
-        회원가입 {authLoading.register && <LoadingSpinner width={'20px'} color={`red`} />}
-      </S_CyanButton>
-      <S_Container>
-        <StyleLink to={'/login'} size={'small'}>
-          로그인
-        </StyleLink>
-      </S_Container>
-    </S_Wrapper>
+    <>
+      <S_Wrapper>
+        <InputBox
+          title={'아이디'}
+          name={'username'}
+          value={authForm.register.username}
+          onChange={onChange}
+          autoComplete={'username'}
+        />
+        <InputBox
+          title={'비밀번호'}
+          name={'password'}
+          value={authForm.register.password}
+          type={'password'}
+          onChange={onChange}
+          autoComplete={'new-password'}
+        />
+        <InputBox
+          title={'비밀번호 확인'}
+          name={'passwordConfirm'}
+          value={authForm.register.passwordConfirm}
+          type={'password'}
+          onChange={onChange}
+          autoComplete={'new-password'}
+        />
+        <S_CyanButton size={'fullWidth'} disabled={authLoading.register} onClick={onSubmit}>
+          회원가입 {authLoading.register && <LoadingSpinner width={'20px'} color={`red`} />}
+        </S_CyanButton>
+        <S_Container>
+          <StyleLink to={'/login'} size={'small'}>
+            로그인
+          </StyleLink>
+        </S_Container>
+      </S_Wrapper>
+      <ErrorBox visible={error.state} errorMessage={error.message} onClick={closeErrorBox} />
+    </>
   );
 }
 

@@ -2,6 +2,7 @@ import { css } from 'styled-components';
 
 export const lightTheme = {
   bgColor: '#f8f7f4',
+  authBgColor: '#e9ecef',
   textColor: '#31302e',
   borderColor: '#eaeaea',
   cardColor: '#fff',
@@ -11,6 +12,7 @@ export const lightTheme = {
 
 export const darkTheme = {
   bgColor: '#1e1e22',
+  authBgColor: '#343a40',
   textColor: '#ccc',
   borderColor: '#2c2d33',
   cardColor: '#333',

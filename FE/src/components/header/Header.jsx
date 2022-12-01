@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import styled from 'styled-components';
 
-import GNB from '@/components/header/GNB';
 import Logo from '@/components/common/Logo';
+import GNB from '@/components/header/GNB';
 import UtilArea from '@/components/header/UtilArea';
 import { UserContext, useUser } from '@/context/UserProvider';
 import { firstAndDebounce } from '@/utils/util';
