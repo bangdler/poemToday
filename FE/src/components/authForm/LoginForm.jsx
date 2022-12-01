@@ -92,7 +92,7 @@ export default function LoginForm() {
           autoComplete={'new-password'}
         />
         <S_CyanButton size={'fullWidth'} disabled={authLoading.login} onClick={onSubmit}>
-          로그인 {authLoading.login && <LoadingSpinner width={'20px'} color={`red`} />}
+          로그인 <LoadingSpinner visible={authLoading.login} width={'20px'} color={`red`} />
         </S_CyanButton>
         <S_Container>
           <StyleLink to={'/register'} size={'small'}>

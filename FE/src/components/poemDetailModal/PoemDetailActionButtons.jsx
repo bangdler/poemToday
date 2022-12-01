@@ -75,7 +75,7 @@ export default function PoemDetailActionButtons({
                 수정
               </S_CyanButton>
               <S_RedButton size={'medium'} disabled={loading} onClick={onRemove}>
-                삭제 {loading && <LoadingSpinner width={'20px'} color={`blue`} />}
+                삭제 <LoadingSpinner visible={loading} width={'20px'} color={`blue`} />
               </S_RedButton>
             </>
           )}

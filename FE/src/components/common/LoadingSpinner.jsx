@@ -3,7 +3,8 @@ import styled from 'styled-components';
 
 import BlindText from '@/components/common/BlindText';
 
-export default function LoadingSpinner({ width = '50px', color }) {
+export default function LoadingSpinner({ visible, width = '50px', color }) {
+  if (!visible) return null;
   return (
     <S_Spinner w={width} c={color}>
       <BlindText text={'로딩중'} />

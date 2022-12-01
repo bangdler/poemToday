@@ -38,12 +38,10 @@ export default function PoemDetailContents({ getPoemResponse, getPoemError, load
           <S_ReactQuill readOnly={true} value={getPoemResponse.body} modules={{ toolbar: null }} />
         </>
       )}
-      {(getPoemError || loading) && (
-        <S_ErrorWrapper>
-          {getPoemError && <S_Error>{GetPoemByIdServerErrorMessages[getPoemError.response.status]}</S_Error>}
-          {loading && <LoadingSpinner width={'100px'} color={`red`} />}
-        </S_ErrorWrapper>
-      )}
+      <S_ErrorWrapper visible={!getPoemResponse}>
+        <S_Error visible={getPoemError}>{GetPoemByIdServerErrorMessages[getPoemError?.response.status]}</S_Error>
+        <LoadingSpinner visible={loading} width={'100px'} color={`red`} />
+      </S_ErrorWrapper>
     </S_ContentsWrapper>
   );
 }
@@ -56,7 +54,6 @@ const S_ContentsWrapper = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
-
   margin-bottom: 1rem;
 `;
 
@@ -93,6 +90,7 @@ const S_Line = styled.div`
   border: 2px solid ${({ theme }) => theme.mode.borderColor};
   margin: 10px 0;
 `;
+
 const S_CategoryContainer = styled.div`
   ${({ theme }) => theme.mixin.flexBox({})}
   > *:not(:last-child) {
@@ -117,9 +115,11 @@ const S_ReactQuill = styled(ReactQuill)`
 
 const S_ErrorWrapper = styled.div`
   ${({ theme }) => theme.mixin.flexBox({})}
-  height: 200px;
+  display: ${({ visible }) => (visible ? 'flex' : 'none')};
+  height: 300px;
 `;
 
 const S_Error = styled.p`
+  display: ${({ visible }) => (visible ? 'block' : 'none')};
   font-size: 3rem;
 `;

@@ -22,7 +22,7 @@ export default function PoemDetailCard({ closeModal }) {
     };
   }, []);
 
-  const owePoem = (userData.user && userData.user._id) === (poemData.read.response && poemData.read.response.user._id);
+  const owePoem = userData.user && userData.user._id === poemData.read.response?.user._id;
 
   const curPoemForm = poemData.read.response && {
     title: poemData.read.response.title,

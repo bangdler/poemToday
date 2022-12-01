@@ -10,18 +10,18 @@ export default function PoemCard({ id, username, title, body, category }) {
     navigate(`/@${username}/${id}`);
   };
 
+  const filteredCategory = category.filter(it => it.checked);
+
   return (
     <S_Wrapper onClick={onClick}>
       <S_Title>{title}</S_Title>
       <S_Line />
       <S_CategoryContainer>
-        {category.map((it, idx) => {
-          if (it.checked) {
-            return <S_CategoryTag key={idx}>#{it.name}</S_CategoryTag>;
-          }
-        })}
+        {filteredCategory.map((it, idx) => (
+          <S_CategoryTag key={idx}>#{it.name}</S_CategoryTag>
+        ))}
       </S_CategoryContainer>
-      {category.filter(it => it.checked).length && <S_Line />}
+      {!!filteredCategory.length && <S_Line />}
       <S_ReactQuill readOnly={true} value={body} modules={{ toolbar: null }} />
     </S_Wrapper>
   );

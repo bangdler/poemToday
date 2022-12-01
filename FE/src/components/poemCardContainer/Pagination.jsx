@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import StyleLink from '@/components/common/StyleLink';
 import { S_CyanButton } from '@/components/commonStyled/styleButtons';
 
-export default function Pagination({ username, page, lastPage }) {
+export default function Pagination({ visible, username, page, lastPage }) {
   const navigate = useNavigate();
 
   const buildUrl = ({ username, page }) => {
@@ -30,6 +30,7 @@ export default function Pagination({ username, page, lastPage }) {
     navigate(buildUrl({ username, page: lastPage }));
   };
 
+  if (!visible) return null;
   return (
     <S_Wrapper>
       <S_CyanButton size="medium" disabled={page === 1} onClick={clickStartPage}>

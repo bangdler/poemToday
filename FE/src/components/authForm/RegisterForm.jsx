@@ -106,7 +106,7 @@ export default function RegisterForm() {
           autoComplete={'new-password'}
         />
         <S_CyanButton size={'fullWidth'} disabled={authLoading.register} onClick={onSubmit}>
-          회원가입 {authLoading.register && <LoadingSpinner width={'20px'} color={`red`} />}
+          회원가입 <LoadingSpinner visible={authLoading.register} width={'20px'} color={`red`} />
         </S_CyanButton>
         <S_Container>
           <StyleLink to={'/login'} size={'small'}>
