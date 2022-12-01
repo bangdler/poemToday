@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import PoemDetailActionButtons from '@/components/poemDetailModal/PoemDetailActionButtons';
@@ -11,9 +11,8 @@ export default function PoemDetailCard({ closeModal }) {
   const { username, poemId } = useParams();
   const userData = useContext(UserContext);
   const poemData = useContext(PoemContext);
-  const { initializePoem, setPoemData } = useContext(PoemDispatchContext);
-  const { poemLoading, getPoemByIdFromServer, removePoemByIdFromServer } = usePoem();
-  const navigate = useNavigate();
+  const { initializePoem } = useContext(PoemDispatchContext);
+  const { poemLoading, getPoemByIdFromServer } = usePoem();
 
   useEffect(() => {
     getPoemByIdFromServer({ id: poemId });
@@ -25,23 +24,13 @@ export default function PoemDetailCard({ closeModal }) {
 
   const owePoem = (userData.user && userData.user._id) === (poemData.read.response && poemData.read.response.user._id);
 
-  const onEdit = () => {
-    const curPoemForm = {
-      title: poemData.read.response.title,
-      author: poemData.read.response.author,
-      body: poemData.read.response.body,
-      category: poemData.read.response.category,
-      response: null,
-      error: null,
-    };
-    setPoemData({ field: 'edit', state: curPoemForm });
-    navigate(`/edit/@${username}/${poemId}`);
-  };
-
-  const onRemove = () => {
-    if (window.confirm('정말 삭제하시겠습니까?')) {
-      removePoemByIdFromServer({ id: poemId });
-    }
+  const curPoemForm = poemData.read.response && {
+    title: poemData.read.response.title,
+    author: poemData.read.response.author,
+    body: poemData.read.response.body,
+    category: poemData.read.response.category,
+    response: null,
+    error: null,
   };
 
   return (
@@ -53,9 +42,10 @@ export default function PoemDetailCard({ closeModal }) {
         username={username}
       />
       <PoemDetailActionButtons
+        username={username}
+        poemId={poemId}
         closeModal={closeModal}
-        onEdit={onEdit}
-        onRemove={onRemove}
+        curPoemForm={curPoemForm}
         ownPoem={owePoem}
         removePoemResponse={poemData.remove.response}
         removePoemError={poemData.remove.error}

@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
+import { DimLayerStyle } from '@/style/common';
+
 export default function PoemDetailModal({ pop, closeModal, children }) {
   const disableScroll = () => {
     const scrollBarCompensation = window.innerWidth - document.body.offsetWidth;
@@ -26,13 +28,7 @@ export default function PoemDetailModal({ pop, closeModal, children }) {
 }
 
 const S_DimLayer = styled.div`
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
+  ${DimLayerStyle};
   background: ${({ theme }) => theme.mode.dimColor};
   z-index: 20;
   ${({ theme }) => theme.mixin.flexBox({})};
