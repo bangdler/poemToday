@@ -49,7 +49,13 @@ export default function QuillEditor({ placeholder, value, ...rest }) {
 const S_ReactQuill = styled(ReactQuill)`
   .ql-container {
     min-height: 300px;
+    max-height: 460px;
     font-size: 1.6rem;
     font-family: 'Gamja Flower';
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;

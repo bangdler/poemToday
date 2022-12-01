@@ -51,6 +51,13 @@ export default function PoemDetailContents({ getPoemResponse, getPoemError, load
 const S_ContentsWrapper = styled.div`
   flex-grow: 1;
   width: 100%;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  margin-bottom: 1rem;
 `;
 
 const S_Title = styled.h2`
@@ -59,7 +66,6 @@ const S_Title = styled.h2`
   width: 100%;
   text-align: center;
   ${({ theme }) => theme.mixin.flexBox({})};
-  ${({ theme }) => theme.mixin.ellipsis({ lineNum: 2, lineHeight: '4.2rem' })};
 `;
 
 const S_Wrapper = styled.div`
@@ -97,11 +103,6 @@ const S_CategoryContainer = styled.div`
 const S_ReactQuill = styled(ReactQuill)`
   .ql-editor {
     padding: 0.5rem 1rem;
-    overflow-y: scroll;
-    -ms-overflow-style: none;
-    &::-webkit-scrollbar {
-      display: none;
-    }
     > * {
       word-break: keep-all;
       word-wrap: break-word;

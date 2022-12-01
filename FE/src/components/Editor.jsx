@@ -17,9 +17,16 @@ export default function Editor({ field, poemForm, userData }) {
     changePoemData({ field, key: 'author', value: target.value });
   };
 
+  const checkSelfPoemCategory = (name, checked) => {
+    if (name === '자작시' && checked) {
+      changePoemData({ field, key: 'author', value: userData.user.username });
+    }
+  };
+
   const changeCategory = ({ target }) => {
     const category = poemForm.category.map(it => {
       if (it.name === target.id) {
+        checkSelfPoemCategory(it.name, target.checked);
         return { ...it, checked: target.checked };
       } else {
         return it;
@@ -32,14 +39,14 @@ export default function Editor({ field, poemForm, userData }) {
     changePoemData({ field, key: 'body', value: value });
   };
 
-  useEffect(() => {
-    const selfPoemCategory = poemForm.category[0];
-    if (selfPoemCategory.checked) {
-      changePoemData({ field, key: 'author', value: userData.user.username });
-    } else {
-      changePoemData({ field, key: 'author', value: poemForm.author });
-    }
-  }, [poemForm.category[0]]);
+  // useEffect(() => {
+  //   const selfPoemCategory = poemForm.category[0];
+  //   if (selfPoemCategory.checked) {
+  //     changePoemData({ field, key: 'author', value: userData.user.username });
+  //   } else {
+  //     changePoemData({ field, key: 'author', value: poemForm.author });
+  //   }
+  // }, [poemForm.category[0]]);
 
   return (
     <S_Wrapper>
