@@ -1,15 +1,15 @@
-export const shortenQuillTypeBody = quillBody => {
-  let shortBody = quillBody.slice(0, 200);
+export const shortenQuillTypeBody = ({ body, shortLength }) => {
+  let shortBody = body.slice(0, shortLength);
   let close = false;
-  for (let i = 200; i < quillBody.length; i++) {
-    if (quillBody[i] === '/') {
+  for (let i = shortLength; i < body.length; i++) {
+    if (body[i] === '/') {
       close = true;
     }
-    if (close && quillBody[i] === '>') {
+    if (close && body[i] === '>') {
       shortBody += '>';
       break;
     }
-    shortBody += quillBody[i];
+    shortBody += body[i];
   }
   return shortBody;
 };

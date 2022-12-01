@@ -2,6 +2,7 @@ import Joi from 'joi';
 import mongoose from 'mongoose';
 
 import Poem from '../models/poem.js';
+import { LENGTH_OF_SHORT_BODY, NUMBER_OF_LIST } from '../utils/constants.js';
 import { shortenQuillTypeBody } from '../utils/shortenQuillTypeBody.js';
 
 const { ObjectId } = mongoose.Types;
@@ -90,17 +91,23 @@ export const list = async ctx => {
   try {
     const poems = await Poem.find(query)
       .sort({ publishedDate: -1, _id: -1 })
-      .limit(10)
-      .skip((curPage - 1) * 10)
+      .limit(NUMBER_OF_LIST)
+      .skip((curPage - 1) * NUMBER_OF_LIST)
       .exec();
     // 마지막 페이지 알려주기
     const poemCount = await Poem.countDocuments(query).exec();
-    ctx.set('Last-Page', Math.ceil(poemCount / 10));
+    ctx.set('Last-Page', Math.ceil(poemCount / NUMBER_OF_LIST));
     // body 200자 이상 제한하기
     // 인스턴스 형태에서 json 으로 변환하여 사용해야함. 이 방법 또는 .skip() 뒤에 .lean() 추가하여 사용
     ctx.body = poems
       .map(poem => poem.toJSON())
-      .map(poem => ({ ...poem, body: poem.body.length < 200 ? poem.body : `${shortenQuillTypeBody(poem.body)}...` }));
+      .map(poem => ({
+        ...poem,
+        body:
+          poem.body.length < LENGTH_OF_SHORT_BODY
+            ? poem.body
+            : `${shortenQuillTypeBody({ body: poem.body, shortLength: LENGTH_OF_SHORT_BODY })}...`,
+      }));
   } catch (e) {
     ctx.throw(500, e);
   }
