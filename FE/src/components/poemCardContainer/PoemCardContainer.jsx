@@ -3,8 +3,8 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import Pagination from '@/components/Pagination';
-import PoemCard from '@/components/PoemCard';
+import Pagination from '@/components/poemCardContainer/Pagination';
+import PoemCard from '@/components/poemCardContainer/PoemCard';
 import { PoemListContext, usePoemList } from '@/context/PoemListProvider';
 import { GetPoemListServerErrorMessages } from '@/utils/constants';
 

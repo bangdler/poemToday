@@ -1,8 +1,8 @@
 import React from 'react';
 
 import LoginRegisterLayout from '@/components/common/LoginRegisterLayout';
-import LoginForm from '@/components/LoginForm';
-import Logo from '@/components/Logo';
+import LoginForm from '@/components/authForm/LoginForm';
+import Logo from '@/components/common/Logo';
 
 export default function Login() {
   return (

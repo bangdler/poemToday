@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Header from '@/components/Header';
-import WriteForm from '@/components/WriteForm';
+import Header from '@/components/header/Header';
+import WriteForm from '@/components/writeForm/WriteForm';
 import { UserContext, useUser } from '@/context/UserProvider';
 
 export default function Write() {

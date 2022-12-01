@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import EditActionButtons from '@/components/EditActionButtons';
-import Editor from '@/components/Editor';
+import EditActionButtons from '@/components/writeForm/EditActionButtons';
+import Editor from '@/components/writeForm/Editor';
 import { PoemContext } from '@/context/PoemProvider';
 import { UserContext } from '@/context/UserProvider';
 

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 
-import Header from '@/components/Header';
-import PoemCardContainer from '@/components/PoemCardContainer';
+import Header from '@/components/header/Header';
+import PoemCardContainer from '@/components/poemCardContainer/PoemCardContainer';
 import { UserDispatchContext, useUser } from '@/context/UserProvider';
 
 export default function Home() {

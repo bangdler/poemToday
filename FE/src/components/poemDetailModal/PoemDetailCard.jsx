@@ -2,8 +2,8 @@ import React, { useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import PoemDetailActionButtons from '@/components/PoemDetailActionButtons';
-import PoemDetailContents from '@/components/PoemDetailContents';
+import PoemDetailActionButtons from '@/components/poemDetailModal/PoemDetailActionButtons';
+import PoemDetailContents from '@/components/poemDetailModal/PoemDetailContents';
 import { PoemContext, PoemDispatchContext, usePoem } from '@/context/PoemProvider';
 import { UserContext } from '@/context/UserProvider';
 

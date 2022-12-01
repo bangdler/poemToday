@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import PoemDetailCard from '@/components/PoemDetailCard';
-import PoemDetailModal from '@/components/PoemDetailModal';
+import PoemDetailCard from '@/components/poemDetailModal/PoemDetailCard';
+import PoemDetailModal from '@/components/poemDetailModal/PoemDetailModal';
 import Home from '@/pages/Home';
 
 export default function PoemDetail() {

@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
 
-import Editor from '@/components/Editor';
-import WriteActionButtons from '@/components/WriteActionButtons';
+import Editor from '@/components/writeForm/Editor';
+import WriteActionButtons from '@/components/writeForm/WriteActionButtons';
 import { PoemContext } from '@/context/PoemProvider';
 import { UserContext } from '@/context/UserProvider';
 

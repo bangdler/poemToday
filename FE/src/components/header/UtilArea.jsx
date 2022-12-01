@@ -6,7 +6,7 @@ import { ReactComponent as Search } from '@/assets/icons/search.svg';
 import StyleLink from '@/components/common/StyleLink';
 import UtilBtn from '@/components/common/UtilBtn';
 import { S_TextBtn } from '@/components/commonStyled/styleButtons';
-import ThemeBtn from '@/components/ThemeBtn';
+import ThemeBtn from '@/components/header/ThemeBtn';
 
 export default function UtilArea({ user, logoutUser }) {
   const navigate = useNavigate();
