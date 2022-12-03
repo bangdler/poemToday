@@ -1,6 +1,7 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import ConfirmModal from '@/components/common/ConfirmModal';
 import Header from '@/components/header/Header';
 import EditForm from '@/components/writeForm/EditForm';
 import { UserContext, useUser } from '@/context/UserProvider';
@@ -10,6 +11,11 @@ export default function Edit() {
   const { checkUser } = useUser();
   const navigate = useNavigate();
   const { username } = useParams();
+  const [loginAlertModal, setLoginAlertModal] = useState(false);
+
+  const onClickGoLoginConfirm = () => {
+    navigate('/login');
+  };
 
   useEffect(() => {
     checkUser();
@@ -17,15 +23,13 @@ export default function Edit() {
 
   useEffect(() => {
     if (userData.error) {
-      alert('로그인이 필요합니다.');
-      navigate('/login');
+      setLoginAlertModal(true);
     }
   }, [userData.error]);
 
   useEffect(() => {
     if (userData.user && username !== userData.user.username) {
-      alert('작성자가 아닙니다. 홈으로 이동합니다.');
-      navigate('/');
+      setLoginAlertModal(true);
     }
   }, [userData.user]);
 
@@ -33,6 +37,13 @@ export default function Edit() {
     <>
       <Header />
       <EditForm />
+      <ConfirmModal
+        visible={loginAlertModal}
+        title={'로그인이 필요합니다.'}
+        description={'로그인 페이지로 이동해주세요!'}
+        confirmText={'이동'}
+        onConfirm={onClickGoLoginConfirm}
+      />
     </>
   );
 }
