@@ -84,7 +84,7 @@ export default function PoemDetailActionButtons({
           닫기
         </S_Button>
       </S_Wrapper>
-      <ErrorBox visible={error.state} errorMessage={error.message} onClick={closeErrorBox} />}
+      <ErrorBox visible={error.state} errorMessage={error.message} onClick={closeErrorBox} />
       <ConfirmModal
         visible={removeConfirmModal}
         title={'삭제하시겠습니까?'}

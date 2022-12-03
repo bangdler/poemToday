@@ -11,7 +11,7 @@ import ThemeBtn from '@/components/header/ThemeBtn';
 export default function UtilArea({ user, logoutUser }) {
   const navigate = useNavigate();
 
-  const clickCancelBtn = () => {
+  const clickLogoutBtn = () => {
     logoutUser();
     navigate('/');
   };
@@ -23,7 +23,7 @@ export default function UtilArea({ user, logoutUser }) {
       </UtilBtn>
       <ThemeBtn />
       {user ? (
-        <S_TextBtn size={'xs'} onClick={clickCancelBtn}>
+        <S_TextBtn size={'xs'} onClick={clickLogoutBtn}>
           로그아웃
         </S_TextBtn>
       ) : (

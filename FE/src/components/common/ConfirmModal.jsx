@@ -36,7 +36,8 @@ export default function ConfirmModal({
 }
 
 const S_DimLayer = styled.div`
-  ${DimLayerStyle}
+  ${DimLayerStyle};
+  z-index: 30;
 `;
 
 const S_ConfirmModal = styled.div`
