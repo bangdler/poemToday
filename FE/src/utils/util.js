@@ -33,3 +33,27 @@ export function throttle(callback, time) {
     }
   };
 }
+
+export function setLocalStorage(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+    console.log('localStorage is not working');
+  }
+}
+
+export function getLocalStorage(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch (e) {
+    console.log('localStorage is not working');
+  }
+}
+
+export function removeLocalStorage(key) {
+  try {
+    return localStorage.removeItem(key);
+  } catch (e) {
+    console.log('localStorage is not working');
+  }
+}

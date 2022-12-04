@@ -47,11 +47,6 @@ export default function LoginForm() {
       console.log('check API 성공');
       console.log(userData.user);
       navigate('/');
-      try {
-        localStorage.setItem('user', JSON.stringify(userData.user));
-      } catch (e) {
-        console.log('localStorage is not working');
-      }
     }
   }, [userData.user]);
 
