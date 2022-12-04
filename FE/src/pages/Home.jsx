@@ -3,20 +3,20 @@ import React, { useContext, useEffect } from 'react';
 import Header from '@/components/header/Header';
 import PoemCardContainer from '@/components/poemCardContainer/PoemCardContainer';
 import { UserDispatchContext, useUser } from '@/context/UserProvider';
+import { getLocalStorage } from '@/utils/util';
 
 export default function Home() {
   const { setUser } = useContext(UserDispatchContext);
   const { checkUser } = useUser();
 
   useEffect(() => {
-    try {
-      const user = localStorage.getItem('user');
-      if (!user) return;
-      setUser({ user: JSON.parse(user) });
+    const user = getLocalStorage('user');
+    if (!user) {
       checkUser();
-    } catch (e) {
-      console.log('localStorage is not working');
+      return;
     }
+    setUser({ user: JSON.parse(user) });
+    checkUser();
   }, []);
 
   return (

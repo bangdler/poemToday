@@ -1,6 +1,7 @@
 import React, { createContext, useReducer, useMemo, useCallback, useContext, useState } from 'react';
 
 import * as authApi from '@/api/auth.js';
+import { removeLocalStorage, setLocalStorage } from '@/utils/util';
 
 export const UserContext = createContext();
 export const UserDispatchContext = createContext();
@@ -69,9 +70,10 @@ export const useUser = () => {
     try {
       const response = await authApi.check();
       checkUserSuccess({ response: response.data });
+      setLocalStorage('user', response.data);
     } catch (e) {
       checkUserFail({ error: e });
-      localStorage.removeItem('user');
+      removeLocalStorage('user');
     }
     const loadingFinish = { ...userLoading, check: false };
     setUserLoading(loadingFinish);
@@ -83,10 +85,12 @@ export const useUser = () => {
     try {
       await authApi.logout();
       setUser({ user: null });
-      localStorage.removeItem('user');
+      removeLocalStorage('user');
     } catch (e) {
-      setUser({ user: null });
-      localStorage.removeItem('user');
+      // 로그아웃 api 가 실패해도 로그아웃 된 것처럼 보여주게 했었지만 사실상 token 이 쿠키에 남아있으므로 로그아웃처리를 하면 안될듯.
+      // setUser({ user: null });
+      // localStorage.removeItem('user');
+      alert('logout 실패');
       console.log(e);
     }
     const loadingFinish = { ...userLoading, logout: false };
