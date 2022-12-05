@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import PortalModal from '@/components/common/PortalModal';
 import { S_Button, S_CyanButton } from '@/components/commonStyled/styleButtons';
 import { DimLayerStyle } from '@/style/common';
 import palette from '@/style/palette';
@@ -16,24 +17,27 @@ export default function ConfirmModal({
   onCancel,
   confirmLoading,
 }) {
-  if (!visible) return null;
   return (
-    <S_DimLayer>
-      <S_ConfirmModal>
-        <S_Title>{title}</S_Title>
-        <S_Description>{description}</S_Description>
-        <S_Container>
-          {cancelText && (
-            <S_Button size={'medium'} onClick={onCancel}>
-              {cancelText}
-            </S_Button>
-          )}
-          <S_CyanButton size={'medium'} disabled={confirmLoading} onClick={onConfirm}>
-            {confirmText} <LoadingSpinner visible={confirmLoading} width={'20px'} color={`red`} />
-          </S_CyanButton>
-        </S_Container>
-      </S_ConfirmModal>
-    </S_DimLayer>
+    <PortalModal>
+      {visible && (
+        <S_DimLayer>
+          <S_ConfirmModal>
+            <S_Title>{title}</S_Title>
+            <S_Description>{description}</S_Description>
+            <S_Container>
+              {cancelText && (
+                <S_Button size={'medium'} onClick={onCancel}>
+                  {cancelText}
+                </S_Button>
+              )}
+              <S_CyanButton size={'medium'} disabled={confirmLoading} onClick={onConfirm}>
+                {confirmText} <LoadingSpinner visible={confirmLoading} width={'20px'} color={`red`} />
+              </S_CyanButton>
+            </S_Container>
+          </S_ConfirmModal>
+        </S_DimLayer>
+      )}
+    </PortalModal>
   );
 }
 

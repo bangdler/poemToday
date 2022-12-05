@@ -1,18 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
+import PortalModal from '@/components/common/PortalModal';
 import { S_TextBtn } from '@/components/commonStyled/styleButtons';
 
 export default React.memo(function ErrorBox({ visible, errorMessage, onClick }) {
   let timer = useRef(null);
-  let start;
+  let start = Date.now();
   let enterTime;
 
   useEffect(() => {
     if (!timer.current) {
       timer.current = setTimeout(() => onClick(), 3 * 1000);
     }
-    start = Date.now();
     return () => clearTimeout(timer.current);
   }, []);
 
@@ -26,26 +26,27 @@ export default React.memo(function ErrorBox({ visible, errorMessage, onClick }) 
     timer.current = setTimeout(() => onClick(), 3 * 1000 - diff);
   };
 
-  if (!visible) return null;
   return (
-    <>
-      <S_Wrapper onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-        <S_Wrapper2>
-          <S_Message>{errorMessage}</S_Message>
-          <S_WhiteTextBtn size={'xs'} onClick={onClick}>
-            닫기
-          </S_WhiteTextBtn>
-        </S_Wrapper2>
-        <S_ProgressBar>
-          <S_Progress></S_Progress>
-        </S_ProgressBar>
-      </S_Wrapper>
-    </>
+    <PortalModal>
+      {visible && (
+        <S_Wrapper onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          <S_Wrapper2>
+            <S_Message>{errorMessage}</S_Message>
+            <S_WhiteTextBtn size={'xs'} onClick={onClick}>
+              닫기
+            </S_WhiteTextBtn>
+          </S_Wrapper2>
+          <S_ProgressBar>
+            <S_Progress></S_Progress>
+          </S_ProgressBar>
+        </S_Wrapper>
+      )}
+    </PortalModal>
   );
 });
 
 const S_Wrapper = styled.div`
-  z-index: 15;
+  z-index: 35;
   background-color: tomato;
   color: ${({ theme }) => theme.mode.textColor};
   border-radius: 10px;
