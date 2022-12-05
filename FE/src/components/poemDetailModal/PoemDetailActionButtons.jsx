@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import ConfirmModal from '@/components/common/ConfirmModal';
 import ErrorBox from '@/components/common/ErrorBox';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { S_Button, S_CyanButton, S_RedButton } from '@/components/commonStyled/styleButtons';
 import { PoemDispatchContext, usePoem } from '@/context/PoemProvider';
 import { DeletePoemByIdServerErrorMessages } from '@/utils/constants';
@@ -17,10 +16,9 @@ export default function PoemDetailActionButtons({
   curPoemForm,
   removePoemResponse,
   removePoemError,
-  loading,
 }) {
   const { setPoemData } = useContext(PoemDispatchContext);
-  const { removePoemByIdFromServer } = usePoem();
+  const { poemLoading, removePoemByIdFromServer } = usePoem();
   const navigate = useNavigate();
   const [error, setError] = useState({ state: false, message: '' });
   const [removeConfirmModal, setRemoveConformModal] = useState(false);
@@ -71,11 +69,11 @@ export default function PoemDetailActionButtons({
         <S_Wrapper2>
           {ownPoem && (
             <>
-              <S_CyanButton size={'medium'} disabled={loading} onClick={onEdit}>
+              <S_CyanButton size={'medium'} onClick={onEdit}>
                 수정
               </S_CyanButton>
-              <S_RedButton size={'medium'} disabled={loading} onClick={onRemove}>
-                삭제 <LoadingSpinner visible={loading} width={'20px'} color={`blue`} />
+              <S_RedButton size={'medium'} onClick={onRemove}>
+                삭제
               </S_RedButton>
             </>
           )}
@@ -93,6 +91,7 @@ export default function PoemDetailActionButtons({
         cancelText={'취소'}
         onConfirm={onClickRemoveConfirm}
         onCancel={onClickRemoveCancel}
+        confirmLoading={poemLoading.remove}
       />
       <ConfirmModal
         visible={loginAlertModal}

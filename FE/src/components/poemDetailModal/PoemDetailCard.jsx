@@ -49,7 +49,6 @@ export default function PoemDetailCard({ closeModal }) {
         ownPoem={owePoem}
         removePoemResponse={poemData.remove.response}
         removePoemError={poemData.remove.error}
-        loading={poemLoading.remove}
       />
     </S_CardWrapper>
   );

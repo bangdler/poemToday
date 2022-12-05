@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { S_Button, S_CyanButton } from '@/components/commonStyled/styleButtons';
 import { DimLayerStyle } from '@/style/common';
 import palette from '@/style/palette';
@@ -13,6 +14,7 @@ export default function ConfirmModal({
   cancelText,
   onConfirm,
   onCancel,
+  confirmLoading,
 }) {
   if (!visible) return null;
   return (
@@ -26,8 +28,8 @@ export default function ConfirmModal({
               {cancelText}
             </S_Button>
           )}
-          <S_CyanButton size={'medium'} onClick={onConfirm}>
-            {confirmText}
+          <S_CyanButton size={'medium'} disabled={confirmLoading} onClick={onConfirm}>
+            {confirmText} <LoadingSpinner visible={confirmLoading} width={'20px'} color={`red`} />
           </S_CyanButton>
         </S_Container>
       </S_ConfirmModal>
