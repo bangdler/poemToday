@@ -27,7 +27,7 @@ export default function PoemDetailContents({ getPoemResponse, getPoemError, load
             {!!filteredCategory.length && (
               <S_CategoryContainer>
                 {filteredCategory.map((it, idx) => (
-                  <S_Category key={idx} color={it.color}>
+                  <S_Category key={idx} color={it.color} size={'small'}>
                     {it.name}
                   </S_Category>
                 ))}

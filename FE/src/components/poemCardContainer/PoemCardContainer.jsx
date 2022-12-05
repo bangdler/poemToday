@@ -7,6 +7,7 @@ import Pagination from '@/components/poemCardContainer/Pagination';
 import PoemCard from '@/components/poemCardContainer/PoemCard';
 import { PoemListContext, PoemListDispatchContext, usePoemList } from '@/context/PoemListProvider';
 import { GetPoemListServerErrorMessages } from '@/utils/constants';
+import CategoryFilter from '@/components/poemCardContainer/CategoryFilter';
 
 export default function PoemCardContainer() {
   const { poemList, error, lastPage } = useContext(PoemListContext);
@@ -25,6 +26,7 @@ export default function PoemCardContainer() {
 
   return (
     <>
+      <CategoryFilter />
       <S_CardContainer>
         {poemList.map(poemCard => (
           <PoemCard

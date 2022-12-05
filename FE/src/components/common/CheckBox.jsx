@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 import { CategoryStyle } from '@/style/common';
 
-export default function CheckBox({ onChange, checked, value, text, color }) {
+export default function CheckBox({ onChange, checked, value, text, color, size = 'small' }) {
   return (
-    <S_Label htmlFor={value} checked={checked} color={color}>
+    <S_Label htmlFor={value} checked={checked} color={color} size={size}>
       <S_CheckInput id={value} onChange={onChange} checked={checked} />
       <S_Text>{text}</S_Text>
     </S_Label>
