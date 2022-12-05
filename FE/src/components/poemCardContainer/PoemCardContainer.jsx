@@ -10,16 +10,17 @@ import { GetPoemListServerErrorMessages } from '@/utils/constants';
 
 export default function PoemCardContainer() {
   const { poemList, error, lastPage } = useContext(PoemListContext);
-  const { initializePoemList } = useContext(PoemListDispatchContext);
+  const { initializePoemListError } = useContext(PoemListDispatchContext);
   const { poemListLoading, getPoemListFromServer } = usePoemList();
-  const { username } = useParams();
+  const { username, poemId } = useParams();
   const [searchParams] = useSearchParams();
 
   const page = parseInt(searchParams.get('page'), 10) || 1;
 
   useEffect(() => {
+    if (poemId) return;
     getPoemListFromServer({ page, username });
-    return () => initializePoemList();
+    return () => initializePoemListError();
   }, [page, username]);
 
   return (

@@ -10,22 +10,20 @@ import { GlobalStyle } from '@/style/global';
 
 function App() {
   return (
-    <>
-      <div className="app">
-        <ThemeProvider>
-          <UserProvider>
-            <AuthProvider>
-              <PoemListProvider>
-                <PoemProvider>
-                  <GlobalStyle />
-                  <Router />
-                </PoemProvider>
-              </PoemListProvider>
-            </AuthProvider>
-          </UserProvider>
-        </ThemeProvider>
-      </div>
-    </>
+    <div className="app">
+      <ThemeProvider>
+        <UserProvider>
+          <AuthProvider>
+            <PoemListProvider>
+              <PoemProvider>
+                <GlobalStyle />
+                <Router />
+              </PoemProvider>
+            </PoemListProvider>
+          </AuthProvider>
+        </UserProvider>
+      </ThemeProvider>
+    </div>
   );
 }
 

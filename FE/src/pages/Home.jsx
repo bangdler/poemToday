@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 
 import Header from '@/components/header/Header';
 import PoemCardContainer from '@/components/poemCardContainer/PoemCardContainer';
@@ -23,6 +24,7 @@ export default function Home() {
     <>
       <Header />
       <PoemCardContainer />
+      <Outlet />
     </>
   );
 }

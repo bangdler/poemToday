@@ -53,7 +53,7 @@ export default function PoemDetailActionButtons({
 
   useEffect(() => {
     if (removePoemResponse === null) return;
-    navigate('/');
+    navigate(-1);
   }, [removePoemResponse]);
 
   useEffect(() => {

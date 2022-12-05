@@ -15,6 +15,8 @@ const poemListReducer = (state, action) => {
   switch (action.type) {
     case 'INITIALIZE':
       return initialPoemListData;
+    case 'INITIALIZE_ERROR':
+      return { ...state, error: null };
     case 'GET_LIST_SUCCESS':
       return { ...state, poemList: action.poemList, lastPage: action.lastPage };
     case 'GET_LIST_FAIL':
@@ -30,6 +32,12 @@ export default function PoemListProvider({ children }) {
   const initializePoemList = useCallback(() => {
     poemListDataDispatch({
       type: 'INITIALIZE',
+    });
+  }, []);
+
+  const initializePoemListError = useCallback(() => {
+    poemListDataDispatch({
+      type: 'INITIALIZE_ERROR',
     });
   }, []);
 
@@ -49,8 +57,8 @@ export default function PoemListProvider({ children }) {
   }, []);
 
   const memoizedPoemListDispatches = useMemo(
-    () => ({ initializePoemList, getListSuccess, getListFail }),
-    [initializePoemList, getListSuccess, getListFail]
+    () => ({ initializePoemList, getListSuccess, getListFail, initializePoemListError }),
+    [initializePoemList, getListSuccess, getListFail, initializePoemListError]
   );
 
   return (

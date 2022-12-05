@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 
 import Edit from '@/pages/Edit';
 import Home from '@/pages/Home';
@@ -12,14 +12,15 @@ export default function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />}>
+          <Route path="/@:username">
+            <Route path=":poemId" element={<PoemDetail />} />
+          </Route>
+        </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/write" element={<Write />} />
         <Route path="/edit/@:username/:poemId" element={<Edit />} />
-        <Route path="/@:username">
-          <Route path=":poemId" element={<PoemDetail />} />
-        </Route>
       </Routes>
     </BrowserRouter>
   );
