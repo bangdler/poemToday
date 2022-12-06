@@ -1,13 +1,25 @@
+import qs from 'qs';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import CheckBox from '@/components/common/CheckBox';
 import { S_Button, S_CyanButton } from '@/components/commonStyled/styleButtons';
-import { Categories } from '@/utils/constants';
+import { CategoryColors } from '@/utils/constants';
 
 export default React.memo(function CategoryFilter() {
   const [filter, setFilter] = useState(false);
   const [checkedList, setCheckedList] = useState([]);
+  const navigate = useNavigate();
+
+  const toggleFilter = () => {
+    if (filter) {
+      setFilter(false);
+    } else {
+      setCheckedList([]);
+      setFilter(true);
+    }
+  };
 
   const onChange = ({ target }) => {
     if (checkedList.includes(target.id)) {
@@ -19,9 +31,13 @@ export default React.memo(function CategoryFilter() {
     }
   };
 
+  const clickApplyBtn = () => {
+    navigate(`/?${qs.stringify({ category: checkedList }, { arrayFormat: 'repeat' })}`);
+  };
+
   return (
     <S_Wrapper>
-      <S_CyanButton size={'medium'} onClick={() => setFilter(!filter)}>
+      <S_CyanButton size={'medium'} onClick={toggleFilter}>
         카테고리별
       </S_CyanButton>
       {filter && (
@@ -31,19 +47,21 @@ export default React.memo(function CategoryFilter() {
             <S_Button onClick={() => setFilter(false)}>X</S_Button>
           </S_Wrapper2>
           <S_CategoryContainer>
-            {Categories.map((it, idx) => (
+            {Object.entries(CategoryColors).map(([name, color], idx) => (
               <CheckBox
                 key={idx}
-                checked={checkedList.includes(it.name)}
-                value={it.name}
-                color={it.color}
-                text={it.name}
+                checked={checkedList.includes(name)}
+                value={name}
+                color={color}
+                text={name}
                 onChange={onChange}
                 size={'medium'}
               />
             ))}
           </S_CategoryContainer>
-          <S_CyanButton size={'fullWidth'}>적용하기</S_CyanButton>
+          <S_CyanButton size={'fullWidth'} onClick={clickApplyBtn}>
+            적용하기
+          </S_CyanButton>
         </S_FilterContainer>
       )}
     </S_Wrapper>

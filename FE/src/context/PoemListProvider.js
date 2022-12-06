@@ -72,10 +72,10 @@ export const usePoemList = () => {
   const { getListSuccess, getListFail } = useContext(PoemListDispatchContext);
   const [poemListLoading, setPoemListLoading] = useState(false);
 
-  const getPoemListFromServer = async ({ page, username }) => {
+  const getPoemListFromServer = async ({ page, username, category }) => {
     setPoemListLoading(true);
     try {
-      const response = await poemsApi.list({ page, username });
+      const response = await poemsApi.list({ page, username, category });
       getListSuccess({ poemList: response.data, lastPage: parseInt(response.headers['last-page'], 10) });
     } catch (e) {
       console.log(e);

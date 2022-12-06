@@ -3,11 +3,11 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import CategoryFilter from '@/components/poemCardContainer/CategoryFilter';
 import Pagination from '@/components/poemCardContainer/Pagination';
 import PoemCard from '@/components/poemCardContainer/PoemCard';
 import { PoemListContext, PoemListDispatchContext, usePoemList } from '@/context/PoemListProvider';
 import { GetPoemListServerErrorMessages } from '@/utils/constants';
-import CategoryFilter from '@/components/poemCardContainer/CategoryFilter';
 
 export default function PoemCardContainer() {
   const { poemList, error, lastPage } = useContext(PoemListContext);
@@ -17,12 +17,13 @@ export default function PoemCardContainer() {
   const [searchParams] = useSearchParams();
 
   const page = parseInt(searchParams.get('page'), 10) || 1;
+  const category = searchParams.getAll('category');
 
   useEffect(() => {
     if (poemId) return;
-    getPoemListFromServer({ page, username });
+    getPoemListFromServer({ page, username, category });
     return () => initializePoemListError();
-  }, [page, username]);
+  }, [page, username, category.length]);
 
   return (
     <>
