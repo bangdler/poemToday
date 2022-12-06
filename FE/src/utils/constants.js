@@ -36,8 +36,8 @@ export const UpdatePoemByIdServerErrorMessages = {
   500: '서버 응답 오류',
 };
 
-export const Categories = [
-  { checked: false, name: '자작시', color: palette.yellow[2] },
-  { checked: false, name: '사랑시', color: palette.red[1] },
-  { checked: false, name: '감성시', color: palette.green[2] },
-];
+export const CategoryColors = {
+  자작시: palette.yellow[2],
+  사랑시: palette.red[1],
+  감성시: palette.green[2],
+};

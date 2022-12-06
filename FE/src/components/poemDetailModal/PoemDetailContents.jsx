@@ -4,15 +4,13 @@ import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { S_Category } from '@/components/commonStyled/styleDivs';
-import { GetPoemByIdServerErrorMessages } from '@/utils/constants';
+import { CategoryColors, GetPoemByIdServerErrorMessages } from '@/utils/constants';
 
 export default function PoemDetailContents({ getPoemResponse, getPoemError, loading }) {
   const getPublishedDate = responseDate => {
     const koreaDate = new Date(responseDate).toLocaleString();
     return koreaDate.substring(0, koreaDate.length - 3);
   };
-
-  const filteredCategory = getPoemResponse ? getPoemResponse.category.filter(it => it.checked) : [];
 
   return (
     <S_ContentsWrapper onClick={e => e.stopPropagation()}>
@@ -24,11 +22,11 @@ export default function PoemDetailContents({ getPoemResponse, getPoemError, load
             <S_Author>저자: {getPoemResponse.author}</S_Author>
             <S_Writer>작성자: {getPoemResponse.user.username}</S_Writer>
             <S_Date>작성일시: {getPublishedDate(getPoemResponse.publishedDate)}</S_Date>
-            {!!filteredCategory.length && (
+            {!!getPoemResponse.category.length && (
               <S_CategoryContainer>
-                {filteredCategory.map((it, idx) => (
-                  <S_Category key={idx} color={it.color} size={'small'}>
-                    {it.name}
+                {getPoemResponse.category.map((it, idx) => (
+                  <S_Category key={idx} color={CategoryColors[it]} size={'small'}>
+                    {it}
                   </S_Category>
                 ))}
               </S_CategoryContainer>

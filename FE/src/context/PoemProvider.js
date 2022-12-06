@@ -1,7 +1,6 @@
 import React, { createContext, useReducer, useMemo, useCallback, useContext, useState } from 'react';
 
 import * as poemsApi from '@/api/poems';
-import { Categories } from '@/utils/constants';
 
 export const PoemContext = createContext();
 export const PoemDispatchContext = createContext();
@@ -10,7 +9,7 @@ const initialForm = {
   title: '',
   body: '',
   author: '',
-  category: Categories,
+  category: [],
   response: null,
   error: null,
 };
