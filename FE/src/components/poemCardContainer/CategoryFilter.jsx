@@ -72,7 +72,6 @@ const S_Wrapper = styled.div`
   z-index: 1;
   width: 100%;
   position: relative;
-  margin: 40px 0;
   ${({ theme }) => theme.mixin.flexBox({ direction: 'column', align: 'flex-end' })};
 `;
 

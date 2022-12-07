@@ -26,7 +26,7 @@ export default function PoemCardContainer() {
   }, [page, username, category.length]);
 
   return (
-    <>
+    <S_Wrapper>
       <CategoryFilter username={username} />
       <S_CardContainer>
         {poemList.map(poemCard => (
@@ -40,16 +40,22 @@ export default function PoemCardContainer() {
         ))}
       </S_CardContainer>
       <Pagination visible={poemList.length} username={username} page={page} lastPage={lastPage} category={category} />
-      <S_Wrapper visible={!poemList.length}>
+      <S_ErrorWrapper visible={!poemList.length}>
         <S_Error visible={error}>{GetPoemListServerErrorMessages[error?.response.status]}</S_Error>
         <LoadingSpinner visible={poemListLoading} width={'100px'} color={`red`} />
-      </S_Wrapper>
-    </>
+      </S_ErrorWrapper>
+    </S_Wrapper>
   );
 }
 
+const S_Wrapper = styled.div`
+  margin: 20px 0;
+  > * {
+    margin-bottom: 20px;
+  }
+`;
+
 const S_CardContainer = styled.div`
-  margin: 40px 20px;
   display: grid;
   column-gap: 20px;
   row-gap: 20px;
@@ -58,7 +64,7 @@ const S_CardContainer = styled.div`
   justify-items: center;
 `;
 
-const S_Wrapper = styled.div`
+const S_ErrorWrapper = styled.div`
   ${({ theme }) => theme.mixin.flexBox({})}
   display: ${({ visible }) => (visible ? 'flex' : 'none')};
   height: 200px;

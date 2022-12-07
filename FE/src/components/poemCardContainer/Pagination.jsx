@@ -55,7 +55,6 @@ const S_Wrapper = styled.div`
   > * {
     margin: 0 1rem;
   }
-  margin-bottom: 2rem;
 `;
 
 const S_Page = styled.p`
