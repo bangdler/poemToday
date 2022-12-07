@@ -3,11 +3,11 @@ import ReactQuill from 'react-quill';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function PoemCard({ id, username, title, body, category }) {
+export default function PoemCard({ id, title, body, category }) {
   const navigate = useNavigate();
 
   const onClick = () => {
-    navigate(`/@${username}/${id}`);
+    navigate(`/${id}`);
   };
 
   return (

@@ -27,20 +27,19 @@ export default function PoemCardContainer() {
 
   return (
     <>
-      <CategoryFilter />
+      <CategoryFilter username={username} />
       <S_CardContainer>
         {poemList.map(poemCard => (
           <PoemCard
             key={poemCard._id}
             id={poemCard._id}
-            username={poemCard.user.username}
             title={poemCard.title}
             body={poemCard.body}
             category={poemCard.category}
           />
         ))}
       </S_CardContainer>
-      <Pagination visible={poemList.length} username={username} page={page} lastPage={lastPage} />
+      <Pagination visible={poemList.length} username={username} page={page} lastPage={lastPage} category={category} />
       <S_Wrapper visible={!poemList.length}>
         <S_Error visible={error}>{GetPoemListServerErrorMessages[error?.response.status]}</S_Error>
         <LoadingSpinner visible={poemListLoading} width={'100px'} color={`red`} />

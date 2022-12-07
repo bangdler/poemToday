@@ -1,33 +1,28 @@
-import qs from 'qs';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import StyleLink from '@/components/common/StyleLink';
 import { S_CyanButton } from '@/components/commonStyled/styleButtons';
+import { buildUrl } from '@/utils/util';
 
-export default function Pagination({ visible, username, page, lastPage }) {
+export default function Pagination({ visible, username, page, lastPage, category }) {
   const navigate = useNavigate();
 
-  const buildUrl = ({ username, page }) => {
-    const query = qs.stringify({ page });
-    return username ? `/@${username}?${query}` : `/?${query}`;
-  };
-
   const clickPrev = () => {
-    navigate(buildUrl({ username, page: page - 1 }));
+    navigate(buildUrl({ username, page: page - 1, category }));
   };
 
   const clickNext = () => {
-    navigate(buildUrl({ username, page: page + 1 }));
+    navigate(buildUrl({ username, page: page + 1, category }));
   };
 
   const clickStartPage = () => {
-    navigate(buildUrl({ username, page: 1 }));
+    navigate(buildUrl({ username, page: 1, category }));
   };
 
   const clickLastPage = () => {
-    navigate(buildUrl({ username, page: lastPage }));
+    navigate(buildUrl({ username, page: lastPage, category }));
   };
 
   if (!visible) return null;
@@ -40,7 +35,7 @@ export default function Pagination({ visible, username, page, lastPage }) {
         이전
       </S_CyanButton>
       {Array.from({ length: lastPage }, (_, idx) => idx + 1).map((num, idx) => (
-        <StyleLink key={idx} to={buildUrl({ username, page: num })} size={'medium'}>
+        <StyleLink key={idx} to={buildUrl({ username, page: num, category })} size={'medium'}>
           <S_Page cur={page === num}>{num}</S_Page>
         </StyleLink>
       ))}

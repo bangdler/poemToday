@@ -1,4 +1,3 @@
-import qs from 'qs';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -6,8 +5,9 @@ import styled from 'styled-components';
 import CheckBox from '@/components/common/CheckBox';
 import { S_Button, S_CyanButton } from '@/components/commonStyled/styleButtons';
 import { CategoryColors } from '@/utils/constants';
+import { buildUrl } from '@/utils/util';
 
-export default React.memo(function CategoryFilter() {
+export default React.memo(function CategoryFilter({ username }) {
   const [filter, setFilter] = useState(false);
   const [checkedList, setCheckedList] = useState([]);
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ export default React.memo(function CategoryFilter() {
   };
 
   const clickApplyBtn = () => {
-    navigate(`/?${qs.stringify({ category: checkedList }, { arrayFormat: 'repeat' })}`);
+    navigate(buildUrl({ username, category: checkedList }));
   };
 
   return (
@@ -72,7 +72,7 @@ const S_Wrapper = styled.div`
   z-index: 1;
   width: 100%;
   position: relative;
-  margin: 40px 20px;
+  margin: 40px 0;
   ${({ theme }) => theme.mixin.flexBox({ direction: 'column', align: 'flex-end' })};
 `;
 

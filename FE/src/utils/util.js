@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 export function debounce(callback, delay) {
   let timer;
   return function (...args) {
@@ -57,3 +59,10 @@ export function removeLocalStorage(key) {
     console.log('localStorage is not working');
   }
 }
+
+export const buildUrl = ({ username, page, category }) => {
+  const pageQuery = qs.stringify({ page });
+  const categoryQuery = qs.stringify({ category }, { arrayFormat: 'repeat' });
+  const AND = page && category.length ? '&' : '';
+  return username ? `/@${username}?${categoryQuery}${AND}${pageQuery}` : `/?${categoryQuery}${AND}${pageQuery}`;
+};
