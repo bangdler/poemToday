@@ -50,7 +50,7 @@ export default function Header() {
 
 const S_Header = styled.header`
   position: fixed;
-  width: 100vw;
+  width: 100%;
   top: 0;
   left: 0;
   height: 72px;

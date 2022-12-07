@@ -38,7 +38,7 @@ export default function UtilArea({ user, logoutUser }) {
 const S_Wrapper = styled.div`
   height: 100%;
   ${({ theme }) => theme.mixin.flexBox({})};
-  > * {
-    margin: 0 10px;
+  > *:not(:last-child) {
+    margin-right: 1.6rem;
   }
 `;
