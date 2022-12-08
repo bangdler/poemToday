@@ -7,6 +7,7 @@ import Login from '@/pages/Login';
 import MyPage from '@/pages/MyPage';
 import PoemDetail from '@/pages/PoemDetail';
 import Register from '@/pages/Register';
+import Search from '@/pages/Search';
 import Write from '@/pages/Write';
 
 export default function Router() {
@@ -17,6 +18,9 @@ export default function Router() {
           <Route path=":poemId" element={<PoemDetail />} />
         </Route>
         <Route path="/@:username" element={<MyPage />}>
+          <Route path=":poemId" element={<PoemDetail />} />
+        </Route>
+        <Route path="/search" element={<Search/>}>
           <Route path=":poemId" element={<PoemDetail />} />
         </Route>
         <Route path="/login" element={<Login />} />

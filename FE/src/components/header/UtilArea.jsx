@@ -16,9 +16,13 @@ export default function UtilArea({ user, logoutUser }) {
     navigate('/');
   };
 
+  const clickSearchBtn = () => {
+    navigate('/search');
+  };
+
   return (
     <S_Wrapper>
-      <UtilBtn blindText={'검색'}>
+      <UtilBtn blindText={'검색'} onClick={clickSearchBtn}>
         <Search width={22} height={22} viewBox="0 0 16 16" />
       </UtilBtn>
       <ThemeBtn />
