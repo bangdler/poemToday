@@ -1,15 +1,8 @@
 import React from 'react';
 import ReactQuill from 'react-quill';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function PoemCard({ id, title, body, category }) {
-  const navigate = useNavigate();
-
-  const onClick = () => {
-    navigate(`/${id}`);
-  };
-
+export default function PoemCard({ title, body, category, onClick }) {
   return (
     <S_Wrapper onClick={onClick}>
       <S_Title>{title}</S_Title>

@@ -4,12 +4,10 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import ConfirmModal from '@/components/common/ConfirmModal';
 import Header from '@/components/header/Header';
 import MyPageForm from '@/components/myPageForm/MyPageForm';
-import { UserContext, UserDispatchContext, useUser } from '@/context/UserProvider';
-import { getLocalStorage } from '@/utils/util';
+import { UserContext, useUser } from '@/context/UserProvider';
 
 export default function MyPage() {
   const userData = useContext(UserContext);
-  const { setUser } = useContext(UserDispatchContext);
   const { checkUser } = useUser();
   const navigate = useNavigate();
   const [loginAlertModal, setLoginAlertModal] = useState(false);
@@ -19,12 +17,6 @@ export default function MyPage() {
   };
 
   useEffect(() => {
-    const user = getLocalStorage('user');
-    if (!user) {
-      checkUser();
-      return;
-    }
-    setUser({ user: JSON.parse(user) });
     checkUser();
   }, []);
 

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -13,14 +13,19 @@ export default function PoemCardContainer() {
   const { poemList, error, lastPage } = useContext(PoemListContext);
   const { initializePoemListError } = useContext(PoemListDispatchContext);
   const { poemListLoading, getPoemListFromServer } = usePoemList();
-  const { username, poemId } = useParams();
+  const { username } = useParams();
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const page = parseInt(searchParams.get('page'), 10) || 1;
   const category = searchParams.getAll('category');
 
+  const clickPoemCard = id => {
+    const poemDetailUrl = username ? `/@${username}/${id}` : `/${id}`;
+    navigate(poemDetailUrl);
+  };
+
   useEffect(() => {
-    if (poemId) return;
     getPoemListFromServer({ page, username, category });
     return () => initializePoemListError();
   }, [page, username, category.length]);
@@ -36,6 +41,7 @@ export default function PoemCardContainer() {
             title={poemCard.title}
             body={poemCard.body}
             category={poemCard.category}
+            onClick={() => clickPoemCard(poemCard._id)}
           />
         ))}
       </S_CardContainer>
