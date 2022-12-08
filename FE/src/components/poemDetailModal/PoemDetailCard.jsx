@@ -8,7 +8,7 @@ import { PoemContext, PoemDispatchContext, usePoem } from '@/context/PoemProvide
 import { UserContext } from '@/context/UserProvider';
 
 export default function PoemDetailCard({ closeModal }) {
-  const { username, poemId } = useParams();
+  const { poemId } = useParams();
   const userData = useContext(UserContext);
   const poemData = useContext(PoemContext);
   const { initializePoem } = useContext(PoemDispatchContext);
@@ -39,10 +39,9 @@ export default function PoemDetailCard({ closeModal }) {
         getPoemError={poemData.read.error}
         getPoemResponse={poemData.read.response}
         loading={poemLoading.read}
-        username={username}
       />
       <PoemDetailActionButtons
-        username={username}
+        username={userData.user?.username}
         poemId={poemId}
         closeModal={closeModal}
         curPoemForm={curPoemForm}

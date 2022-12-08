@@ -28,7 +28,7 @@ export default function WriteActionButtons({ field, poemForm }) {
 
   const onClickCancel = e => {
     e.preventDefault();
-    navigate('/');
+    navigate(-1);
   };
 
   const onClickGoLoginConfirm = () => {
@@ -41,10 +41,9 @@ export default function WriteActionButtons({ field, poemForm }) {
 
   useEffect(() => {
     if (poemForm.response === null) return;
-    const response = poemForm.response;
     console.log('전송완료');
     console.log(poemForm.response);
-    navigate(`/@${response.user.username}/${response._id}`);
+    navigate(-1);
 
     return () => initializePoem({ field });
   }, [poemForm.response]);

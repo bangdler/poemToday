@@ -9,7 +9,7 @@ import { S_CyanButton } from '@/components/commonStyled/styleButtons';
 import { PoemDispatchContext, usePoem } from '@/context/PoemProvider';
 import { UpdatePoemByIdServerErrorMessages } from '@/utils/constants';
 
-export default function EditActionButtons({ field, poemForm, id, username }) {
+export default function EditActionButtons({ field, poemForm, id }) {
   const { poemLoading, updatePoemByIdToServer } = usePoem();
   const { initializePoem, initializeError } = useContext(PoemDispatchContext);
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ export default function EditActionButtons({ field, poemForm, id, username }) {
 
   const onClickCancel = e => {
     e.preventDefault();
-    navigate(`/@${username}/${id}`);
+    navigate(-1);
   };
 
   const onClickGoLoginConfirm = () => {
@@ -43,7 +43,7 @@ export default function EditActionButtons({ field, poemForm, id, username }) {
     if (poemForm.response === null) return;
     console.log('전송완료');
     console.log(poemForm.response);
-    navigate(`/@${username}/${id}`);
+    navigate(-1);
     return () => initializePoem({ field });
   }, [poemForm.response]);
 
