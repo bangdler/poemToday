@@ -13,7 +13,7 @@ export default function PoemCardContainer() {
   const { poemList, error, lastPage } = useContext(PoemListContext);
   const { initializePoemListError } = useContext(PoemListDispatchContext);
   const { poemListLoading, getPoemListFromServer } = usePoemList();
-  const { username } = useParams();
+  const { username, poemId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -26,6 +26,7 @@ export default function PoemCardContainer() {
   };
 
   useEffect(() => {
+    if (poemId) return; // detail 모달 떴을 때 배경 리스트 요청 안하도록.
     getPoemListFromServer({ page, username, category });
     return () => initializePoemListError();
   }, [page, username, category.length]);

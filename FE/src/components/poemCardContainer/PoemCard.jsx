@@ -20,7 +20,7 @@ export default function PoemCard({ title, body, category, onClick }) {
 
 const S_Wrapper = styled.div`
   width: 260px;
-  min-height: 330px;
+  height: 340px;
   background-color: ${({ theme }) => theme.mode.cardColor};
   box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 9%);
   border-radius: 5px;
@@ -60,7 +60,7 @@ const S_CategoryTag = styled.span`
 const S_ReactQuill = styled(ReactQuill)`
   .ql-editor {
     padding: 0.5rem 1rem;
-    height: 200px;
+    height: 250px;
     overflow-y: hidden;
     > * {
       word-break: keep-all;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,8 +7,10 @@ import StyleLink from '@/components/common/StyleLink';
 import UtilBtn from '@/components/common/UtilBtn';
 import { S_TextBtn } from '@/components/commonStyled/styleButtons';
 import ThemeBtn from '@/components/header/ThemeBtn';
+import { PoemListDispatchContext } from '@/context/PoemListProvider';
 
 export default function UtilArea({ user, logoutUser }) {
+  const { initializePoemList } = useContext(PoemListDispatchContext);
   const navigate = useNavigate();
 
   const clickLogoutBtn = () => {
@@ -17,6 +19,7 @@ export default function UtilArea({ user, logoutUser }) {
   };
 
   const clickSearchBtn = () => {
+    initializePoemList();
     navigate('/search');
   };
 
