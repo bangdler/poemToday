@@ -6,6 +6,7 @@ import * as poemsCtrl from './poems.ctrl.js';
 const poems = new Router();
 
 poems.get('/', poemsCtrl.list);
+poems.get('/search', poemsCtrl.search);
 poems.post('/', checkLoggedIn, poemsCtrl.write);
 
 const poem = new Router();

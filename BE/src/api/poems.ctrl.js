@@ -94,18 +94,19 @@ export const list = async ctx => {
       .exec();
     // 마지막 페이지 알려주기
     const poemCount = await Poem.countDocuments(query).exec();
+    ctx.set('Result-Total', Math.ceil(poemCount));
     ctx.set('Last-Page', Math.ceil(poemCount / NUMBER_OF_LIST));
     // body 200자 이상 제한하기
     // 인스턴스 형태에서 json 으로 변환하여 사용해야함. 이 방법 또는 .skip() 뒤에 .lean() 추가하여 사용
-    ctx.body = poems
-      .map(poem => poem.toJSON())
-      .map(poem => ({
-        ...poem,
-        body:
-          poem.body.length < LENGTH_OF_SHORT_BODY
-            ? poem.body
-            : `${shortenQuillTypeBody({ body: poem.body, shortLength: LENGTH_OF_SHORT_BODY })}...`,
-      }));
+    ctx.body = poems;
+    // .map(poem => poem.toJSON())
+    // .map(poem => ({
+    //   ...poem,
+    //   body:
+    //     poem.body.length < LENGTH_OF_SHORT_BODY
+    //       ? poem.body
+    //       : `${shortenQuillTypeBody({ body: poem.body, shortLength: LENGTH_OF_SHORT_BODY })}...`,
+    // }));
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -160,6 +161,36 @@ export const update = async ctx => {
       return;
     }
     ctx.body = poem;
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const search = async ctx => {
+  const { text, page } = ctx.query;
+
+  const curPage = parseInt(page || '1', 10);
+
+  if (curPage < 1) {
+    ctx.status = 400;
+    return;
+  }
+
+  const query = {
+    $or: [{ title: { $regex: text } }, { author: { $regex: text } }],
+  };
+
+  try {
+    const poems = await Poem.find(query)
+      .sort({ publishedDate: -1, _id: -1 })
+      .limit(NUMBER_OF_LIST)
+      .skip((curPage - 1) * NUMBER_OF_LIST)
+      .exec();
+    // 마지막 페이지 알려주기
+    const poemCount = await Poem.countDocuments(query).exec();
+    ctx.set('Result-Total', Math.ceil(poemCount));
+    ctx.set('Last-Page', Math.ceil(poemCount / NUMBER_OF_LIST));
+    ctx.body = poems;
   } catch (e) {
     ctx.throw(500, e);
   }
