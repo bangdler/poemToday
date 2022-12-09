@@ -6,13 +6,15 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import CategoryFilter from '@/components/poemCardContainer/CategoryFilter';
 import Pagination from '@/components/poemCardContainer/Pagination';
 import PoemCard from '@/components/poemCardContainer/PoemCard';
+import { LoadingContext } from '@/context/LoadingProvider';
 import { PoemListContext, PoemListDispatchContext, usePoemList } from '@/context/PoemListProvider';
 import { GetPoemListServerErrorMessages } from '@/utils/constants';
 
 export default function PoemCardContainer() {
   const { poemList, error, lastPage } = useContext(PoemListContext);
   const { initializePoemListError } = useContext(PoemListDispatchContext);
-  const { poemListLoading, getPoemListFromServer } = usePoemList();
+  const { getPoemListFromServer } = usePoemList();
+  const loading = useContext(LoadingContext);
   const { username, poemId } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -47,9 +49,9 @@ export default function PoemCardContainer() {
         ))}
       </S_CardContainer>
       <Pagination visible={poemList.length} username={username} page={page} lastPage={lastPage} category={category} />
-      <S_ErrorWrapper visible={!poemList.length}>
+      <S_ErrorWrapper visible={loading.list || error}>
         <S_Error visible={error}>{GetPoemListServerErrorMessages[error?.response.status]}</S_Error>
-        <LoadingSpinner visible={poemListLoading} width={'100px'} color={`red`} />
+        <LoadingSpinner visible={loading.list} width={'100px'} color={`red`} />
       </S_ErrorWrapper>
     </S_Wrapper>
   );

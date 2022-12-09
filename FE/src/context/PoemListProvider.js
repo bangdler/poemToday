@@ -1,6 +1,7 @@
-import React, { createContext, useReducer, useMemo, useCallback, useContext, useState } from 'react';
+import React, { createContext, useReducer, useMemo, useCallback, useContext } from 'react';
 
 import * as poemsApi from '@/api/poems';
+import { LoadingDispatchContext } from '@/context/LoadingProvider';
 
 export const PoemListContext = createContext();
 export const PoemListDispatchContext = createContext();
@@ -72,10 +73,10 @@ export default function PoemListProvider({ children }) {
 
 export const usePoemList = () => {
   const { getListSuccess, getListFail } = useContext(PoemListDispatchContext);
-  const [poemListLoading, setPoemListLoading] = useState(false);
+  const { startLoading, finishLoading } = useContext(LoadingDispatchContext);
 
   const getPoemListFromServer = async ({ page, username, category }) => {
-    setPoemListLoading(true);
+    startLoading({ field: 'list' });
     try {
       const response = await poemsApi.list({ page, username, category });
       getListSuccess({
@@ -87,11 +88,11 @@ export const usePoemList = () => {
       console.log(e);
       getListFail({ error: e });
     }
-    setPoemListLoading(false);
+    finishLoading({ field: 'list' });
   };
 
   const searchPoemListFromServer = async ({ text, page }) => {
-    setPoemListLoading(true);
+    startLoading({ field: 'list' });
     try {
       const response = await poemsApi.search({ text, page });
       getListSuccess({
@@ -103,8 +104,8 @@ export const usePoemList = () => {
       console.log(e);
       getListFail({ error: e });
     }
-    setPoemListLoading(false);
+    finishLoading({ field: 'list' });
   };
 
-  return { poemListLoading, getPoemListFromServer, searchPoemListFromServer };
+  return { getPoemListFromServer, searchPoemListFromServer };
 };

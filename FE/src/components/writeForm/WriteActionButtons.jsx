@@ -6,12 +6,14 @@ import ConfirmModal from '@/components/common/ConfirmModal';
 import ErrorBox from '@/components/common/ErrorBox';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { S_CyanButton } from '@/components/commonStyled/styleButtons';
+import { LoadingContext } from '@/context/LoadingProvider';
 import { PoemDispatchContext, usePoem } from '@/context/PoemProvider';
 import { PostPoemServerErrorMessages } from '@/utils/constants';
 
 export default function WriteActionButtons({ field, poemForm }) {
-  const { poemLoading, writePoemToServer } = usePoem();
+  const { writePoemToServer } = usePoem();
   const { initializePoem, initializeError } = useContext(PoemDispatchContext);
+  const loading = useContext(LoadingContext)
   const navigate = useNavigate();
   const [error, setError] = useState({ state: false, message: '' });
   const [loginAlertModal, setLoginAlertModal] = useState(false);
@@ -66,8 +68,8 @@ export default function WriteActionButtons({ field, poemForm }) {
         <S_CyanButton size={'medium'} onClick={onClickCancel}>
           취소하기
         </S_CyanButton>
-        <S_CyanButton size={'medium'} disabled={poemLoading.write} onClick={onSubmit}>
-          작성하기 <LoadingSpinner visible={poemLoading.write} width={'20px'} color={`red`} />
+        <S_CyanButton size={'medium'} disabled={loading.write} onClick={onSubmit}>
+          작성하기 <LoadingSpinner visible={loading.write} width={'20px'} color={`red`} />
         </S_CyanButton>
       </S_Wrapper>
       <ErrorBox visible={error.state} errorMessage={error.message} onClick={closeErrorBox} />

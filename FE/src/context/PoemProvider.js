@@ -1,6 +1,7 @@
-import React, { createContext, useReducer, useMemo, useCallback, useContext, useState } from 'react';
+import React, { createContext, useReducer, useMemo, useCallback, useContext } from 'react';
 
 import * as poemsApi from '@/api/poems';
+import { LoadingDispatchContext } from '@/context/LoadingProvider';
 
 export const PoemContext = createContext();
 export const PoemDispatchContext = createContext();
@@ -105,12 +106,10 @@ export default function PoemProvider({ children }) {
 export const usePoem = () => {
   const poemData = useContext(PoemContext);
   const { poemsApiSuccess, poemsApiFail } = useContext(PoemDispatchContext);
-
-  const [poemLoading, setPoemLoading] = useState({ write: false, read: false, remove: false, edit: false });
+  const { startLoading, finishLoading } = useContext(LoadingDispatchContext);
 
   const writePoemToServer = async () => {
-    const loadingStart = { ...poemLoading, write: true };
-    setPoemLoading(loadingStart);
+    startLoading({ field: 'write' });
     try {
       const response = await poemsApi.write({
         title: poemData.write.title,
@@ -123,13 +122,11 @@ export const usePoem = () => {
       console.log(e);
       poemsApiFail({ field: 'write', error: e });
     }
-    const loadingFinish = { ...poemLoading, write: false };
-    setPoemLoading(loadingFinish);
+    finishLoading({ field: 'write' });
   };
 
   const getPoemByIdFromServer = async ({ id }) => {
-    const loadingStart = { ...poemLoading, read: true };
-    setPoemLoading(loadingStart);
+    startLoading({ field: 'read' });
     try {
       const response = await poemsApi.read({ id });
       poemsApiSuccess({ field: 'read', response: response.data });
@@ -137,13 +134,11 @@ export const usePoem = () => {
       console.log(e);
       poemsApiFail({ field: 'read', error: e });
     }
-    const loadingFinish = { ...poemLoading, read: false };
-    setPoemLoading(loadingFinish);
+    finishLoading({ field: 'read' });
   };
 
   const removePoemByIdFromServer = async ({ id }) => {
-    const loadingStart = { ...poemLoading, remove: true };
-    setPoemLoading(loadingStart);
+    startLoading({ field: 'remove' });
     try {
       const response = await poemsApi.remove({ id });
       poemsApiSuccess({ field: 'remove', response: response.data });
@@ -151,13 +146,11 @@ export const usePoem = () => {
       console.log(e);
       poemsApiFail({ field: 'remove', error: e });
     }
-    const loadingFinish = { ...poemLoading, remove: false };
-    setPoemLoading(loadingFinish);
+    finishLoading({ field: 'remove' });
   };
 
   const updatePoemByIdToServer = async ({ id }) => {
-    const loadingStart = { ...poemLoading, edit: true };
-    setPoemLoading(loadingStart);
+    startLoading({ field: 'edit' });
     try {
       const response = await poemsApi.update({
         id,
@@ -171,9 +164,8 @@ export const usePoem = () => {
       console.log(e);
       poemsApiFail({ field: 'edit', error: e });
     }
-    const loadingFinish = { ...poemLoading, edit: false };
-    setPoemLoading(loadingFinish);
+    finishLoading({ field: 'edit' });
   };
 
-  return { poemLoading, writePoemToServer, getPoemByIdFromServer, removePoemByIdFromServer, updatePoemByIdToServer};
+  return { writePoemToServer, getPoemByIdFromServer, removePoemByIdFromServer, updatePoemByIdToServer };
 };

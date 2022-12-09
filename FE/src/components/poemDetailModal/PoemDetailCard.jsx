@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 import PoemDetailActionButtons from '@/components/poemDetailModal/PoemDetailActionButtons';
 import PoemDetailContents from '@/components/poemDetailModal/PoemDetailContents';
+import { LoadingContext } from '@/context/LoadingProvider';
 import { PoemContext, PoemDispatchContext, usePoem } from '@/context/PoemProvider';
 import { UserContext } from '@/context/UserProvider';
 
@@ -12,7 +13,8 @@ export default function PoemDetailCard({ closeModal }) {
   const userData = useContext(UserContext);
   const poemData = useContext(PoemContext);
   const { initializePoem } = useContext(PoemDispatchContext);
-  const { poemLoading, getPoemByIdFromServer } = usePoem();
+  const { getPoemByIdFromServer } = usePoem();
+  const loading = useContext(LoadingContext)
 
   useEffect(() => {
     getPoemByIdFromServer({ id: poemId });
@@ -38,7 +40,7 @@ export default function PoemDetailCard({ closeModal }) {
       <PoemDetailContents
         getPoemError={poemData.read.error}
         getPoemResponse={poemData.read.response}
-        loading={poemLoading.read}
+        loading={loading.read}
       />
       <PoemDetailActionButtons
         username={userData.user?.username}

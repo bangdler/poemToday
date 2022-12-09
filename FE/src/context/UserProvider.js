@@ -1,6 +1,7 @@
-import React, { createContext, useReducer, useMemo, useCallback, useContext, useState } from 'react';
+import React, { createContext, useReducer, useMemo, useCallback, useContext } from 'react';
 
 import * as authApi from '@/api/auth.js';
+import { LoadingDispatchContext } from '@/context/LoadingProvider';
 import { removeLocalStorage, setLocalStorage } from '@/utils/util';
 
 export const UserContext = createContext();
@@ -62,11 +63,10 @@ export default function UserProvider({ children }) {
 
 export const useUser = () => {
   const { checkUserSuccess, checkUserFail, setUser } = useContext(UserDispatchContext);
-  const [userLoading, setUserLoading] = useState({ check: false, logout: false });
+  const { startLoading, finishLoading } = useContext(LoadingDispatchContext);
 
   const checkUser = async () => {
-    const loadingStart = { ...userLoading, check: true };
-    setUserLoading(loadingStart);
+    startLoading({ field: 'check' });
     try {
       const response = await authApi.check();
       checkUserSuccess({ response: response.data });
@@ -75,13 +75,11 @@ export const useUser = () => {
       checkUserFail({ error: e });
       removeLocalStorage('user');
     }
-    const loadingFinish = { ...userLoading, check: false };
-    setUserLoading(loadingFinish);
+    finishLoading({ field: 'check' });
   };
 
   const logoutUser = async () => {
-    const loadingStart = { ...userLoading, logout: true };
-    setUserLoading(loadingStart);
+    startLoading({ field: 'logout' });
     try {
       await authApi.logout();
       setUser({ user: null });
@@ -93,9 +91,8 @@ export const useUser = () => {
       alert('logout 실패');
       console.log(e);
     }
-    const loadingFinish = { ...userLoading, logout: false };
-    setUserLoading(loadingFinish);
+    finishLoading({ field: 'logout' });
   };
 
-  return { userLoading, checkUser, logoutUser };
+  return { checkUser, logoutUser };
 };

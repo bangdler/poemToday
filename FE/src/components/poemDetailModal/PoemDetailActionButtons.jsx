@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import ConfirmModal from '@/components/common/ConfirmModal';
 import ErrorBox from '@/components/common/ErrorBox';
 import { S_Button, S_CyanButton, S_RedButton } from '@/components/commonStyled/styleButtons';
+import { LoadingContext } from '@/context/LoadingProvider';
 import { PoemDispatchContext, usePoem } from '@/context/PoemProvider';
 import { DeletePoemByIdServerErrorMessages } from '@/utils/constants';
 
@@ -18,7 +19,8 @@ export default function PoemDetailActionButtons({
   removePoemError,
 }) {
   const { setPoemData } = useContext(PoemDispatchContext);
-  const { poemLoading, removePoemByIdFromServer } = usePoem();
+  const { removePoemByIdFromServer } = usePoem();
+  const loading = useContext(LoadingContext);
   const navigate = useNavigate();
   const [error, setError] = useState({ state: false, message: '' });
   const [removeConfirmModal, setRemoveConformModal] = useState(false);
@@ -91,7 +93,7 @@ export default function PoemDetailActionButtons({
         cancelText={'취소'}
         onConfirm={onClickRemoveConfirm}
         onCancel={onClickRemoveCancel}
-        confirmLoading={poemLoading.remove}
+        confirmLoading={loading.remove}
       />
       <ConfirmModal
         visible={loginAlertModal}

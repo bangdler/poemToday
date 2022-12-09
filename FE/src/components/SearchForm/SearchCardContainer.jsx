@@ -4,13 +4,14 @@ import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import PoemCard from '@/components/poemCardContainer/PoemCard';
-import { PoemListContext, usePoemList } from '@/context/PoemListProvider';
+import { LoadingContext } from '@/context/LoadingProvider';
+import { PoemListContext } from '@/context/PoemListProvider';
 import Palette from '@/style/palette';
 import { GetPoemListServerErrorMessages } from '@/utils/constants';
 
 export default function SearchCardContainer() {
   const { poemList, error, total } = useContext(PoemListContext);
-  const { poemListLoading } = usePoemList();
+  const loading = useContext(LoadingContext);
   const navigate = useNavigate();
 
   const clickPoemCard = id => {
@@ -23,7 +24,7 @@ export default function SearchCardContainer() {
         <S_ResultText>
           검색 결과가 총 <S_ResultNum>{total}</S_ResultNum> 건입니다.
         </S_ResultText>
-      ) : (
+      ) : loading.list ? null : (
         <S_ResultText>검색 결과가 없습니다.</S_ResultText>
       )}
       <S_CardContainer>
@@ -38,9 +39,9 @@ export default function SearchCardContainer() {
           />
         ))}
       </S_CardContainer>
-      <S_ErrorWrapper visible={!poemList.length}>
+      <S_ErrorWrapper visible={error || loading.list}>
         <S_Error visible={error}>{GetPoemListServerErrorMessages[error?.response.status]}</S_Error>
-        <LoadingSpinner visible={poemListLoading} width={'100px'} color={`red`} />
+        <LoadingSpinner visible={loading.list} width={'100px'} color={`red`} />
       </S_ErrorWrapper>
     </S_Wrapper>
   );

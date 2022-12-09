@@ -20,7 +20,7 @@ export default function Router() {
         <Route path="/@:username" element={<MyPage />}>
           <Route path=":poemId" element={<PoemDetail />} />
         </Route>
-        <Route path="/search" element={<Search/>}>
+        <Route path="/search" element={<Search />}>
           <Route path=":poemId" element={<PoemDetail />} />
         </Route>
         <Route path="/login" element={<Login />} />

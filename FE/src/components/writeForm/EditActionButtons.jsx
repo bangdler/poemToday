@@ -6,12 +6,14 @@ import ConfirmModal from '@/components/common/ConfirmModal';
 import ErrorBox from '@/components/common/ErrorBox';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { S_CyanButton } from '@/components/commonStyled/styleButtons';
+import { LoadingContext } from '@/context/LoadingProvider';
 import { PoemDispatchContext, usePoem } from '@/context/PoemProvider';
 import { UpdatePoemByIdServerErrorMessages } from '@/utils/constants';
 
 export default function EditActionButtons({ field, poemForm, id }) {
-  const { poemLoading, updatePoemByIdToServer } = usePoem();
+  const { updatePoemByIdToServer } = usePoem();
   const { initializePoem, initializeError } = useContext(PoemDispatchContext);
+  const loading = useContext(LoadingContext)
   const navigate = useNavigate();
   const [error, setError] = useState({ state: false, message: '' });
   const [loginAlertModal, setLoginAlertModal] = useState(false);
@@ -65,8 +67,8 @@ export default function EditActionButtons({ field, poemForm, id }) {
         <S_CyanButton size={'medium'} onClick={onClickCancel}>
           취소하기
         </S_CyanButton>
-        <S_CyanButton size={'medium'} disabled={poemLoading.edit} onClick={onSubmit}>
-          수정하기 <LoadingSpinner visible={poemLoading.edit} width={'20px'} color={`red`} />
+        <S_CyanButton size={'medium'} disabled={loading.edit} onClick={onSubmit}>
+          수정하기 <LoadingSpinner visible={loading.edit} width={'20px'} color={`red`} />
         </S_CyanButton>
       </S_Wrapper>
       <ErrorBox visible={error.state} errorMessage={error.message} onClick={closeErrorBox} />

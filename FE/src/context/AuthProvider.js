@@ -1,6 +1,7 @@
-import React, { createContext, useReducer, useMemo, useCallback, useContext, useState } from 'react';
+import React, { createContext, useReducer, useMemo, useCallback, useContext } from 'react';
 
 import * as authApi from '@/api/auth.js';
+import { LoadingDispatchContext } from '@/context/LoadingProvider';
 
 export const AuthContext = createContext();
 export const AuthDispatchContext = createContext();
@@ -81,21 +82,19 @@ export default function AuthProvider({ children }) {
 
 export const useAuth = () => {
   const authForm = useContext(AuthContext);
+  const { startLoading, finishLoading } = useContext(LoadingDispatchContext);
   const { authSuccess, authFail } = useContext(AuthDispatchContext);
-  const [authLoading, setAuthLoading] = useState({ login: false, register: false });
 
   const submitAuth = async ({ field }) => {
-    const loadingStart = { ...authLoading, [field]: true };
-    setAuthLoading(loadingStart);
+    startLoading({ field });
     try {
       const response = await authApi[field]({ username: authForm[field].username, password: authForm[field].password });
       authSuccess({ response: response.data });
     } catch (e) {
       authFail({ error: e });
     }
-    const loadingFinish = { ...authLoading, [field]: false };
-    setAuthLoading(loadingFinish);
+    finishLoading({ field });
   };
 
-  return { authLoading, submitAuth };
+  return { submitAuth };
 };

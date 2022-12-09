@@ -8,15 +8,17 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import StyleLink from '@/components/common/StyleLink';
 import { S_CyanButton } from '@/components/commonStyled/styleButtons';
 import { AuthContext, AuthDispatchContext, useAuth } from '@/context/AuthProvider';
+import { LoadingContext } from '@/context/LoadingProvider';
 import { UserContext, useUser } from '@/context/UserProvider';
 import { LoginServerErrorMessages } from '@/utils/constants';
 
 export default function LoginForm() {
   const authForm = useContext(AuthContext);
   const { initializeForm, changeForm } = useContext(AuthDispatchContext);
-  const { authLoading, submitAuth } = useAuth();
+  const { submitAuth } = useAuth();
   const userData = useContext(UserContext);
   const { checkUser } = useUser();
+  const loading = useContext(LoadingContext);
   const [error, setError] = useState({ state: false, message: '' });
   const navigate = useNavigate();
 
@@ -86,8 +88,8 @@ export default function LoginForm() {
           onChange={onChange}
           autoComplete={'new-password'}
         />
-        <S_CyanButton size={'fullWidth'} disabled={authLoading.login} onClick={onSubmit}>
-          로그인 <LoadingSpinner visible={authLoading.login} width={'20px'} color={`red`} />
+        <S_CyanButton size={'fullWidth'} disabled={loading.login} onClick={onSubmit}>
+          로그인 <LoadingSpinner visible={loading.login} width={'20px'} color={`red`} />
         </S_CyanButton>
         <S_Container>
           <StyleLink to={'/register'} size={'small'}>

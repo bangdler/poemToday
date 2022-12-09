@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { ReactComponent as Search } from '@/assets/icons/search.svg';
-import { usePoemList } from '@/context/PoemListProvider';
+import { PoemListDispatchContext, usePoemList } from '@/context/PoemListProvider';
 
 export default function SearchInput({ searchText, setSearchText, setOpenSearchCardContainer, setError }) {
+  const { initializePoemList } = useContext(PoemListDispatchContext);
   const { searchPoemListFromServer } = usePoemList();
 
   const searchInput = useRef();
@@ -19,6 +20,7 @@ export default function SearchInput({ searchText, setSearchText, setOpenSearchCa
       setError({ state: true, message: '1글자 이상 입력해주세요!' });
       return;
     }
+    initializePoemList();
     searchPoemListFromServer({ text: searchText });
     setOpenSearchCardContainer(true);
   };
