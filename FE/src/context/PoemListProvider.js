@@ -9,6 +9,7 @@ const initialPoemListData = {
   poemList: [],
   error: null,
   lastPage: 1,
+  total: null,
 };
 
 const poemListReducer = (state, action) => {
@@ -18,7 +19,7 @@ const poemListReducer = (state, action) => {
     case 'INITIALIZE_ERROR':
       return { ...state, error: null };
     case 'GET_LIST_SUCCESS':
-      return { ...state, poemList: action.poemList, lastPage: action.lastPage };
+      return { ...state, poemList: action.poemList, lastPage: action.lastPage, total: action.total };
     case 'GET_LIST_FAIL':
       return { ...state, error: action.error };
     default:
@@ -41,11 +42,12 @@ export default function PoemListProvider({ children }) {
     });
   }, []);
 
-  const getListSuccess = useCallback(({ poemList, lastPage }) => {
+  const getListSuccess = useCallback(({ poemList, lastPage, total }) => {
     poemListDataDispatch({
       type: 'GET_LIST_SUCCESS',
       poemList,
       lastPage,
+      total,
     });
   }, []);
 
@@ -76,7 +78,11 @@ export const usePoemList = () => {
     setPoemListLoading(true);
     try {
       const response = await poemsApi.list({ page, username, category });
-      getListSuccess({ poemList: response.data, lastPage: parseInt(response.headers['last-page'], 10) });
+      getListSuccess({
+        poemList: response.data,
+        lastPage: parseInt(response.headers['last-page'], 10),
+        total: parseInt(response.headers['result-total'], 10),
+      });
     } catch (e) {
       console.log(e);
       getListFail({ error: e });
@@ -84,5 +90,21 @@ export const usePoemList = () => {
     setPoemListLoading(false);
   };
 
-  return { poemListLoading, getPoemListFromServer };
+  const searchPoemListFromServer = async ({ text, page }) => {
+    setPoemListLoading(true);
+    try {
+      const response = await poemsApi.search({ text, page });
+      getListSuccess({
+        poemList: response.data,
+        lastPage: parseInt(response.headers['last-page'], 10),
+        total: parseInt(response.headers['result-total'], 10),
+      });
+    } catch (e) {
+      console.log(e);
+      getListFail({ error: e });
+    }
+    setPoemListLoading(false);
+  };
+
+  return { poemListLoading, getPoemListFromServer, searchPoemListFromServer };
 };

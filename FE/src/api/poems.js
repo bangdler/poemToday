@@ -12,3 +12,5 @@ export const remove = ({ id }) => client.delete(`/api/poems/${id}`);
 
 export const update = ({ id, title, author, body, category }) =>
   client.patch(`/api/poems/${id}`, { title, author, body, category });
+
+export const search = ({ text, page }) => client.get('/api/poems/search', { params: { text, page } });
