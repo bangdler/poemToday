@@ -27,18 +27,20 @@ export default function SearchCardContainer() {
       ) : loading.list ? null : (
         <S_ResultText>검색 결과가 없습니다.</S_ResultText>
       )}
-      <S_CardContainer>
-        {poemList.map(poemCard => (
-          <PoemCard
-            key={poemCard._id}
-            id={poemCard._id}
-            title={poemCard.title}
-            body={poemCard.body}
-            category={poemCard.category}
-            onClick={() => clickPoemCard(poemCard._id)}
-          />
-        ))}
-      </S_CardContainer>
+      {!error && !loading.list ? (
+        <S_CardContainer>
+          {poemList.map(poemCard => (
+            <PoemCard
+              key={poemCard._id}
+              id={poemCard._id}
+              title={poemCard.title}
+              body={poemCard.body}
+              category={poemCard.category}
+              onClick={() => clickPoemCard(poemCard._id)}
+            />
+          ))}
+        </S_CardContainer>
+      ) : null}
       <S_ErrorWrapper visible={error || loading.list}>
         <S_Error visible={error}>{GetPoemListServerErrorMessages[error?.response.status]}</S_Error>
         <LoadingSpinner visible={loading.list} width={'100px'} color={`red`} />

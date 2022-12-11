@@ -11,22 +11,26 @@ export const LoginServerErrorMessages = {
 export const PostPoemServerErrorMessages = {
   400: '입력 오류. 제목, 저자, 내용을 모두 입력해주세요.',
   500: '서버 응답 오류',
+  504: '서버 요청 실패(게이트웨이 시간초과)',
 };
 
 export const GetPoemListServerErrorMessages = {
   400: '페이지 번호가 잘못되었습니다.',
   500: '서버 응답 오류',
+  504: '서버 요청 실패(게이트웨이 시간초과)',
 };
 
 export const GetPoemByIdServerErrorMessages = {
   400: '잘못된 요청입니다.',
   404: '존재하지 않는 Poem 입니다.',
   500: '서버 응답 오류',
+  504: '서버 요청 실패(게이트웨이 시간초과)',
 };
 
 export const DeletePoemByIdServerErrorMessages = {
   403: '작성자만 삭제할 수 있습니다.',
   500: '서버 응답 오류',
+  504: '서버 요청 실패(게이트웨이 시간초과)',
 };
 
 export const UpdatePoemByIdServerErrorMessages = {
@@ -34,6 +38,7 @@ export const UpdatePoemByIdServerErrorMessages = {
   403: '작성자만 수정할 수 있습니다.',
   404: '존재하지 않는 Poem 입니다.',
   500: '서버 응답 오류',
+  504: '서버 요청 실패(게이트웨이 시간초과)',
 };
 
 export const CategoryColors = {
