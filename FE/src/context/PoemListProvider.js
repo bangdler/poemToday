@@ -9,7 +9,7 @@ export const PoemListDispatchContext = createContext();
 const initialPoemListData = {
   poemList: [],
   error: null,
-  lastPage: 1,
+  lastPage: null,
   total: null,
 };
 
@@ -23,6 +23,13 @@ const poemListReducer = (state, action) => {
       return { ...state, poemList: action.poemList, lastPage: action.lastPage, total: action.total };
     case 'GET_LIST_FAIL':
       return { ...state, error: action.error };
+    case 'ADD_LIST_SUCCESS':
+      return {
+        ...state,
+        poemList: [...state.poemList, ...action.poemList],
+        lastPage: action.lastPage,
+        total: action.total,
+      };
     default:
       return state;
   }
@@ -59,9 +66,18 @@ export default function PoemListProvider({ children }) {
     });
   }, []);
 
+  const addListSuccess = useCallback(({ poemList, lastPage, total }) => {
+    poemListDataDispatch({
+      type: 'ADD_LIST_SUCCESS',
+      poemList,
+      lastPage,
+      total,
+    });
+  }, []);
+
   const memoizedPoemListDispatches = useMemo(
-    () => ({ initializePoemList, getListSuccess, getListFail, initializePoemListError }),
-    [initializePoemList, getListSuccess, getListFail, initializePoemListError]
+    () => ({ initializePoemList, getListSuccess, getListFail, initializePoemListError, addListSuccess }),
+    [initializePoemList, getListSuccess, getListFail, initializePoemListError, addListSuccess]
   );
 
   return (
@@ -72,7 +88,7 @@ export default function PoemListProvider({ children }) {
 }
 
 export const usePoemList = () => {
-  const { getListSuccess, getListFail } = useContext(PoemListDispatchContext);
+  const { getListSuccess, getListFail, addListSuccess } = useContext(PoemListDispatchContext);
   const { startLoading, finishLoading } = useContext(LoadingDispatchContext);
 
   const getPoemListFromServer = async ({ page, username, category }) => {
@@ -107,5 +123,21 @@ export const usePoemList = () => {
     finishLoading({ field: 'list' });
   };
 
-  return { getPoemListFromServer, searchPoemListFromServer };
+  const addPoemListFromServer = async ({ page, username, category }) => {
+    startLoading({ field: 'list' });
+    try {
+      const response = await poemsApi.list({ page, username, category });
+      addListSuccess({
+        poemList: response.data,
+        lastPage: parseInt(response.headers['last-page'], 10),
+        total: parseInt(response.headers['result-total'], 10),
+      });
+    } catch (e) {
+      console.log(e);
+      getListFail({ error: e });
+    }
+    finishLoading({ field: 'list' });
+  };
+
+  return { getPoemListFromServer, searchPoemListFromServer, addPoemListFromServer };
 };

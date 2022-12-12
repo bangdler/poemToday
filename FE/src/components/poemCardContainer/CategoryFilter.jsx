@@ -4,10 +4,12 @@ import styled from 'styled-components';
 
 import CheckBox from '@/components/common/CheckBox';
 import { S_Button, S_CyanButton } from '@/components/commonStyled/styleButtons';
+import { usePoemList } from '@/context/PoemListProvider';
 import { CategoryColors } from '@/utils/constants';
 import { buildUrl } from '@/utils/util';
 
-export default React.memo(function CategoryFilter({ username }) {
+export default React.memo(function CategoryFilter({ username, setPage }) {
+  const { getPoemListFromServer } = usePoemList();
   const [filter, setFilter] = useState(false);
   const [checkedList, setCheckedList] = useState([]);
   const navigate = useNavigate();
@@ -33,6 +35,8 @@ export default React.memo(function CategoryFilter({ username }) {
 
   const clickApplyBtn = () => {
     navigate(buildUrl({ username, category: checkedList }));
+    getPoemListFromServer({ username, category: checkedList });
+    setPage && setPage(1);
   };
 
   return (
