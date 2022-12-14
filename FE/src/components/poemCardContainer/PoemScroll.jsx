@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -7,18 +7,30 @@ import CategoryFilter from '@/components/poemCardContainer/CategoryFilter';
 import PoemCard from '@/components/poemCardContainer/PoemCard';
 import { LoadingContext } from '@/context/LoadingProvider';
 import { PoemListContext, PoemListDispatchContext, usePoemList } from '@/context/PoemListProvider';
+import { useInfiniteScrollByIntersection } from '@/hooks/useInfiniteScroll';
 import { GetPoemListServerErrorMessages } from '@/utils/constants';
-import { throttleByAnimationFrame } from '@/utils/util';
 
 export default function PoemScroll() {
   const { poemList, error, lastPage } = useContext(PoemListContext);
   const { initializePoemList, initializePoemListError } = useContext(PoemListDispatchContext);
   const { addPoemListFromServer } = usePoemList();
   const loading = useContext(LoadingContext);
-  const [isFetching, setIsFetching] = useState(false);
   const [page, setPage] = useState(1);
   const [isLastPage, setIsLastPage] = useState(false);
   const [searchParams] = useSearchParams();
+  const target = useRef();
+
+  const addPoemList = () => {
+    if (!isLastPage) {
+      initializePoemListError();
+      addPoemListFromServer({ page, category });
+      setPage(page + 1);
+      setIsLastPage(page === lastPage);
+    }
+    setIsFetching(false);
+  };
+
+  const [, setIsFetching] = useInfiniteScrollByIntersection({ fetchCallback: addPoemList, target: target.current });
 
   const navigate = useNavigate();
 
@@ -28,33 +40,9 @@ export default function PoemScroll() {
     navigate(`/${id}`);
   };
 
-  const addPoemList = () => {
-    initializePoemListError();
-    addPoemListFromServer({ page, category });
-    setIsFetching(false);
-    setPage(page + 1);
-    setIsLastPage(page === lastPage);
-  };
-
-  const handleScroll = throttleByAnimationFrame(() => {
-    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
-    if (clientHeight + scrollTop >= scrollHeight) {
-      setIsFetching(true);
-    }
-  });
-
   useEffect(() => {
     initializePoemList();
-    setIsFetching(true);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  useEffect(() => {
-    if (!isFetching) return;
-    if (isFetching && !isLastPage) addPoemList();
-    else if (isLastPage) setIsFetching(false);
-  }, [isFetching]);
 
   return (
     <S_Wrapper>
@@ -75,6 +63,7 @@ export default function PoemScroll() {
         <S_Error visible={error}>{GetPoemListServerErrorMessages[error?.response.status]}</S_Error>
         <LoadingSpinner visible={loading.list} width={'100px'} color={`red`} />
       </S_ErrorWrapper>
+      <S_Target ref={target} />
     </S_Wrapper>
   );
 }
@@ -104,4 +93,8 @@ const S_ErrorWrapper = styled.div`
 const S_Error = styled.p`
   display: ${({ visible }) => (visible ? 'block' : 'none')};
   font-size: 3rem;
+`;
+
+const S_Target = styled.div`
+  height: 1px;
 `;
