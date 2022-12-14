@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -8,14 +8,14 @@ import PoemCard from '@/components/poemCardContainer/PoemCard';
 import { LoadingContext } from '@/context/LoadingProvider';
 import { PoemListContext, PoemListDispatchContext, usePoemList } from '@/context/PoemListProvider';
 import { GetPoemListServerErrorMessages } from '@/utils/constants';
+import { throttleByAnimationFrame } from '@/utils/util';
 
 export default function PoemScroll() {
   const { poemList, error, lastPage } = useContext(PoemListContext);
-  const { initializePoemListError, initializePoemList } = useContext(PoemListDispatchContext);
-  const { getPoemListFromServer, addPoemListFromServer } = usePoemList();
+  const { initializePoemList, initializePoemListError } = useContext(PoemListDispatchContext);
+  const { addPoemListFromServer } = usePoemList();
   const loading = useContext(LoadingContext);
-  const { poemId } = useParams();
-  const [isFetching, setFetching] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [page, setPage] = useState(1);
   const [isLastPage, setIsLastPage] = useState(false);
   const [searchParams] = useSearchParams();
@@ -27,37 +27,33 @@ export default function PoemScroll() {
   const clickPoemCard = id => {
     navigate(`/${id}`);
   };
-  console.log(page, category, lastPage, isLastPage);
 
   const addPoemList = () => {
-    addPoemListFromServer({ page, category });
     initializePoemListError();
-    setFetching(false);
-  };
-
-  const handleScroll = () => {
-    const { scrollTop, offsetHeight } = document.documentElement;
-    if (window.innerHeight + scrollTop >= offsetHeight) {
-      console.log('scroll');
-      setFetching(true);
-    }
-  };
-
-  useEffect(() => {
-    if (poemList.length === 0) return;
+    addPoemListFromServer({ page, category });
+    setIsFetching(false);
     setPage(page + 1);
     setIsLastPage(page === lastPage);
-  }, [poemList.length]);
+  };
+
+  const handleScroll = throttleByAnimationFrame(() => {
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+    if (clientHeight + scrollTop >= scrollHeight) {
+      setIsFetching(true);
+    }
+  });
 
   useEffect(() => {
-    setFetching(true);
+    initializePoemList();
+    setIsFetching(true);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
+    if (!isFetching) return;
     if (isFetching && !isLastPage) addPoemList();
-    else if (isLastPage) setFetching(false);
+    else if (isLastPage) setIsFetching(false);
   }, [isFetching]);
 
   return (

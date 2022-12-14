@@ -13,7 +13,7 @@ export default function Header() {
   const [position, setPosition] = useState('top');
   const curPageY = useRef(0);
 
-  const handleScroll = () => {
+  const handleScroll = firstAndDebounce(() => {
     const { scrollY } = window;
     const dY = curPageY.current - scrollY;
 
@@ -25,12 +25,12 @@ export default function Header() {
       setPosition('up');
     }
     curPageY.current = scrollY;
-  };
+  }, 150);
 
   useEffect(() => {
-    window.addEventListener('scroll', firstAndDebounce(handleScroll, 150));
+    window.addEventListener('scroll', handleScroll);
     return () => {
-      window.removeEventListener('scroll', firstAndDebounce(handleScroll, 150)); //clean up
+      window.removeEventListener('scroll', handleScroll); //clean up
     };
   }, []);
 

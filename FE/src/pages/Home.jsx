@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Header from '@/components/header/Header';
-import PoemCardContainer from '@/components/poemCardContainer/PoemCardContainer';
+import PoemScroll from '@/components/poemCardContainer/PoemScroll';
 import { UserDispatchContext, useUser } from '@/context/UserProvider';
 import { getLocalStorage } from '@/utils/util';
 
@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <PoemCardContainer />
+      <PoemScroll />
       <Outlet />
     </>
   );

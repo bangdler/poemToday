@@ -31,12 +31,12 @@ export default function PoemCardContainer() {
     if (poemId) return; // detail 모달 떴을 때 배경 리스트 요청 안하도록.
     getPoemListFromServer({ page, username, category });
     return () => initializePoemListError();
-  }, [page, username, category.length]);
+  }, [page, username]);
 
   return (
     <S_Wrapper>
       <CategoryFilter username={username} />
-      {!error && !loading.list ? (
+      {!error ? (
         <S_CardContainer>
           {poemList.map(poemCard => (
             <PoemCard

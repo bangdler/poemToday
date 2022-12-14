@@ -1,6 +1,6 @@
 import qs from 'qs';
 
-export function debounce(callback, delay) {
+export const debounce = (callback, delay) => {
   let timer;
   return function (...args) {
     clearTimeout(timer);
@@ -8,8 +8,9 @@ export function debounce(callback, delay) {
       callback.apply(this, args);
     }, delay);
   };
-}
-export function firstAndDebounce(callback, delay) {
+};
+
+export const firstAndDebounce = (callback, delay) => {
   let timer = 'first';
   return function (...args) {
     if (timer === 'first') {
@@ -21,9 +22,9 @@ export function firstAndDebounce(callback, delay) {
       timer = 'first';
     }, delay);
   };
-}
+};
 
-export function throttle(callback, time) {
+export const throttle = (callback, time) => {
   let waiting = false;
   return function (...args) {
     if (!waiting) {
@@ -34,31 +35,38 @@ export function throttle(callback, time) {
       }, time);
     }
   };
-}
+};
 
-export function setLocalStorage(key, value) {
+export const throttleByAnimationFrame = callback =>
+  function (...args) {
+    window.requestAnimationFrame(() => {
+      callback.apply(this, args);
+    });
+  };
+
+export const setLocalStorage = (key, value) => {
   try {
     localStorage.setItem(key, JSON.stringify(value));
   } catch (e) {
     console.log('localStorage is not working');
   }
-}
+};
 
-export function getLocalStorage(key) {
+export const getLocalStorage = key => {
   try {
     return localStorage.getItem(key);
   } catch (e) {
     console.log('localStorage is not working');
   }
-}
+};
 
-export function removeLocalStorage(key) {
+export const removeLocalStorage = key => {
   try {
     return localStorage.removeItem(key);
   } catch (e) {
     console.log('localStorage is not working');
   }
-}
+};
 
 export const buildUrl = ({ username, page, category }) => {
   const pageQuery = qs.stringify({ page });
