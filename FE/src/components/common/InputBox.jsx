@@ -17,7 +17,11 @@ export default function InputBox({
       <S_Title>{title}</S_Title>
       <S_Container>
         <S_Input type={type} onChange={onChange} name={name} value={value} autoComplete={autoComplete} />
-        {option.component && <S_OptionBtn onClick={option.onClick}>{option.component}</S_OptionBtn>}
+        {option.component && (
+          <S_OptionBtn type="button" onClick={option.onClick}>
+            {option.component}
+          </S_OptionBtn>
+        )}
       </S_Container>
     </S_Wrapper>
   );
@@ -27,6 +31,9 @@ const S_Wrapper = styled.div`
   ${({ theme }) => theme.mixin.flexBox({ direction: 'column' })}
   width: 100%;
   border-bottom: 1px solid ${({ theme }) => theme.mode.borderColor};
+  &:focus-within {
+    border-bottom: 1px solid ${palette.gray[7]};
+  }
 `;
 
 const S_Title = styled.h2`
@@ -51,7 +58,4 @@ const S_Input = styled.input`
   width: 100%;
   font-size: 2rem;
   color: ${({ theme }) => theme.mode.textColor};
-  &:focus {
-    border-bottom: 1px solid ${palette.gray[7]};
-  }
 `;

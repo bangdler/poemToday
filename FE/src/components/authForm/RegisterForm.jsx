@@ -132,7 +132,7 @@ export default function RegisterForm() {
             onClick: clickShowPasswordConfirmBtn,
           }}
         />
-        <S_CyanButton size={'fullWidth'} disabled={loading.register} onClick={onSubmit}>
+        <S_CyanButton type="submit" size={'fullWidth'} disabled={loading.register} onClick={onSubmit}>
           회원가입 <LoadingSpinner visible={loading.register} width={'20px'} color={`red`} />
         </S_CyanButton>
         <S_Container>

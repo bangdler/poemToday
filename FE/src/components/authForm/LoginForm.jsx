@@ -104,7 +104,7 @@ export default function LoginForm() {
             onClick: clickShowPasswordBtn,
           }}
         />
-        <S_CyanButton size={'fullWidth'} disabled={loading.login} onClick={onSubmit}>
+        <S_CyanButton type="submit" size={'fullWidth'} disabled={loading.login} onClick={onSubmit}>
           로그인 <LoadingSpinner visible={loading.login} width={'20px'} color={`red`} />
         </S_CyanButton>
         <S_Container>
