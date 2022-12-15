@@ -3,9 +3,9 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import CategoryFilter from '@/components/poemCardContainer/CategoryFilter';
-import Pagination from '@/components/poemCardContainer/Pagination';
-import PoemCard from '@/components/poemCardContainer/PoemCard';
+import CategoryFilter from '@/components/poemCards/CategoryFilter';
+import Pagination from '@/components/poemCards/Pagination';
+import PoemCard from '@/components/poemCards/PoemCard';
 import { LoadingContext } from '@/context/LoadingProvider';
 import { PoemListContext, PoemListDispatchContext, usePoemList } from '@/context/PoemListProvider';
 import { GetPoemListServerErrorMessages } from '@/utils/constants';
@@ -79,6 +79,7 @@ const S_CardContainer = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(280px, min-content));
   grid-auto-flow: row;
   justify-items: center;
+  justify-content: center;
 `;
 
 const S_ErrorWrapper = styled.div`

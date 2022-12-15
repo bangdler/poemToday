@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import PoemCard from '@/components/poemCardContainer/PoemCard';
+import PoemCard from '@/components/poemCards/PoemCard';
 import { LoadingContext } from '@/context/LoadingProvider';
 import { PoemListContext } from '@/context/PoemListProvider';
 import Palette from '@/style/palette';

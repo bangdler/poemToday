@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 import UserProfile from '@/components/myPageForm/UserProfile';
-import PoemCardContainer from '@/components/poemCardContainer/PoemCardContainer';
+import PoemCardContainer from '@/components/poemCards/PoemCardContainer';
 import Palette from '@/style/palette';
 
 const PROFILE_TAB = '유저프로필';

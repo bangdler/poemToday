@@ -3,8 +3,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import CategoryFilter from '@/components/poemCardContainer/CategoryFilter';
-import PoemCard from '@/components/poemCardContainer/PoemCard';
+import CategoryFilter from '@/components/poemCards/CategoryFilter';
+import PoemCard from '@/components/poemCards/PoemCard';
 import { LoadingContext } from '@/context/LoadingProvider';
 import { PoemListContext, PoemListDispatchContext, usePoemList } from '@/context/PoemListProvider';
 import { useInfiniteScrollByIntersection } from '@/hooks/useInfiniteScroll';
@@ -42,6 +42,7 @@ export default function PoemScroll() {
 
   useEffect(() => {
     initializePoemList();
+    return () => initializePoemList();
   }, []);
 
   return (
@@ -82,6 +83,7 @@ const S_CardContainer = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(280px, min-content));
   grid-auto-flow: row;
   justify-items: center;
+  justify-content: center;
 `;
 
 const S_ErrorWrapper = styled.div`

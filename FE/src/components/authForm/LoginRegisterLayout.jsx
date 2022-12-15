@@ -19,7 +19,7 @@ const S_InnerBox = styled.div`
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.025);
   padding: 2rem;
   width: 360px;
-  background: ${({ theme }) => theme.mode.bgColor};
+  background: ${({ theme }) => theme.mode.dimColor};
   color: ${({ theme }) => theme.mode.textColor};
   border-radius: 2px;
 `;

@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import Header from '@/components/header/Header';
-import PoemScroll from '@/components/poemCardContainer/PoemScroll';
+import PoemScroll from '@/components/poemCards/PoemScroll';
 import { UserDispatchContext, useUser } from '@/context/UserProvider';
 import { getLocalStorage } from '@/utils/util';
 
