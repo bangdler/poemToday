@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -36,9 +36,9 @@ export default function PoemScroll() {
 
   const category = searchParams.getAll('category');
 
-  const clickPoemCard = id => {
+  const clickPoemCard = useCallback(id => {
     navigate(`/${id}`);
-  };
+  }, []);
 
   useEffect(() => {
     initializePoemList();
@@ -56,7 +56,7 @@ export default function PoemScroll() {
             title={poemCard.title}
             body={poemCard.body}
             category={poemCard.category}
-            onClick={() => clickPoemCard(poemCard._id)}
+            onClick={clickPoemCard}
           />
         ))}
       </S_CardContainer>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,7 +9,7 @@ import { S_TextBtn } from '@/components/commonStyled/styleButtons';
 import ThemeBtn from '@/components/header/ThemeBtn';
 import { PoemListDispatchContext } from '@/context/PoemListProvider';
 
-export default function UtilArea({ user, logoutUser }) {
+export default React.memo(function UtilArea({ user, logoutUser }) {
   const { initializePoemList } = useContext(PoemListDispatchContext);
   const navigate = useNavigate();
 
@@ -18,15 +18,19 @@ export default function UtilArea({ user, logoutUser }) {
     navigate('/');
   };
 
-  const clickSearchBtn = () => {
+  const clickSearchBtn = useCallback(() => {
     initializePoemList();
     navigate('/search');
-  };
+  }, [initializePoemList]);
+
+  const memoizedSearch = useMemo(() => {
+    return <Search width={22} height={22} viewBox="0 0 16 16" />;
+  }, []);
 
   return (
     <S_Wrapper>
       <UtilBtn blindText={'검색'} onClick={clickSearchBtn}>
-        <Search width={22} height={22} viewBox="0 0 16 16" />
+        {memoizedSearch}
       </UtilBtn>
       <ThemeBtn />
       {user ? (
@@ -40,7 +44,7 @@ export default function UtilArea({ user, logoutUser }) {
       )}
     </S_Wrapper>
   );
-}
+});
 
 const S_Wrapper = styled.div`
   height: 100%;

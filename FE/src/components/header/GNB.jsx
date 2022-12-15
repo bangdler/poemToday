@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-export default function GNB({ user }) {
+export default React.memo(function GNB({ user }) {
   return (
     <S_Nav>
       <ul>
@@ -11,7 +11,7 @@ export default function GNB({ user }) {
       </ul>
     </S_Nav>
   );
-}
+});
 
 const S_Nav = styled.nav`
   height: 100%;

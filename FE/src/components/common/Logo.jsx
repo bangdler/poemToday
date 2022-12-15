@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import BlindText from '@/components/common/BlindText';
 
-export default function Logo({ name, link, blindText }) {
+export default React.memo(function Logo({ name, link, blindText }) {
   return (
     <S_Logo>
       <Link to={link}>
@@ -13,7 +13,7 @@ export default function Logo({ name, link, blindText }) {
       </Link>
     </S_Logo>
   );
-}
+});
 
 const S_Logo = styled.h1`
   font-size: 2.6rem;

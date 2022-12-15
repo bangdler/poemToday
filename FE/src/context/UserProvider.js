@@ -65,7 +65,7 @@ export const useUser = () => {
   const { checkUserSuccess, checkUserFail, setUser } = useContext(UserDispatchContext);
   const { startLoading, finishLoading } = useContext(LoadingDispatchContext);
 
-  const checkUser = async () => {
+  const checkUser = useCallback(async () => {
     startLoading({ field: 'check' });
     try {
       const response = await authApi.check();
@@ -76,9 +76,9 @@ export const useUser = () => {
       removeLocalStorage('user');
     }
     finishLoading({ field: 'check' });
-  };
+  }, []);
 
-  const logoutUser = async () => {
+  const logoutUser = useCallback(async () => {
     startLoading({ field: 'logout' });
     try {
       await authApi.logout();
@@ -92,7 +92,7 @@ export const useUser = () => {
       console.log(e);
     }
     finishLoading({ field: 'logout' });
-  };
+  }, []);
 
   return { checkUser, logoutUser };
 };

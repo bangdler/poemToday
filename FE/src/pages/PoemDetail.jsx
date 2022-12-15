@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import PoemDetailCard from '@/components/poemDetailModal/PoemDetailCard';
@@ -8,9 +8,9 @@ export default function PoemDetail() {
   const [pop, setPop] = useState(true);
   const navigate = useNavigate();
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setPop(false);
-  };
+  }, [setPop]);
 
   useEffect(() => {
     if (!pop) {

@@ -2,9 +2,9 @@ import React from 'react';
 import ReactQuill from 'react-quill';
 import styled from 'styled-components';
 
-export default function PoemCard({ title, body, category, onClick }) {
+export default React.memo(function PoemCard({ id, title, body, category, onClick }) {
   return (
-    <S_Wrapper onClick={onClick}>
+    <S_Wrapper onClick={() => onClick(id)}>
       <S_Title>{title}</S_Title>
       <S_Line />
       <S_CategoryContainer>
@@ -16,7 +16,7 @@ export default function PoemCard({ title, body, category, onClick }) {
       <S_ReactQuill readOnly={true} value={body} modules={{ toolbar: null }} />
     </S_Wrapper>
   );
-}
+});
 
 const S_Wrapper = styled.div`
   width: 260px;

@@ -5,7 +5,7 @@ import { ReactComponent as Moon } from '@/assets/icons/moon.svg';
 import UtilBtn from '@/components/common/UtilBtn';
 import { useThemeMode } from '@/context/ThemeProvider';
 
-export default function ThemeBtn() {
+export default React.memo(function ThemeBtn() {
   const [themeMode, toggleThemeMode] = useThemeMode();
 
   return (
@@ -17,4 +17,4 @@ export default function ThemeBtn() {
       )}
     </UtilBtn>
   );
-}
+});

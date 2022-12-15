@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -22,10 +22,10 @@ export default function PoemCardContainer() {
   const page = parseInt(searchParams.get('page'), 10) || 1;
   const category = searchParams.getAll('category');
 
-  const clickPoemCard = id => {
+  const clickPoemCard = useCallback(id => {
     const poemDetailUrl = username ? `/@${username}/${id}` : `/${id}`;
     navigate(poemDetailUrl);
-  };
+  }, []);
 
   useEffect(() => {
     if (poemId) return; // detail 모달 떴을 때 배경 리스트 요청 안하도록.
@@ -45,7 +45,7 @@ export default function PoemCardContainer() {
               title={poemCard.title}
               body={poemCard.body}
               category={poemCard.category}
-              onClick={() => clickPoemCard(poemCard._id)}
+              onClick={clickPoemCard}
             />
           ))}
         </S_CardContainer>

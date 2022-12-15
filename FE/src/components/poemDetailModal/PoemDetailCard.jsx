@@ -8,13 +8,13 @@ import { LoadingContext } from '@/context/LoadingProvider';
 import { PoemContext, PoemDispatchContext, usePoem } from '@/context/PoemProvider';
 import { UserContext } from '@/context/UserProvider';
 
-export default function PoemDetailCard({ closeModal }) {
+export default React.memo(function PoemDetailCard({ closeModal }) {
   const { poemId } = useParams();
   const userData = useContext(UserContext);
   const poemData = useContext(PoemContext);
   const { initializePoem } = useContext(PoemDispatchContext);
   const { getPoemByIdFromServer } = usePoem();
-  const loading = useContext(LoadingContext)
+  const loading = useContext(LoadingContext);
 
   useEffect(() => {
     getPoemByIdFromServer({ id: poemId });
@@ -53,7 +53,7 @@ export default function PoemDetailCard({ closeModal }) {
       />
     </S_CardWrapper>
   );
-}
+});
 
 const S_CardWrapper = styled.div`
   width: 420px;
