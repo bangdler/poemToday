@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { ReactComponent as Eye } from '@/assets/icons/eye-fill.svg';
+import { ReactComponent as EyeSlash } from '@/assets/icons/eye-slash-fill.svg';
 import ErrorBox from '@/components/common/ErrorBox';
 import InputBox from '@/components/common/InputBox';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -20,6 +22,7 @@ export default function LoginForm() {
   const { checkUser } = useUser();
   const loading = useContext(LoadingContext);
   const [error, setError] = useState({ state: false, message: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,6 +73,11 @@ export default function LoginForm() {
     submitAuth({ field: 'login' });
   };
 
+  const clickShowPasswordBtn = e => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+  };
+
   return (
     <>
       <S_Wrapper>
@@ -84,9 +92,17 @@ export default function LoginForm() {
           title={'비밀번호'}
           name={'password'}
           value={authForm.login.password}
-          type={'password'}
+          type={showPassword ? 'text' : 'password'}
           onChange={onChange}
           autoComplete={'new-password'}
+          option={{
+            component: showPassword ? (
+              <Eye width={22} height={22} viewBox="0 0 16 16" />
+            ) : (
+              <EyeSlash width={22} height={22} viewBox="0 0 16 16" />
+            ),
+            onClick: clickShowPasswordBtn,
+          }}
         />
         <S_CyanButton size={'fullWidth'} disabled={loading.login} onClick={onSubmit}>
           로그인 <LoadingSpinner visible={loading.login} width={'20px'} color={`red`} />

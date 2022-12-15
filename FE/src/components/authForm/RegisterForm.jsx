@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { ReactComponent as Eye } from '@/assets/icons/eye-fill.svg';
+import { ReactComponent as EyeSlash } from '@/assets/icons/eye-slash-fill.svg';
 import ErrorBox from '@/components/common/ErrorBox';
 import InputBox from '@/components/common/InputBox';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -20,6 +22,8 @@ export default function RegisterForm() {
   const { checkUser } = useUser();
   const loading = useContext(LoadingContext);
   const [error, setError] = useState({ state: false, message: '' });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -76,6 +80,16 @@ export default function RegisterForm() {
     submitAuth({ field: 'register' });
   };
 
+  const clickShowPasswordBtn = e => {
+    e.preventDefault();
+    setShowPassword(!showPassword);
+  };
+
+  const clickShowPasswordConfirmBtn = e => {
+    e.preventDefault();
+    setShowPasswordConfirm(!showPasswordConfirm);
+  };
+
   return (
     <>
       <S_Wrapper>
@@ -90,17 +104,33 @@ export default function RegisterForm() {
           title={'비밀번호'}
           name={'password'}
           value={authForm.register.password}
-          type={'password'}
+          type={showPassword ? 'text' : 'password'}
           onChange={onChange}
           autoComplete={'new-password'}
+          option={{
+            component: showPassword ? (
+              <Eye width={22} height={22} viewBox="0 0 16 16" />
+            ) : (
+              <EyeSlash width={22} height={22} viewBox="0 0 16 16" />
+            ),
+            onClick: clickShowPasswordBtn,
+          }}
         />
         <InputBox
           title={'비밀번호 확인'}
           name={'passwordConfirm'}
           value={authForm.register.passwordConfirm}
-          type={'password'}
+          type={showPasswordConfirm ? 'text' : 'password'}
           onChange={onChange}
           autoComplete={'new-password'}
+          option={{
+            component: showPasswordConfirm ? (
+              <Eye width={22} height={22} viewBox="0 0 16 16" />
+            ) : (
+              <EyeSlash width={22} height={22} viewBox="0 0 16 16" />
+            ),
+            onClick: clickShowPasswordConfirmBtn,
+          }}
         />
         <S_CyanButton size={'fullWidth'} disabled={loading.register} onClick={onSubmit}>
           회원가입 <LoadingSpinner visible={loading.register} width={'20px'} color={`red`} />
