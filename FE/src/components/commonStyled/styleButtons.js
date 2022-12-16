@@ -1,8 +1,9 @@
+import React from 'react';
 import styled, { css } from 'styled-components';
 
 import palette from '@/style/palette';
 
-export const S_Button = styled.button`
+export const S_Button = React.memo(styled.button`
   border-radius: 4px;
   padding: 0.25rem 1rem;
   background-color: ${({ theme }) => theme.mode.bgColor};
@@ -35,7 +36,7 @@ export const S_Button = styled.button`
       `;
     }
   }}
-`;
+`);
 
 export const S_CircleBtn = styled.button`
   width: 36px;
@@ -57,7 +58,7 @@ export const S_TextBtn = styled.button`
   }
 `;
 
-export const S_CyanButton = styled(S_Button)`
+export const S_CyanButton = React.memo(styled(S_Button)`
   background-color: ${palette.cyan[5]};
   &:hover:enabled {
     background-color: ${palette.cyan[4]};
@@ -67,9 +68,9 @@ export const S_CyanButton = styled(S_Button)`
     opacity: 0.5;
     background-color: ${palette.cyan[5]};
   }
-`;
+`);
 
-export const S_RedButton = styled(S_Button)`
+export const S_RedButton = React.memo(styled(S_Button)`
   background-color: ${palette.red[4]};
   &:hover:enabled {
     background-color: ${palette.red[2]};
@@ -79,4 +80,4 @@ export const S_RedButton = styled(S_Button)`
     opacity: 0.5;
     background-color: ${palette.red[4]};
   }
-`;
+`);

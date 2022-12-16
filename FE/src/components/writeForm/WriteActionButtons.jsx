@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -13,7 +13,7 @@ import { PostPoemServerErrorMessages } from '@/utils/constants';
 export default function WriteActionButtons({ field, poemForm }) {
   const { writePoemToServer } = usePoem();
   const { initializePoem, initializeError } = useContext(PoemDispatchContext);
-  const loading = useContext(LoadingContext)
+  const loading = useContext(LoadingContext);
   const navigate = useNavigate();
   const [error, setError] = useState({ state: false, message: '' });
   const [loginAlertModal, setLoginAlertModal] = useState(false);
@@ -25,21 +25,26 @@ export default function WriteActionButtons({ field, poemForm }) {
       setError({ state: true, message: '제목, 저자, 내용을 모두 입력하세요.' });
       return;
     }
-    writePoemToServer();
+    writePoemToServer({
+      title: poemForm.title,
+      author: poemForm.author,
+      body: poemForm.body,
+      category: poemForm.category,
+    });
   };
 
-  const onClickCancel = e => {
+  const onClickCancel = useCallback(e => {
     e.preventDefault();
     navigate(-1);
-  };
+  }, []);
 
-  const onClickGoLoginConfirm = () => {
+  const onClickGoLoginConfirm = useCallback(() => {
     navigate('/login');
-  };
+  }, []);
 
-  const closeErrorBox = async () => {
+  const closeErrorBox = useCallback(async () => {
     setError({ state: false, message: '' });
-  };
+  }, []);
 
   useEffect(() => {
     if (poemForm.response === null) return;

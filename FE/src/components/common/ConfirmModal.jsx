@@ -7,7 +7,7 @@ import { S_Button, S_CyanButton } from '@/components/commonStyled/styleButtons';
 import { DimLayerStyle } from '@/style/common';
 import palette from '@/style/palette';
 
-export default function ConfirmModal({
+export default React.memo(function ConfirmModal({
   visible,
   title,
   description,
@@ -39,7 +39,7 @@ export default function ConfirmModal({
       )}
     </PortalModal>
   );
-}
+});
 
 const S_DimLayer = styled.div`
   ${DimLayerStyle};

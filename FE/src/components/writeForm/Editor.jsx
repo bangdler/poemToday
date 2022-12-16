@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import styled from 'styled-components';
 
 import CheckBox from '@/components/common/CheckBox';
@@ -10,34 +10,49 @@ import { CategoryColors } from '@/utils/constants';
 export default function Editor({ field, poemForm, userData }) {
   const { changePoemData } = useContext(PoemDispatchContext);
 
-  const changeTitle = ({ target }) => {
-    changePoemData({ field, key: 'title', value: target.value });
-  };
+  const changeTitle = useCallback(
+    ({ target }) => {
+      changePoemData({ field, key: 'title', value: target.value });
+    },
+    [changePoemData, field]
+  );
 
-  const changeAuthor = ({ target }) => {
-    changePoemData({ field, key: 'author', value: target.value });
-  };
+  const changeAuthor = useCallback(
+    ({ target }) => {
+      changePoemData({ field, key: 'author', value: target.value });
+    },
+    [changePoemData, field]
+  );
 
-  const checkSelfPoemCategory = name => {
-    if (name === '자작시') {
-      changePoemData({ field, key: 'author', value: userData.user.username });
-    }
-  };
+  const checkSelfPoemCategory = useCallback(
+    name => {
+      if (name === '자작시') {
+        changePoemData({ field, key: 'author', value: userData.user.username });
+      }
+    },
+    [changePoemData, field, userData]
+  );
 
-  const changeCategory = ({ target }) => {
-    let newCategory;
-    if (target.checked) {
-      checkSelfPoemCategory(target.id);
-      newCategory = [...poemForm.category, target.id];
-    } else {
-      newCategory = poemForm.category.filter(it => it !== target.id);
-    }
-    changePoemData({ field, key: 'category', value: newCategory });
-  };
+  const changeCategory = useCallback(
+    ({ target }) => {
+      let newCategory;
+      if (target.checked) {
+        checkSelfPoemCategory(target.id);
+        newCategory = [...poemForm.category, target.id];
+      } else {
+        newCategory = poemForm.category.filter(it => it !== target.id);
+      }
+      changePoemData({ field, key: 'category', value: newCategory });
+    },
+    [changePoemData, checkSelfPoemCategory, field, poemForm.category]
+  );
 
-  const changeBody = value => {
-    changePoemData({ field, key: 'body', value: value });
-  };
+  const changeBody = useCallback(
+    value => {
+      changePoemData({ field, key: 'body', value: value });
+    },
+    [changePoemData, field]
+  );
 
   return (
     <S_Wrapper>

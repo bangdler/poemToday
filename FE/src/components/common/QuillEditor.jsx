@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import 'react-quill/dist/quill.snow.css';
 
-export default function QuillEditor({ placeholder, value, ...rest }) {
+export default React.memo(function QuillEditor({ placeholder, value, ...rest }) {
   const quill = useRef();
   const toolbarOptions = useMemo(
     () => [
@@ -44,7 +44,7 @@ export default function QuillEditor({ placeholder, value, ...rest }) {
       />
     </div>
   );
-}
+});
 
 const S_ReactQuill = styled(ReactQuill)`
   .ql-container {

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ConfirmModal from '@/components/common/ConfirmModal';
@@ -12,9 +12,9 @@ export default function Write() {
   const navigate = useNavigate();
   const [loginAlertModal, setLoginAlertModal] = useState(false);
 
-  const onClickGoLoginConfirm = () => {
+  const onClickGoLoginConfirm = useCallback(() => {
     navigate('/login');
-  };
+  }, []);
 
   useEffect(() => {
     checkUser();

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -26,30 +26,30 @@ export default function PoemDetailActionButtons({
   const [removeConfirmModal, setRemoveConformModal] = useState(false);
   const [loginAlertModal, setLoginAlertModal] = useState(false);
 
-  const onEdit = () => {
+  const onEdit = useCallback(() => {
     setPoemData({ field: 'edit', state: curPoemForm });
     navigate(`/edit/@${username}/${poemId}`);
-  };
+  }, [curPoemForm, username, poemId]);
 
-  const onRemove = () => {
+  const onRemove = useCallback(() => {
     setRemoveConformModal(true);
-  };
+  }, []);
 
-  const onClickRemoveConfirm = () => {
+  const onClickRemoveConfirm = useCallback(() => {
     removePoemByIdFromServer({ id: poemId });
-  };
+  }, [poemId]);
 
-  const onClickRemoveCancel = () => {
+  const onClickRemoveCancel = useCallback(() => {
     setRemoveConformModal(false);
-  };
+  }, []);
 
-  const onClickGoLoginConfirm = () => {
+  const onClickGoLoginConfirm = useCallback(() => {
     navigate('/login');
-  };
+  }, []);
 
-  const closeErrorBox = async () => {
+  const closeErrorBox = useCallback(async () => {
     setError({ state: false, message: '' });
-  };
+  }, []);
 
   useEffect(() => {
     if (removePoemResponse === null) return;
@@ -80,7 +80,7 @@ export default function PoemDetailActionButtons({
             </>
           )}
         </S_Wrapper2>
-        <S_Button size={'medium'} onClick={() => closeModal()}>
+        <S_Button size={'medium'} onClick={closeModal}>
           닫기
         </S_Button>
       </S_Wrapper>

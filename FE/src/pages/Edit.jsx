@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import ConfirmModal from '@/components/common/ConfirmModal';
@@ -13,9 +13,9 @@ export default function Edit() {
   const { username } = useParams();
   const [loginAlertModal, setLoginAlertModal] = useState(false);
 
-  const onClickGoLoginConfirm = () => {
+  const onClickGoLoginConfirm = useCallback(() => {
     navigate('/login');
-  };
+  }, []);
 
   useEffect(() => {
     checkUser();
