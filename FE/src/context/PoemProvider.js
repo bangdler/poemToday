@@ -104,18 +104,17 @@ export default function PoemProvider({ children }) {
 }
 
 export const usePoem = () => {
-  const poemData = useContext(PoemContext);
   const { poemsApiSuccess, poemsApiFail } = useContext(PoemDispatchContext);
   const { startLoading, finishLoading } = useContext(LoadingDispatchContext);
 
-  const writePoemToServer = async () => {
+  const writePoemToServer = useCallback(async ({ title, author, body, category }) => {
     startLoading({ field: 'write' });
     try {
       const response = await poemsApi.write({
-        title: poemData.write.title,
-        author: poemData.write.author,
-        body: poemData.write.body,
-        category: poemData.write.category,
+        title,
+        author,
+        body,
+        category,
       });
       poemsApiSuccess({ field: 'write', response: response.data });
     } catch (e) {
@@ -123,9 +122,9 @@ export const usePoem = () => {
       poemsApiFail({ field: 'write', error: e });
     }
     finishLoading({ field: 'write' });
-  };
+  }, []);
 
-  const getPoemByIdFromServer = async ({ id }) => {
+  const getPoemByIdFromServer = useCallback(async ({ id }) => {
     startLoading({ field: 'read' });
     try {
       const response = await poemsApi.read({ id });
@@ -135,9 +134,9 @@ export const usePoem = () => {
       poemsApiFail({ field: 'read', error: e });
     }
     finishLoading({ field: 'read' });
-  };
+  }, []);
 
-  const removePoemByIdFromServer = async ({ id }) => {
+  const removePoemByIdFromServer = useCallback(async ({ id }) => {
     startLoading({ field: 'remove' });
     try {
       const response = await poemsApi.remove({ id });
@@ -147,17 +146,17 @@ export const usePoem = () => {
       poemsApiFail({ field: 'remove', error: e });
     }
     finishLoading({ field: 'remove' });
-  };
+  }, []);
 
-  const updatePoemByIdToServer = async ({ id }) => {
+  const updatePoemByIdToServer = useCallback(async ({ id, title, author, body, category }) => {
     startLoading({ field: 'edit' });
     try {
       const response = await poemsApi.update({
         id,
-        title: poemData.edit.title,
-        author: poemData.edit.author,
-        body: poemData.edit.body,
-        category: poemData.edit.category,
+        title,
+        author,
+        body,
+        category,
       });
       poemsApiSuccess({ field: 'edit', response: response.data });
     } catch (e) {
@@ -165,7 +164,7 @@ export const usePoem = () => {
       poemsApiFail({ field: 'edit', error: e });
     }
     finishLoading({ field: 'edit' });
-  };
+  }, []);
 
   return { writePoemToServer, getPoemByIdFromServer, removePoemByIdFromServer, updatePoemByIdToServer };
 };

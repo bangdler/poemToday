@@ -81,14 +81,16 @@ export default function AuthProvider({ children }) {
 }
 
 export const useAuth = () => {
-  const authForm = useContext(AuthContext);
   const { startLoading, finishLoading } = useContext(LoadingDispatchContext);
   const { authSuccess, authFail } = useContext(AuthDispatchContext);
 
-  const submitAuth = useCallback(async ({ field }) => {
+  const submitAuth = useCallback(async ({ field, username, password }) => {
     startLoading({ field });
     try {
-      const response = await authApi[field]({ username: authForm[field].username, password: authForm[field].password });
+      const response = await authApi[field]({
+        username,
+        password,
+      });
       authSuccess({ response: response.data });
     } catch (e) {
       authFail({ error: e });

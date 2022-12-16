@@ -91,7 +91,7 @@ export const usePoemList = () => {
   const { getListSuccess, getListFail, addListSuccess } = useContext(PoemListDispatchContext);
   const { startLoading, finishLoading } = useContext(LoadingDispatchContext);
 
-  const getPoemListFromServer = async ({ page, username, category }) => {
+  const getPoemListFromServer = useCallback(async ({ page, username, category }) => {
     startLoading({ field: 'list' });
     try {
       const response = await poemsApi.list({ page, username, category });
@@ -105,9 +105,9 @@ export const usePoemList = () => {
       getListFail({ error: e });
     }
     finishLoading({ field: 'list' });
-  };
+  }, []);
 
-  const searchPoemListFromServer = async ({ text, page }) => {
+  const searchPoemListFromServer = useCallback(async ({ text, page }) => {
     startLoading({ field: 'list' });
     try {
       const response = await poemsApi.search({ text, page });
@@ -121,9 +121,9 @@ export const usePoemList = () => {
       getListFail({ error: e });
     }
     finishLoading({ field: 'list' });
-  };
+  }, []);
 
-  const addPoemListFromServer = async ({ page, username, category }) => {
+  const addPoemListFromServer = useCallback(async ({ page, username, category }) => {
     startLoading({ field: 'list' });
     try {
       const response = await poemsApi.list({ page, username, category });
@@ -137,7 +137,7 @@ export const usePoemList = () => {
       getListFail({ error: e });
     }
     finishLoading({ field: 'list' });
-  };
+  }, []);
 
   return { getPoemListFromServer, searchPoemListFromServer, addPoemListFromServer };
 };

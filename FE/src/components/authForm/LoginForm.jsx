@@ -73,7 +73,7 @@ export default function LoginForm() {
       setError({ state: true, message: '빈 칸을 모두 입력하세요.' });
       return;
     }
-    submitAuth({ field: 'login' });
+    submitAuth({ field: 'login', username: authForm.login.username, password: authForm.login.password });
   };
 
   const clickShowPasswordBtn = useCallback(

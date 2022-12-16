@@ -80,7 +80,7 @@ export default function RegisterForm() {
       changeForm({ field: 'register', key: 'passwordConfirm', value: '' });
       return;
     }
-    submitAuth({ field: 'register' });
+    submitAuth({ field: 'register', username: authForm.register.username, password: authForm.register.password });
   };
 
   const clickShowPasswordBtn = useCallback(
