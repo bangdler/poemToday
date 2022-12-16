@@ -85,7 +85,7 @@ export const useAuth = () => {
   const { startLoading, finishLoading } = useContext(LoadingDispatchContext);
   const { authSuccess, authFail } = useContext(AuthDispatchContext);
 
-  const submitAuth = async ({ field }) => {
+  const submitAuth = useCallback(async ({ field }) => {
     startLoading({ field });
     try {
       const response = await authApi[field]({ username: authForm[field].username, password: authForm[field].password });
@@ -94,7 +94,7 @@ export const useAuth = () => {
       authFail({ error: e });
     }
     finishLoading({ field });
-  };
+  }, []);
 
   return { submitAuth };
 };

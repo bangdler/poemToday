@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -55,13 +55,16 @@ export default function LoginForm() {
     }
   }, [userData.user]);
 
-  const onChange = ({ target }) => {
-    changeForm({ field: 'login', key: target.name, value: target.value });
-  };
+  const onChange = useCallback(
+    ({ target }) => {
+      changeForm({ field: 'login', key: target.name, value: target.value });
+    },
+    [changeForm]
+  );
 
-  const closeErrorBox = async () => {
+  const closeErrorBox = useCallback(async () => {
     setError({ state: false, message: '' });
-  };
+  }, []);
 
   const onSubmit = async e => {
     e.preventDefault();
@@ -73,10 +76,24 @@ export default function LoginForm() {
     submitAuth({ field: 'login' });
   };
 
-  const clickShowPasswordBtn = e => {
-    e.preventDefault();
-    setShowPassword(!showPassword);
-  };
+  const clickShowPasswordBtn = useCallback(
+    e => {
+      e.preventDefault();
+      setShowPassword(!showPassword);
+    },
+    [showPassword]
+  );
+
+  const passwordOption = useMemo(() => {
+    return {
+      component: showPassword ? (
+        <Eye width={22} height={22} viewBox="0 0 16 16" />
+      ) : (
+        <EyeSlash width={22} height={22} viewBox="0 0 16 16" />
+      ),
+      onClick: clickShowPasswordBtn,
+    };
+  }, [showPassword, clickShowPasswordBtn]);
 
   return (
     <>
@@ -95,14 +112,7 @@ export default function LoginForm() {
           type={showPassword ? 'text' : 'password'}
           onChange={onChange}
           autoComplete={'new-password'}
-          option={{
-            component: showPassword ? (
-              <Eye width={22} height={22} viewBox="0 0 16 16" />
-            ) : (
-              <EyeSlash width={22} height={22} viewBox="0 0 16 16" />
-            ),
-            onClick: clickShowPasswordBtn,
-          }}
+          option={passwordOption}
         />
         <S_CyanButton type="submit" size={'fullWidth'} disabled={loading.login} onClick={onSubmit}>
           로그인 <LoadingSpinner visible={loading.login} width={'20px'} color={`red`} />

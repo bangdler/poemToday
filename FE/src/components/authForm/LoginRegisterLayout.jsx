@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { DimLayerStyle } from '@/style/common';
 
 export default function LoginRegisterLayout({ children }) {
+  console.log('layout')
   return (
     <S_DimLayer>
       <S_InnerBox>{children}</S_InnerBox>

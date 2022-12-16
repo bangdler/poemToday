@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import palette from '@/style/palette';
 
-export default function InputBox({
+export default React.memo(function InputBox({
   title,
   onChange,
   name,
@@ -25,7 +25,7 @@ export default function InputBox({
       </S_Container>
     </S_Wrapper>
   );
-}
+});
 
 const S_Wrapper = styled.div`
   ${({ theme }) => theme.mixin.flexBox({ direction: 'column' })}

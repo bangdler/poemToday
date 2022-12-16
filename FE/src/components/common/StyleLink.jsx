@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
-export default function StyleLink(props) {
+export default React.memo(function StyleLink(props) {
   return <S_Link {...props} />;
-}
+});
 
 const S_Link = styled(Link)`
   color: ${({ theme }) => theme.mode.textColor};

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -56,13 +56,16 @@ export default function RegisterForm() {
     }
   }, [userData.user]);
 
-  const onChange = ({ target }) => {
-    changeForm({ field: 'register', key: target.name, value: target.value });
-  };
+  const onChange = useCallback(
+    ({ target }) => {
+      changeForm({ field: 'register', key: target.name, value: target.value });
+    },
+    [changeForm]
+  );
 
-  const closeErrorBox = async () => {
+  const closeErrorBox = useCallback(async () => {
     setError({ state: false, message: '' });
-  };
+  }, []);
 
   const onSubmit = async e => {
     e.preventDefault();
@@ -80,15 +83,43 @@ export default function RegisterForm() {
     submitAuth({ field: 'register' });
   };
 
-  const clickShowPasswordBtn = e => {
-    e.preventDefault();
-    setShowPassword(!showPassword);
-  };
+  const clickShowPasswordBtn = useCallback(
+    e => {
+      e.preventDefault();
+      setShowPassword(!showPassword);
+    },
+    [showPassword]
+  );
 
-  const clickShowPasswordConfirmBtn = e => {
-    e.preventDefault();
-    setShowPasswordConfirm(!showPasswordConfirm);
-  };
+  const clickShowPasswordConfirmBtn = useCallback(
+    e => {
+      e.preventDefault();
+      setShowPasswordConfirm(!showPasswordConfirm);
+    },
+    [showPasswordConfirm]
+  );
+
+  const passwordOption = useMemo(() => {
+    return {
+      component: showPassword ? (
+        <Eye width={22} height={22} viewBox="0 0 16 16" />
+      ) : (
+        <EyeSlash width={22} height={22} viewBox="0 0 16 16" />
+      ),
+      onClick: clickShowPasswordBtn,
+    };
+  }, [showPassword, clickShowPasswordBtn]);
+
+  const passwordConfirmOption = useMemo(() => {
+    return {
+      component: showPasswordConfirm ? (
+        <Eye width={22} height={22} viewBox="0 0 16 16" />
+      ) : (
+        <EyeSlash width={22} height={22} viewBox="0 0 16 16" />
+      ),
+      onClick: clickShowPasswordConfirmBtn,
+    };
+  }, [showPasswordConfirm, clickShowPasswordConfirmBtn]);
 
   return (
     <>
@@ -107,14 +138,7 @@ export default function RegisterForm() {
           type={showPassword ? 'text' : 'password'}
           onChange={onChange}
           autoComplete={'new-password'}
-          option={{
-            component: showPassword ? (
-              <Eye width={22} height={22} viewBox="0 0 16 16" />
-            ) : (
-              <EyeSlash width={22} height={22} viewBox="0 0 16 16" />
-            ),
-            onClick: clickShowPasswordBtn,
-          }}
+          option={passwordOption}
         />
         <InputBox
           title={'비밀번호 확인'}
@@ -123,14 +147,7 @@ export default function RegisterForm() {
           type={showPasswordConfirm ? 'text' : 'password'}
           onChange={onChange}
           autoComplete={'new-password'}
-          option={{
-            component: showPasswordConfirm ? (
-              <Eye width={22} height={22} viewBox="0 0 16 16" />
-            ) : (
-              <EyeSlash width={22} height={22} viewBox="0 0 16 16" />
-            ),
-            onClick: clickShowPasswordConfirmBtn,
-          }}
+          option={passwordConfirmOption}
         />
         <S_CyanButton type="submit" size={'fullWidth'} disabled={loading.register} onClick={onSubmit}>
           회원가입 <LoadingSpinner visible={loading.register} width={'20px'} color={`red`} />
