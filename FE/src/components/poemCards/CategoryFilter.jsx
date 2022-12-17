@@ -1,27 +1,24 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import CheckBox from '@/components/common/CheckBox';
 import { S_Button, S_CyanButton } from '@/components/commonStyled/styleButtons';
-import { usePoemList } from '@/context/PoemListProvider';
 import { CategoryColors } from '@/utils/constants';
-import { buildUrl } from '@/utils/util';
 
-export default React.memo(function CategoryFilter({ username, setPage }) {
-  const { getPoemListFromServer } = usePoemList();
+export default React.memo(function CategoryFilter() {
+  const [, setSearchParams] = useSearchParams();
   const [filter, setFilter] = useState(false);
   const [checkedList, setCheckedList] = useState([]);
-  const navigate = useNavigate();
 
-  const toggleFilter = () => {
+  const toggleFilter = useCallback(() => {
     if (filter) {
       setFilter(false);
     } else {
       setCheckedList([]);
       setFilter(true);
     }
-  };
+  }, [filter]);
 
   const onChange = ({ target }) => {
     if (checkedList.includes(target.id)) {
@@ -34,10 +31,12 @@ export default React.memo(function CategoryFilter({ username, setPage }) {
   };
 
   const clickApplyBtn = () => {
-    navigate(buildUrl({ username, category: checkedList }));
-    getPoemListFromServer({ username, category: checkedList });
-    setPage && setPage(1);
+    setSearchParams({ category: checkedList });
   };
+
+  const clickCloseBtn = useCallback(() => {
+    setFilter(false);
+  }, []);
 
   return (
     <S_Wrapper>
@@ -48,7 +47,7 @@ export default React.memo(function CategoryFilter({ username, setPage }) {
         <S_FilterContainer>
           <S_Wrapper2>
             <S_Description>원하는 카테고리를 골라 적용해보세요!</S_Description>
-            <S_Button onClick={() => setFilter(false)}>X</S_Button>
+            <S_Button onClick={clickCloseBtn}>X</S_Button>
           </S_Wrapper2>
           <S_CategoryContainer>
             {Object.entries(CategoryColors).map(([name, color], idx) => (
@@ -95,12 +94,13 @@ const S_FilterContainer = styled.div`
   }
 `;
 
-const S_Wrapper2 = styled.div`
+const S_Wrapper2 = React.memo(styled.div`
   ${({ theme }) => theme.mixin.flexBox({ justify: 'space-between' })}
   > *:not(:last-child) {
     margin-right: 1.4rem;
   }
-`;
+`);
+
 const S_Description = styled.h2`
   font-size: 2rem;
 `;

@@ -23,19 +23,18 @@ export default function PoemCardContainer() {
   const category = searchParams.getAll('category');
 
   const clickPoemCard = useCallback(id => {
-    const poemDetailUrl = username ? `/@${username}/${id}` : `/${id}`;
-    navigate(poemDetailUrl);
+    navigate(`/@${username}/${id}`);
   }, []);
 
   useEffect(() => {
     if (poemId) return; // detail 모달 떴을 때 배경 리스트 요청 안하도록.
     getPoemListFromServer({ page, username, category });
     return () => initializePoemListError();
-  }, [page, username]);
+  }, [searchParams]);
 
   return (
     <S_Wrapper>
-      <CategoryFilter username={username} />
+      <CategoryFilter />
       {!error ? (
         <S_CardContainer>
           {poemList.map(poemCard => (
@@ -45,7 +44,7 @@ export default function PoemCardContainer() {
               title={poemCard.title}
               body={poemCard.body}
               category={poemCard.category}
-              onClick={clickPoemCard}
+              onClick={() => clickPoemCard(poemCard._id)}
             />
           ))}
         </S_CardContainer>
@@ -54,13 +53,7 @@ export default function PoemCardContainer() {
         <S_Error visible={error}>{GetPoemListServerErrorMessages[error?.response.status]}</S_Error>
         <LoadingSpinner visible={loading.list} width={'100px'} color={`red`} />
       </S_ErrorWrapper>
-      <Pagination
-        visible={!error && !loading.list}
-        username={username}
-        page={page}
-        lastPage={lastPage}
-        category={category}
-      />
+      <Pagination visible={poemList.length} page={page} lastPage={lastPage} />
     </S_Wrapper>
   );
 }

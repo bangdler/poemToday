@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import StyleLink from '@/components/common/StyleLink';
 import { S_CyanButton } from '@/components/commonStyled/styleButtons';
 import { usePoemList } from '@/context/PoemListProvider';
 
@@ -43,9 +42,9 @@ export default function SearchPagination({ visible, searchText, page, setPage, l
         이전
       </S_CyanButton>
       {Array.from({ length: lastPage }, (_, idx) => idx + 1).map((num, idx) => (
-        <StyleLink key={idx} onClick={() => clickLink(num)} size={'medium'}>
-          <S_Page cur={page === num}>{num}</S_Page>
-        </StyleLink>
+        <S_PageButton key={idx} onClick={() => clickLink(num)} cur={page === num}>
+          {num}
+        </S_PageButton>
       ))}
       <S_CyanButton size="medium" disabled={page === lastPage} onClick={clickNext}>
         다음
@@ -65,6 +64,13 @@ const S_Wrapper = styled.div`
   }
 `;
 
-const S_Page = styled.p`
-  text-decoration: ${({ cur }) => (cur ? 'underline' : '')};
+const S_PageButton = styled.button`
+  min-width: 1.6rem;
+  color: ${({ theme }) => theme.mode.textColor};
+  border-bottom: 1px solid ${({ theme, cur }) => (cur ? theme.mode.textColor : theme.mode.borderColor)};
+  &:hover {
+    border-color: ${({ theme }) => theme.mode.textColor};
+  }
+  font-size: 2.4rem;
+  font-weight: bold;
 `;

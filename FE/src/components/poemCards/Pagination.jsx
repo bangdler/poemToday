@@ -1,28 +1,30 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import StyleLink from '@/components/common/StyleLink';
 import { S_CyanButton } from '@/components/commonStyled/styleButtons';
-import { buildUrl } from '@/utils/util';
 
-export default function Pagination({ visible, username, page, lastPage, category }) {
-  const navigate = useNavigate();
+export default function Pagination({ visible, page, lastPage }) {
+  const [, setSearchParams] = useSearchParams();
 
   const clickPrev = () => {
-    navigate(buildUrl({ username, page: page - 1, category }));
+    setSearchParams({ page: String(page - 1) });
   };
 
   const clickNext = () => {
-    navigate(buildUrl({ username, page: page + 1, category }));
+    setSearchParams({ page: String(page + 1) });
   };
 
   const clickStartPage = () => {
-    navigate(buildUrl({ username, page: 1, category }));
+    setSearchParams({ page: '1' });
   };
 
   const clickLastPage = () => {
-    navigate(buildUrl({ username, page: lastPage, category }));
+    setSearchParams({ page: lastPage });
+  };
+
+  const clickPageButton = num => {
+    setSearchParams({ page: String(num) });
   };
 
   if (!visible) return null;
@@ -35,9 +37,9 @@ export default function Pagination({ visible, username, page, lastPage, category
         이전
       </S_CyanButton>
       {Array.from({ length: lastPage }, (_, idx) => idx + 1).map((num, idx) => (
-        <StyleLink key={idx} to={buildUrl({ username, page: num, category })} size={'medium'}>
-          <S_Page cur={page === num}>{num}</S_Page>
-        </StyleLink>
+        <S_PageButton key={idx} cur={page === num} onClick={() => clickPageButton(num)}>
+          {num}
+        </S_PageButton>
       ))}
       <S_CyanButton size="medium" disabled={page === lastPage} onClick={clickNext}>
         다음
@@ -57,6 +59,13 @@ const S_Wrapper = styled.div`
   }
 `;
 
-const S_Page = styled.p`
-  text-decoration: ${({ cur }) => (cur ? 'underline' : '')};
+const S_PageButton = styled.button`
+  min-width: 1.6rem;
+  color: ${({ theme }) => theme.mode.textColor};
+  border-bottom: 1px solid ${({ theme, cur }) => (cur ? theme.mode.textColor : theme.mode.borderColor)};
+  &:hover {
+    border-color: ${({ theme }) => theme.mode.textColor};
+  }
+  font-size: 2.4rem;
+  font-weight: bold;
 `;
