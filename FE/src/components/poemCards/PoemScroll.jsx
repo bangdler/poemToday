@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -13,19 +13,20 @@ import { GetPoemListServerErrorMessages } from '@/utils/constants';
 export default function PoemScroll() {
   const { poemList, error, lastPage } = useContext(PoemListContext);
   const { initializePoemList, initializePoemListError } = useContext(PoemListDispatchContext);
-  const { addPoemListFromServer } = usePoemList();
+  const { addPoemListFromServer, getPoemListFromServer } = usePoemList();
   const loading = useContext(LoadingContext);
   const [page, setPage] = useState(1);
   const [isLastPage, setIsLastPage] = useState(false);
   const [searchParams] = useSearchParams();
+  const { poemId } = useParams();
   const target = useRef();
 
   const addPoemList = () => {
-    if (!isLastPage) {
+    if (!isLastPage && !poemId && lastPage !== null) {
       initializePoemListError();
-      addPoemListFromServer({ page, category });
-      setPage(page + 1);
-      setIsLastPage(page === lastPage);
+      addPoemListFromServer({ page: page + 1, category });
+      setPage(prev => prev + 1);
+      setIsLastPage(page + 1 >= lastPage);
     }
     setIsFetching(false);
   };
@@ -40,14 +41,21 @@ export default function PoemScroll() {
     navigate(`/${id}`);
   }, []);
 
+  const initializeScroll = () => {
+    setPage(1);
+    setIsLastPage(false);
+  };
+
   useEffect(() => {
-    initializePoemList();
+    if (poemId) return;
+    getPoemListFromServer({ page: 1, category });
+    initializeScroll();
     return () => initializePoemList();
-  }, []);
+  }, [searchParams]);
 
   return (
     <S_Wrapper>
-      <CategoryFilter setPage={setPage} />
+      <CategoryFilter initializeScroll={initializeScroll} />
       <S_CardContainer>
         {poemList.map(poemCard => (
           <PoemCard
