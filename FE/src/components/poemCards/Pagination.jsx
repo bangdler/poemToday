@@ -1,27 +1,27 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { S_CyanButton } from '@/components/commonStyled/styleButtons';
 
-export default function Pagination({ visible, page, lastPage }) {
+export default React.memo(function Pagination({ visible, page, lastPage }) {
   const [, setSearchParams] = useSearchParams();
 
-  const clickPrev = () => {
+  const clickPrev = useCallback(() => {
     setSearchParams({ page: String(page - 1) });
-  };
+  }, [page]);
 
-  const clickNext = () => {
+  const clickNext = useCallback(() => {
     setSearchParams({ page: String(page + 1) });
-  };
+  }, [page]);
 
-  const clickStartPage = () => {
+  const clickStartPage = useCallback(() => {
     setSearchParams({ page: '1' });
-  };
+  }, []);
 
-  const clickLastPage = () => {
+  const clickLastPage = useCallback(() => {
     setSearchParams({ page: lastPage });
-  };
+  }, [lastPage]);
 
   const clickPageButton = num => {
     setSearchParams({ page: String(num) });
@@ -49,7 +49,7 @@ export default function Pagination({ visible, page, lastPage }) {
       </S_CyanButton>
     </S_Wrapper>
   );
-}
+});
 
 const S_Wrapper = styled.div`
   width: 100%;

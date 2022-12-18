@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 
 import UserProfile from '@/components/myPageForm/UserProfile';
@@ -12,9 +12,9 @@ export default function MyPageForm() {
   const [selectTab, setSelectTab] = useState(MY_POEM_TAB);
   const tabMenu = [MY_POEM_TAB, PROFILE_TAB];
 
-  const onClickTab = ({ target }) => {
+  const onClickTab = useCallback(({ target }) => {
     setSelectTab(target.innerText);
-  };
+  }, []);
 
   return (
     <S_Wrapper>
@@ -39,7 +39,7 @@ const S_Wrapper = styled.div`
   ${({ theme }) => theme.mixin.flexBox({ direction: 'column' })};
 `;
 
-const S_Tab = styled.button`
+const S_Tab = React.memo(styled.button`
   height: 40px;
   font-size: 1.6rem;
   border-radius: 4px 4px 0 0;
@@ -49,7 +49,7 @@ const S_Tab = styled.button`
   ${({ theme }) => theme.mixin.flexBox({})}
   color:${({ theme }) => theme.mode.textColor};
   border-color: ${({ selected, theme }) => (selected ? theme.mode.textColor : '')};
-`;
+`);
 
 const S_Navigation = styled.nav`
   width: 100%;

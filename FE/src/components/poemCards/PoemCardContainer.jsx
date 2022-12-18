@@ -44,7 +44,7 @@ export default function PoemCardContainer() {
               title={poemCard.title}
               body={poemCard.body}
               category={poemCard.category}
-              onClick={() => clickPoemCard(poemCard._id)}
+              onClick={clickPoemCard}
             />
           ))}
         </S_CardContainer>
