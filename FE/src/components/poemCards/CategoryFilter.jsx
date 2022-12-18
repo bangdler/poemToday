@@ -94,16 +94,17 @@ const S_FilterContainer = styled.div`
   }
 `;
 
-const S_Wrapper2 = React.memo(styled.div`
+const S_Wrapper2 = styled.div`
   ${({ theme }) => theme.mixin.flexBox({ justify: 'space-between' })}
   > *:not(:last-child) {
     margin-right: 1.4rem;
   }
+`;
+
+const S_Description = React.memo(styled.h2`
+  font-size: 2rem;
 `);
 
-const S_Description = styled.h2`
-  font-size: 2rem;
-`;
 const S_CategoryContainer = styled.div`
   ${({ theme }) => theme.mixin.flexBox({})}
   > *:not(:last-child) {

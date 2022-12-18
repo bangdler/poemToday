@@ -28,6 +28,6 @@ const S_CheckInput = styled.input.attrs(() => ({ type: 'checkbox' }))`
   }
 `;
 
-const S_Text = styled.span`
+const S_Text = React.memo(styled.span`
   color: rgba(0, 0, 0, 0.2);
-`;
+`);
