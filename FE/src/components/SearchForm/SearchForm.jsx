@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import ErrorBox from '@/components/common/ErrorBox';
@@ -15,9 +15,9 @@ export default function SearchForm() {
   const [openSearchCardContainer, setOpenSearchCardContainer] = useState(false);
   const [page, setPage] = useState(1);
 
-  const closeErrorBox = async () => {
+  const closeErrorBox = useCallback(async () => {
     setError({ state: false, message: '' });
-  };
+  }, []);
 
   useEffect(() => {
     return () => initializePoemList;
@@ -26,19 +26,22 @@ export default function SearchForm() {
   return (
     <S_Wrapper>
       <SearchInput
-        searchText={searchText}
         setSearchText={setSearchText}
         setOpenSearchCardContainer={setOpenSearchCardContainer}
         setError={setError}
       />
-      {openSearchCardContainer && <SearchCardContainer />}
-      <SearchPagination
-        visible={poemList.length}
-        searchText={searchText}
-        page={page}
-        setPage={setPage}
-        lastPage={lastPage}
-      />
+      {openSearchCardContainer && (
+        <>
+          <SearchCardContainer />
+          <SearchPagination
+            visible={poemList.length}
+            searchText={searchText}
+            page={page}
+            setPage={setPage}
+            lastPage={lastPage}
+          />
+        </>
+      )}
       <ErrorBox visible={error.state} errorMessage={error.message} onClick={closeErrorBox} />
     </S_Wrapper>
   );

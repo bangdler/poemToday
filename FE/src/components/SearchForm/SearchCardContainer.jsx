@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -9,14 +9,14 @@ import { PoemListContext } from '@/context/PoemListProvider';
 import Palette from '@/style/palette';
 import { GetPoemListServerErrorMessages } from '@/utils/constants';
 
-export default function SearchCardContainer() {
+export default React.memo(function SearchCardContainer() {
   const { poemList, error, total } = useContext(PoemListContext);
   const loading = useContext(LoadingContext);
   const navigate = useNavigate();
 
-  const clickPoemCard = id => {
+  const clickPoemCard = useCallback(id => {
     navigate(`/search/${id}`);
-  };
+  }, []);
 
   return (
     <S_Wrapper>
@@ -36,7 +36,7 @@ export default function SearchCardContainer() {
               title={poemCard.title}
               body={poemCard.body}
               category={poemCard.category}
-              onClick={() => clickPoemCard(poemCard._id)}
+              onClick={clickPoemCard}
             />
           ))}
         </S_CardContainer>
@@ -47,7 +47,7 @@ export default function SearchCardContainer() {
       </S_ErrorWrapper>
     </S_Wrapper>
   );
-}
+});
 
 const S_Wrapper = styled.div`
   margin: 20px 0;
@@ -61,11 +61,11 @@ const S_ResultText = styled.p`
   font-size: 4rem;
 `;
 
-const S_ResultNum = styled.span`
+const S_ResultNum = React.memo(styled.span`
   font-weight: bold;
   color: ${Palette.cyan[5]};
   margin: 0 1rem;
-`;
+`);
 
 const S_CardContainer = styled.div`
   display: grid;

@@ -1,27 +1,32 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { ReactComponent as Search } from '@/assets/icons/search.svg';
 import { PoemListDispatchContext, usePoemList } from '@/context/PoemListProvider';
 
-export default function SearchInput({ searchText, setSearchText, setOpenSearchCardContainer, setError }) {
+export default function SearchInput({ setSearchText, setOpenSearchCardContainer, setError }) {
   const { initializePoemList } = useContext(PoemListDispatchContext);
   const { searchPoemListFromServer } = usePoemList();
-
   const searchInput = useRef();
+  const [inputText, setInputText] = useState('');
 
   const changeSearchInput = ({ target }) => {
-    setSearchText(target.value);
+    setInputText(target.value);
   };
+
+  const memoizedSearch = useMemo(() => {
+    return <Search width={22} height={22} viewBox="0 0 16 16" />;
+  }, []);
 
   const submitSearchText = e => {
     e.preventDefault();
-    if (!searchText.length) {
+    if (!inputText.length) {
       setError({ state: true, message: '1글자 이상 입력해주세요!' });
       return;
     }
     initializePoemList();
-    searchPoemListFromServer({ text: searchText });
+    setSearchText(inputText);
+    searchPoemListFromServer({ text: inputText });
     setOpenSearchCardContainer(true);
   };
 
@@ -31,12 +36,10 @@ export default function SearchInput({ searchText, setSearchText, setOpenSearchCa
 
   return (
     <S_FormLayout onSubmit={submitSearchText}>
-      <S_SvgContainer>
-        <Search width={22} height={22} viewBox="0 0 16 16" />
-      </S_SvgContainer>
+      <S_SvgContainer>{memoizedSearch}</S_SvgContainer>
       <S_Input
         ref={searchInput}
-        value={searchText}
+        value={inputText}
         onChange={changeSearchInput}
         placeholder={'제목, 저자를 검색해보세요.'}
       ></S_Input>

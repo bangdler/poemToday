@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { S_CyanButton } from '@/components/commonStyled/styleButtons';
 import { usePoemList } from '@/context/PoemListProvider';
 
-export default function SearchPagination({ visible, searchText, page, setPage, lastPage }) {
+export default React.memo(function SearchPagination({ visible, searchText, page, setPage, lastPage }) {
   const { searchPoemListFromServer } = usePoemList();
 
   const clickPrev = () => {
@@ -27,7 +27,7 @@ export default function SearchPagination({ visible, searchText, page, setPage, l
     setPage(lastPage);
   };
 
-  const clickLink = num => {
+  const clickPageButton = num => {
     searchPoemListFromServer({ text: searchText, page: num });
     setPage(num);
   };
@@ -42,7 +42,7 @@ export default function SearchPagination({ visible, searchText, page, setPage, l
         이전
       </S_CyanButton>
       {Array.from({ length: lastPage }, (_, idx) => idx + 1).map((num, idx) => (
-        <S_PageButton key={idx} onClick={() => clickLink(num)} cur={page === num}>
+        <S_PageButton key={idx} onClick={() => clickPageButton(num)} cur={page === num}>
           {num}
         </S_PageButton>
       ))}
@@ -54,7 +54,7 @@ export default function SearchPagination({ visible, searchText, page, setPage, l
       </S_CyanButton>
     </S_Wrapper>
   );
-}
+});
 
 const S_Wrapper = styled.div`
   width: 100%;
