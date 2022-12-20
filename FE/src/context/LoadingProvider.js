@@ -8,6 +8,7 @@ const initialLoading = {
   login: false,
   check: false,
   logout: false,
+  resign: false,
   write: false,
   read: false,
   remove: false,

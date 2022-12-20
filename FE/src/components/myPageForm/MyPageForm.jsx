@@ -9,8 +9,8 @@ const PROFILE_TAB = '유저프로필';
 const MY_POEM_TAB = '내가 작성한 글';
 
 export default function MyPageForm() {
-  const [selectTab, setSelectTab] = useState(MY_POEM_TAB);
-  const tabMenu = [MY_POEM_TAB, PROFILE_TAB];
+  const tabMenu = [PROFILE_TAB, MY_POEM_TAB];
+  const [selectTab, setSelectTab] = useState(tabMenu[0]);
 
   const onClickTab = useCallback(({ target }) => {
     setSelectTab(target.innerText);
@@ -26,7 +26,7 @@ export default function MyPageForm() {
         ))}
       </S_Navigation>
       <S_Layout>
-        {selectTab === PROFILE_TAB ? <UserProfile></UserProfile> : null}
+        {selectTab === PROFILE_TAB ? <UserProfile /> : null}
         {selectTab === MY_POEM_TAB ? <PoemCardContainer /> : null}
       </S_Layout>
     </S_Wrapper>

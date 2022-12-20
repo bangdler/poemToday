@@ -78,5 +78,16 @@ export const useAuth = () => {
     finishLoading({ field });
   }, []);
 
-  return { submitAuth };
+  const resignAuth = useCallback(async () => {
+    startLoading({ field: 'resign' });
+    try {
+      const response = await authApi.resign();
+      authSuccess({ response: response.data });
+    } catch (e) {
+      authFail({ error: e });
+    }
+    finishLoading({ field: 'resign' });
+  });
+
+  return { submitAuth, resignAuth };
 };
