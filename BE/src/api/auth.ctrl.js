@@ -101,3 +101,43 @@ export const logout = async ctx => {
   ctx.cookies.set(ACCESS_TOKEN);
   ctx.status = 204;
 };
+
+export const resign = async ctx => {
+  const { user } = ctx.state;
+  try {
+    await User.findByIdAndRemove(user._id).exec();
+    ctx.cookies.set(ACCESS_TOKEN);
+    ctx.body = 'Resign Success';
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const changePassword = async ctx => {
+  const schema = Joi.object().keys({
+    existPassword: Joi.string().required(),
+    newPassword: Joi.string().required(),
+  });
+
+  const result = schema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+  try {
+    const { user } = ctx.state;
+    const userModel = await User.findByUsername(user.username);
+    const { existPassword, newPassword } = ctx.request.body;
+    const valid = await userModel.checkPassword(existPassword);
+    if (!valid) {
+      ctx.status = 401;
+      return;
+    }
+    await userModel.setPassword(newPassword); // hash 비밀번호 설정
+    await userModel.save(); // 데이터베이스 저장
+    ctx.body = 'ChangePassword Success';
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
