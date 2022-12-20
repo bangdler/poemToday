@@ -7,6 +7,11 @@ const { Schema } = mongoose;
 const UserSchema = new Schema({
   username: String,
   hashedPassword: String,
+  email: String,
+  createdDate: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 // 인스턴스 메서드 - 각 document 에서 사용할 수 있는 함수, this = user 도큐먼트 (new User)
