@@ -14,54 +14,54 @@ import { LoadingContext } from '@/context/LoadingProvider';
 import { UserContext, useUser } from '@/context/UserProvider';
 import { LoginServerErrorMessages } from '@/utils/constants';
 
+const initialForm = {
+  username: '',
+  password: '',
+  passwordConfirm: '',
+};
+
 export default function RegisterForm() {
-  const authForm = useContext(AuthContext);
-  const { initializeForm, changeForm } = useContext(AuthDispatchContext);
+  const auth = useContext(AuthContext);
+  const { initializeAuth } = useContext(AuthDispatchContext);
   const { submitAuth } = useAuth();
   const userData = useContext(UserContext);
   const { checkUser } = useUser();
   const loading = useContext(LoadingContext);
+  const [form, setForm] = useState(initialForm);
   const [error, setError] = useState({ state: false, message: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    initializeForm({ field: 'register' });
-    return () => initializeForm({ field: 'register' });
+    initializeAuth();
+    return () => initializeAuth();
   }, []);
 
   useEffect(() => {
-    if (authForm.authError) {
-      console.log('오류 발생');
-      console.log(authForm.authError);
-      const errorStatus = authForm.authError.response.status;
+    if (auth.error) {
+      const errorStatus = auth.error.response.status;
       setError({ state: true, message: LoginServerErrorMessages[errorStatus] });
       return;
     }
-    if (authForm.authResponse) {
-      console.log('회원가입 성공');
-      console.log(authForm.authResponse);
+    if (auth.response) {
       // 유저 체크
       checkUser();
     }
     setError({ state: false, message: '' });
-  }, [authForm.authResponse, authForm.authError]);
+  }, [auth.response, auth.error]);
 
   useEffect(() => {
     if (userData.user) {
-      console.log('check API 성공');
-      console.log(userData.user);
       navigate('/');
     }
   }, [userData.user]);
 
-  const onChange = useCallback(
-    ({ target }) => {
-      changeForm({ field: 'register', key: target.name, value: target.value });
-    },
-    [changeForm]
-  );
+  const onChange = useCallback(({ target }) => {
+    setForm(form => {
+      return { ...form, [target.name]: target.value };
+    });
+  }, []);
 
   const closeErrorBox = useCallback(async () => {
     setError({ state: false, message: '' });
@@ -70,17 +70,18 @@ export default function RegisterForm() {
   const onSubmit = async e => {
     e.preventDefault();
     await closeErrorBox();
-    if ([authForm.register.username, authForm.register.password, authForm.register.passwordConfirm].includes('')) {
+    if ([form.username, form.password, form.passwordConfirm].includes('')) {
       setError({ state: true, message: '빈 칸을 모두 입력하세요.' });
       return;
     }
-    if (authForm.register.password !== authForm.register.passwordConfirm) {
+    if (form.password !== form.passwordConfirm) {
       setError({ state: true, message: '비밀번호가 일치하지 않습니다.' });
-      changeForm({ field: 'register', key: 'password', value: '' });
-      changeForm({ field: 'register', key: 'passwordConfirm', value: '' });
+      setForm(form => {
+        return { ...form, password: '', passwordConfirm: '' };
+      });
       return;
     }
-    submitAuth({ field: 'register', username: authForm.register.username, password: authForm.register.password });
+    submitAuth({ field: 'register', username: form.username, password: form.password });
   };
 
   const clickShowPasswordBtn = useCallback(
@@ -127,14 +128,14 @@ export default function RegisterForm() {
         <InputBox
           title={'아이디'}
           name={'username'}
-          value={authForm.register.username}
+          value={form.username}
           onChange={onChange}
           autoComplete={'username'}
         />
         <InputBox
           title={'비밀번호'}
           name={'password'}
-          value={authForm.register.password}
+          value={form.password}
           type={showPassword ? 'text' : 'password'}
           onChange={onChange}
           autoComplete={'new-password'}
@@ -143,7 +144,7 @@ export default function RegisterForm() {
         <InputBox
           title={'비밀번호 확인'}
           name={'passwordConfirm'}
-          value={authForm.register.passwordConfirm}
+          value={form.passwordConfirm}
           type={showPasswordConfirm ? 'text' : 'password'}
           onChange={onChange}
           autoComplete={'new-password'}

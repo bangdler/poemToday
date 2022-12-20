@@ -14,53 +14,52 @@ import { LoadingContext } from '@/context/LoadingProvider';
 import { UserContext, useUser } from '@/context/UserProvider';
 import { LoginServerErrorMessages } from '@/utils/constants';
 
+const initialForm = {
+  username: '',
+  password: '',
+};
+
 export default function LoginForm() {
-  const authForm = useContext(AuthContext);
-  const { initializeForm, changeForm } = useContext(AuthDispatchContext);
+  const auth = useContext(AuthContext);
+  const { initializeAuth } = useContext(AuthDispatchContext);
   const { submitAuth } = useAuth();
   const userData = useContext(UserContext);
   const { checkUser } = useUser();
   const loading = useContext(LoadingContext);
+  const [form, setForm] = useState(initialForm);
   const [error, setError] = useState({ state: false, message: '' });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    initializeForm({ field: 'login' });
-    return () => initializeForm({ field: 'login' });
+    initializeAuth();
+    return () => initializeAuth();
   }, []);
 
   useEffect(() => {
-    if (authForm.authError) {
-      console.log('오류 발생');
-      console.log(authForm.authError);
-      const errorStatus = authForm.authError.response.status;
+    if (auth.error) {
+      const errorStatus = auth.error.response.status;
       setError({ state: true, message: LoginServerErrorMessages[errorStatus] });
       return;
     }
-    if (authForm.authResponse) {
-      console.log('로그인성공');
-      console.log(authForm.authResponse);
+    if (auth.response) {
       //유저 체크
       checkUser();
     }
     setError({ state: false, message: '' });
-  }, [authForm.authResponse, authForm.authError]);
+  }, [auth.response, auth.error]);
 
   useEffect(() => {
     if (userData.user) {
-      console.log('check API 성공');
-      console.log(userData.user);
       navigate('/');
     }
   }, [userData.user]);
 
-  const onChange = useCallback(
-    ({ target }) => {
-      changeForm({ field: 'login', key: target.name, value: target.value });
-    },
-    [changeForm]
-  );
+  const onChange = useCallback(({ target }) => {
+    setForm(form => {
+      return { ...form, [target.name]: target.value };
+    });
+  }, []);
 
   const closeErrorBox = useCallback(async () => {
     setError({ state: false, message: '' });
@@ -69,11 +68,11 @@ export default function LoginForm() {
   const onSubmit = async e => {
     e.preventDefault();
     await closeErrorBox();
-    if ([authForm.login.username, authForm.login.password].includes('')) {
+    if ([form.username, form.password].includes('')) {
       setError({ state: true, message: '빈 칸을 모두 입력하세요.' });
       return;
     }
-    submitAuth({ field: 'login', username: authForm.login.username, password: authForm.login.password });
+    submitAuth({ field: 'login', username: form.username, password: form.password });
   };
 
   const clickShowPasswordBtn = useCallback(
@@ -101,14 +100,14 @@ export default function LoginForm() {
         <InputBox
           title={'아이디'}
           name={'username'}
-          value={authForm.login.username}
+          value={form.username}
           onChange={onChange}
           autoComplete={'username'}
         />
         <InputBox
           title={'비밀번호'}
           name={'password'}
-          value={authForm.login.password}
+          value={form.password}
           type={showPassword ? 'text' : 'password'}
           onChange={onChange}
           autoComplete={'new-password'}
