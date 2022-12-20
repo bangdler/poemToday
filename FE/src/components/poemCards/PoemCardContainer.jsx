@@ -34,20 +34,23 @@ export default function PoemCardContainer() {
 
   return (
     <S_Wrapper>
-      <CategoryFilter />
       {!error ? (
-        <S_CardContainer>
-          {poemList.map(poemCard => (
-            <PoemCard
-              key={poemCard._id}
-              id={poemCard._id}
-              title={poemCard.title}
-              body={poemCard.body}
-              category={poemCard.category}
-              onClick={clickPoemCard}
-            />
-          ))}
-        </S_CardContainer>
+        <>
+          <CategoryFilter />
+          {!poemList.length && <p>작성한 글이 없습니다.</p>}
+          <S_CardContainer>
+            {poemList.map(poemCard => (
+              <PoemCard
+                key={poemCard._id}
+                id={poemCard._id}
+                title={poemCard.title}
+                body={poemCard.body}
+                category={poemCard.category}
+                onClick={clickPoemCard}
+              />
+            ))}
+          </S_CardContainer>
+        </>
       ) : null}
       <S_ErrorWrapper visible={loading.list || error}>
         <S_Error visible={error}>{GetPoemListServerErrorMessages[error?.response.status]}</S_Error>
@@ -62,6 +65,11 @@ const S_Wrapper = styled.div`
   margin: 20px 0;
   > * {
     margin-bottom: 20px;
+  }
+  > p {
+    margin-left: 1rem;
+    font-weight: bold;
+    font-size: 2.2rem;
   }
 `;
 

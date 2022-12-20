@@ -75,7 +75,7 @@ export default function LoginForm() {
     submitAuth({ field: 'login', username: form.username, password: form.password });
   };
 
-  const clickShowPasswordBtn = useCallback(
+  const clickShowPasswordButton = useCallback(
     e => {
       e.preventDefault();
       setShowPassword(!showPassword);
@@ -85,14 +85,13 @@ export default function LoginForm() {
 
   const passwordOption = useMemo(() => {
     return {
-      component: showPassword ? (
-        <Eye width={22} height={22} viewBox="0 0 16 16" />
-      ) : (
-        <EyeSlash width={22} height={22} viewBox="0 0 16 16" />
-      ),
-      onClick: clickShowPasswordBtn,
+      component: {
+        text: <Eye width={22} height={22} viewBox="0 0 16 16" />,
+        password: <EyeSlash width={22} height={22} viewBox="0 0 16 16" />,
+      },
+      onClick: clickShowPasswordButton,
     };
-  }, [showPassword, clickShowPasswordBtn]);
+  }, [clickShowPasswordButton]);
 
   return (
     <>

@@ -18,8 +18,8 @@ export default React.memo(function InputBox({
       <S_Container>
         <S_Input type={type} onChange={onChange} name={name} value={value} autoComplete={autoComplete} />
         {option.component && (
-          <S_OptionBtn type="button" onClick={option.onClick}>
-            {option.component}
+          <S_OptionBtn type="button" name={name} onClick={option.onClick}>
+            {option.component[type]}
           </S_OptionBtn>
         )}
       </S_Container>

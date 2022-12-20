@@ -29,8 +29,7 @@ export default function RegisterForm() {
   const loading = useContext(LoadingContext);
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState({ state: false, message: '' });
-  const [showPassword, setShowPassword] = useState(false);
-  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  const [showPassword, setShowPassword] = useState({ password: false, passwordConfirm: false });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -84,43 +83,26 @@ export default function RegisterForm() {
     submitAuth({ field: 'register', username: form.username, password: form.password });
   };
 
-  const clickShowPasswordBtn = useCallback(
-    e => {
-      e.preventDefault();
-      setShowPassword(!showPassword);
-    },
-    [showPassword]
-  );
-
-  const clickShowPasswordConfirmBtn = useCallback(
-    e => {
-      e.preventDefault();
-      setShowPasswordConfirm(!showPasswordConfirm);
-    },
-    [showPasswordConfirm]
-  );
+  const clickShowPasswordButton = useCallback(e => {
+    e.preventDefault();
+    const field = e.currentTarget.name;
+    setShowPassword(prev => {
+      return {
+        ...prev,
+        [field]: !prev[field],
+      };
+    });
+  }, []);
 
   const passwordOption = useMemo(() => {
     return {
-      component: showPassword ? (
-        <Eye width={22} height={22} viewBox="0 0 16 16" />
-      ) : (
-        <EyeSlash width={22} height={22} viewBox="0 0 16 16" />
-      ),
-      onClick: clickShowPasswordBtn,
+      component: {
+        text: <Eye width={22} height={22} viewBox="0 0 16 16" />,
+        password: <EyeSlash width={22} height={22} viewBox="0 0 16 16" />,
+      },
+      onClick: clickShowPasswordButton,
     };
-  }, [showPassword, clickShowPasswordBtn]);
-
-  const passwordConfirmOption = useMemo(() => {
-    return {
-      component: showPasswordConfirm ? (
-        <Eye width={22} height={22} viewBox="0 0 16 16" />
-      ) : (
-        <EyeSlash width={22} height={22} viewBox="0 0 16 16" />
-      ),
-      onClick: clickShowPasswordConfirmBtn,
-    };
-  }, [showPasswordConfirm, clickShowPasswordConfirmBtn]);
+  }, [clickShowPasswordButton]);
 
   return (
     <>
@@ -136,7 +118,7 @@ export default function RegisterForm() {
           title={'비밀번호'}
           name={'password'}
           value={form.password}
-          type={showPassword ? 'text' : 'password'}
+          type={showPassword.password ? 'text' : 'password'}
           onChange={onChange}
           autoComplete={'new-password'}
           option={passwordOption}
@@ -145,10 +127,10 @@ export default function RegisterForm() {
           title={'비밀번호 확인'}
           name={'passwordConfirm'}
           value={form.passwordConfirm}
-          type={showPasswordConfirm ? 'text' : 'password'}
+          type={showPassword.passwordConfirm ? 'text' : 'password'}
           onChange={onChange}
           autoComplete={'new-password'}
-          option={passwordConfirmOption}
+          option={passwordOption}
         />
         <S_CyanButton type="submit" size={'fullWidth'} disabled={loading.register} onClick={onSubmit}>
           회원가입 <LoadingSpinner visible={loading.register} width={'20px'} color={`red`} />
