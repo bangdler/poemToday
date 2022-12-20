@@ -64,4 +64,5 @@ const S_Layout = styled.div`
   padding: 1.5rem;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.mode.textColor};
+  background: ${({ theme }) =>  theme.mode.cardColor };
 `;

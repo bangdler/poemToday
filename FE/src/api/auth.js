@@ -9,3 +9,6 @@ export const check = () => client.get('/api/auth/check');
 export const logout = () => client.post('/api/auth/logout');
 
 export const resign = () => client.delete('/api/auth/resign');
+
+export const changePassword = ({ existPassword, newPassword }) =>
+  client.patch('/api/auth/password', { existPassword, newPassword });

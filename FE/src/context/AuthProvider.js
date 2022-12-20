@@ -89,5 +89,16 @@ export const useAuth = () => {
     finishLoading({ field: 'resign' });
   });
 
-  return { submitAuth, resignAuth };
+  const changePassword = useCallback(async ({ existPassword, newPassword }) => {
+    startLoading({ field: 'changePassword' });
+    try {
+      const response = await authApi.changePassword({ existPassword, newPassword });
+      authSuccess({ response: response.data });
+    } catch (e) {
+      authFail({ error: e });
+    }
+    finishLoading({ field: 'changePassword' });
+  });
+
+  return { submitAuth, resignAuth, changePassword };
 };
