@@ -37,7 +37,7 @@ export default function PoemCardContainer() {
       {!error ? (
         <>
           <CategoryFilter />
-          {!poemList.length && <p>작성한 글이 없습니다.</p>}
+          {!poemList.length && !loading.list && <p>작성한 글이 없습니다.</p>}
           <S_CardContainer>
             {poemList.map(poemCard => (
               <PoemCard
@@ -67,6 +67,7 @@ const S_Wrapper = styled.div`
     margin-bottom: 20px;
   }
   > p {
+    height: 200px;
     margin-left: 1rem;
     font-weight: bold;
     font-size: 2.2rem;

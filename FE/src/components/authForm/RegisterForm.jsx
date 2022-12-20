@@ -8,22 +8,25 @@ import ErrorBox from '@/components/common/ErrorBox';
 import InputBox from '@/components/common/InputBox';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import StyleLink from '@/components/common/StyleLink';
-import { S_CyanButton } from '@/components/commonStyled/styleButtons';
+import { S_Button, S_CyanButton, S_RedButton } from '@/components/commonStyled/styleButtons';
 import { AuthContext, AuthDispatchContext, useAuth } from '@/context/AuthProvider';
 import { LoadingContext } from '@/context/LoadingProvider';
 import { UserContext, useUser } from '@/context/UserProvider';
-import { LoginServerErrorMessages } from '@/utils/constants';
+import { LoginServerErrorMessages, VerifyEmailSeverErrorMessages } from '@/utils/constants';
+import palette from '@/style/palette';
 
 const initialForm = {
   username: '',
   password: '',
   passwordConfirm: '',
+  email: '',
+  authCode: '',
 };
 
 export default function RegisterForm() {
   const auth = useContext(AuthContext);
   const { initializeAuth } = useContext(AuthDispatchContext);
-  const { submitAuth } = useAuth();
+  const { submitAuth, verifyEmail } = useAuth();
   const userData = useContext(UserContext);
   const { checkUser } = useUser();
   const loading = useContext(LoadingContext);
@@ -56,6 +59,19 @@ export default function RegisterForm() {
     }
   }, [userData.user]);
 
+  useEffect(() => {
+    if (auth.verifyError) {
+      const errorStatus = auth.verifyError.response.status;
+      setError({ state: true, message: VerifyEmailSeverErrorMessages[errorStatus] });
+      return;
+    }
+    if (auth.verifyResponse) {
+      // 수정 필요한 부분
+      console.log(auth.verifyResponse);
+    }
+    setError({ state: false, message: '' });
+  }, [auth.verifyResponse, auth.verifyError]);
+
   const onChange = useCallback(({ target }) => {
     setForm(form => {
       return { ...form, [target.name]: target.value };
@@ -69,7 +85,7 @@ export default function RegisterForm() {
   const onSubmit = async e => {
     e.preventDefault();
     await closeErrorBox();
-    if ([form.username, form.password, form.passwordConfirm].includes('')) {
+    if ([form.username, form.password, form.passwordConfirm, form.email, form.authCode].includes('')) {
       setError({ state: true, message: '빈 칸을 모두 입력하세요.' });
       return;
     }
@@ -93,6 +109,15 @@ export default function RegisterForm() {
       };
     });
   }, []);
+
+  const clickEmailVerifyButton = useCallback(
+    async e => {
+      e.preventDefault();
+      await closeErrorBox();
+      verifyEmail({ email: form.email });
+    },
+    [form.email]
+  );
 
   const passwordOption = useMemo(() => {
     return {
@@ -132,6 +157,24 @@ export default function RegisterForm() {
           autoComplete={'new-password'}
           option={passwordOption}
         />
+        <S_EmailContainer>
+          <S_Wrapper2>
+            <InputBox title={'이메일'} name={'email'} value={form.email} onChange={onChange} autoComplete={'email'} />
+            <S_RedButton size={'medium'} onClick={clickEmailVerifyButton}>
+              인증코드 요청
+            </S_RedButton>
+          </S_Wrapper2>
+          <S_Wrapper3>
+            <InputBox
+              title={'인증코드'}
+              name={'authCode'}
+              value={form.authCode}
+              onChange={onChange}
+              autoComplete={'one-time-code'}
+            />
+            <S_Timer>5분 남았습니다.</S_Timer>
+          </S_Wrapper3>
+        </S_EmailContainer>
         <S_CyanButton type="submit" size={'fullWidth'} disabled={loading.register} onClick={onSubmit}>
           회원가입 <LoadingSpinner visible={loading.register} width={'20px'} color={`red`} />
         </S_CyanButton>
@@ -160,3 +203,30 @@ const S_Container = styled.div`
   padding-right: 1rem;
   ${({ theme }) => theme.mixin.flexBox({ justify: 'flex-end' })}
 `;
+
+const S_EmailContainer = styled.div`
+  width: 100%;
+  ${({ theme }) => theme.mixin.flexBox({ direction: 'column' })}
+  > * {
+    margin: 10px 0;
+  }
+`;
+
+const S_Wrapper2 = styled.div`
+  width: 100%;
+  ${({ theme }) => theme.mixin.flexBox({ justify: 'space-between' })};
+`;
+
+const S_Wrapper3 = styled.div`
+  width: 100%;
+  ${({ theme }) => theme.mixin.flexBox({ direction: 'column', align: 'flex-start' })}
+  > *:not(:last-child) {
+    margin-bottom: 5px;
+  }
+`;
+
+const S_Timer = React.memo(styled.p`
+  height: 10px;
+  font-size: 1.2rem;
+  color: ${palette.red[1]};
+`);

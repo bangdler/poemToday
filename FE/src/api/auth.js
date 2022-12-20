@@ -12,3 +12,5 @@ export const resign = () => client.delete('/api/auth/resign');
 
 export const changePassword = ({ existPassword, newPassword }) =>
   client.patch('/api/auth/password', { existPassword, newPassword });
+
+export const verifyEmail = ({ email }) => client.post('/api/auth/verifyEmail', { email });

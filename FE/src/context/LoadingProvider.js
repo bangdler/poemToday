@@ -10,6 +10,7 @@ const initialLoading = {
   logout: false,
   resign: false,
   changePassword: false,
+  verifyEmail: false,
   write: false,
   read: false,
   remove: false,
