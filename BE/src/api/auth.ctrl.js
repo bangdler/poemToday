@@ -1,9 +1,10 @@
-import dotenv from 'dotenv';
 import path from 'path';
 
+import dotenv from 'dotenv';
 import ejs from 'ejs';
 import Joi from 'joi';
 
+import Email from '../models/email.js';
 import User from '../models/user.js';
 import { ACCESS_TOKEN, JWT_EXPIRATION_TYPE_COOKIE } from '../utils/constants.js';
 import { transporter } from '../utils/email.js';
@@ -169,6 +170,20 @@ export const verifyEmail = async ctx => {
     let authNum = Math.random().toString().substring(2, 8);
     let emailTemplate;
 
+    // db 에 저장, 이미 있는 메일이면 날짜만 업데이트
+    const exist = await Email.findByEmail(email);
+    if (exist) {
+      await Email.findOneAndUpdate({ email }, { $set: { publishedDate: Date.now() } });
+    } else {
+      const emailModel = new Email({
+        email,
+        publishedDate: Date.now(),
+        authCode: authNum,
+      });
+      await emailModel.save();
+    }
+
+    // 사용자에게 authNum 메일 보내기
     await ejs.renderFile(__dirname + '/src/ejs/emailVerify.ejs', { email, code: authNum }, function (error, data) {
       if (error) {
         throw error;
@@ -191,8 +206,7 @@ export const verifyEmail = async ctx => {
       }
       transporter.close();
     });
-    // 수정 필요한 부분. 클라이언트 측에서 확인이 가능하여 문제가 있다.
-    ctx.body = authNum;
+    ctx.body = 'Send Email Success';
   } catch (e) {
     ctx.throw(500, e);
   }
