@@ -19,6 +19,7 @@ export const register = async ctx => {
     username: Joi.string().alphanum().min(3).max(20).required(),
     password: Joi.string().required(),
     email: Joi.string().required(),
+    authCode: Joi.string().required(),
   });
 
   const result = schema.validate(ctx.request.body);
@@ -28,7 +29,7 @@ export const register = async ctx => {
     return;
   }
 
-  const { username, password, email } = ctx.request.body;
+  const { username, password, email, authCode } = ctx.request.body;
   try {
     // username 존재 여부 확인
     const exists = await User.findByUsername(username);
@@ -36,6 +37,20 @@ export const register = async ctx => {
       ctx.status = 409; // conflict
       return;
     }
+    // email authCode 확인
+    const emailModel = await Email.findByEmail(email);
+    // 메일 db에 없는 메일인 경우
+    if (!emailModel) {
+      ctx.status = 403; // forbidden
+      return;
+    }
+    // authCode 가 일치하지 않거나 만료된 경우
+    const validAuthcode = await emailModel.checkAuthCode(authCode);
+    if (!validAuthcode) {
+      ctx.status = 403;
+      return;
+    }
+
     const user = new User({
       username,
       email,
@@ -165,23 +180,10 @@ export const verifyEmail = async ctx => {
     return;
   }
 
+  const { email } = ctx.request.body;
   try {
-    const { email } = ctx.request.body;
     let authNum = Math.random().toString().substring(2, 8);
     let emailTemplate;
-
-    // db 에 저장, 이미 있는 메일이면 날짜만 업데이트
-    const exist = await Email.findByEmail(email);
-    if (exist) {
-      await Email.findOneAndUpdate({ email }, { $set: { publishedDate: Date.now() } });
-    } else {
-      const emailModel = new Email({
-        email,
-        publishedDate: Date.now(),
-        authCode: authNum,
-      });
-      await emailModel.save();
-    }
 
     // 사용자에게 authNum 메일 보내기
     await ejs.renderFile(__dirname + '/src/ejs/emailVerify.ejs', { email, code: authNum }, function (error, data) {
@@ -206,7 +208,21 @@ export const verifyEmail = async ctx => {
       }
       transporter.close();
     });
-    ctx.body = 'Send Email Success';
+
+    // db 에 저장, 이미 있는 메일이면 날짜, authCode 만 업데이트
+    const exist = await Email.findByEmail(email);
+    if (exist) {
+      await Email.findOneAndUpdate({ email }, { $set: { publishedDate: Date.now(), authCode: authNum } });
+    } else {
+      const emailModel = new Email({
+        email,
+        publishedDate: Date.now(),
+        authCode: authNum,
+      });
+      await emailModel.save();
+    }
+
+    ctx.body = { msg: 'Send Email Success' };
   } catch (e) {
     ctx.throw(500, e);
   }
