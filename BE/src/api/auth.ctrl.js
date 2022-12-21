@@ -133,7 +133,7 @@ export const resign = async ctx => {
   try {
     await User.findByIdAndRemove(user._id).exec();
     ctx.cookies.set(ACCESS_TOKEN);
-    ctx.body = 'Resign Success';
+    ctx.body = { msg: 'Resign Success' };
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -162,7 +162,7 @@ export const changePassword = async ctx => {
     }
     await userModel.setPassword(newPassword); // hash 비밀번호 설정
     await userModel.save(); // 데이터베이스 저장
-    ctx.body = 'ChangePassword Success';
+    ctx.body = { msg: 'ChangePassword Success' };
   } catch (e) {
     ctx.throw(500, e);
   }
@@ -223,6 +223,69 @@ export const verifyEmail = async ctx => {
     }
 
     ctx.body = { msg: 'Send Email Success' };
+  } catch (e) {
+    ctx.throw(500, e);
+  }
+};
+
+export const forgotPassword = async ctx => {
+  const schema = Joi.object().keys({
+    username: Joi.string().alphanum().min(3).max(20).required(),
+    email: Joi.string().required(),
+  });
+
+  const result = schema.validate(ctx.request.body);
+  if (result.error) {
+    ctx.status = 400;
+    ctx.body = result.error;
+    return;
+  }
+
+  const { username, email } = ctx.request.body;
+  try {
+    // 있는 유저인지 확인
+    const user = await User.findByUsername(username);
+    if (!user) {
+      ctx.status = 403;
+      return;
+    }
+    // 이메일이 같은지 확인
+    if (user.email !== email) {
+      ctx.status = 403;
+      return;
+    }
+    // 임시비밀번호 생성 후 이메일로 전송, db 저장
+    const tempPassword = Math.random().toString(36).slice(2);
+    let emailTemplate;
+
+    // 사용자에게 authNum 메일 보내기
+    await ejs.renderFile(__dirname + '/src/ejs/tempPassword.ejs', { username, tempPassword }, function (error, data) {
+      if (error) {
+        throw error;
+      }
+      emailTemplate = data;
+    });
+
+    const mailOptions = {
+      from: `PoemToday<${process.env.NODEMAILER_USER}>`,
+      to: email,
+      subject: 'PoemToday 비밀번호 찾기에 대한 응답 메일입니다',
+      html: emailTemplate,
+    };
+
+    await transporter.sendMail(mailOptions, (error, responses) => {
+      if (error) {
+        throw error;
+      } else {
+        console.log('send success :', responses);
+      }
+      transporter.close();
+    });
+
+    await user.setPassword(tempPassword);
+    await user.save();
+
+    ctx.body = { msg: 'ChangePassword & SendEmail Success' };
   } catch (e) {
     ctx.throw(500, e);
   }
