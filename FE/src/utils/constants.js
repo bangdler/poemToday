@@ -3,6 +3,7 @@ import palette from '@/style/palette';
 export const LoginServerErrorMessages = {
   400: '아이디, 비밀번호 형식이 잘못되었습니다.',
   401: '없는 아이디거나 잘못된 비밀번호입니다.',
+  403: '잘못된 인증코드 입니다.',
   409: '이미 존재하는 아이디입니다.',
   500: '서버 응답 오류',
   504: '서버 요청 실패(게이트웨이 시간초과)',
@@ -53,3 +54,5 @@ export const CategoryColors = {
   사랑시: palette.red[1],
   감성시: palette.green[2],
 };
+
+export const EMAIL_VERIFICATION_EXPIRATION = 5 * 60;

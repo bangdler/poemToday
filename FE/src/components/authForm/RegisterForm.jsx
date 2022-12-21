@@ -8,12 +8,17 @@ import ErrorBox from '@/components/common/ErrorBox';
 import InputBox from '@/components/common/InputBox';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import StyleLink from '@/components/common/StyleLink';
-import { S_Button, S_CyanButton, S_RedButton } from '@/components/commonStyled/styleButtons';
+import { S_CyanButton, S_RedButton } from '@/components/commonStyled/styleButtons';
 import { AuthContext, AuthDispatchContext, useAuth } from '@/context/AuthProvider';
 import { LoadingContext } from '@/context/LoadingProvider';
 import { UserContext, useUser } from '@/context/UserProvider';
-import { LoginServerErrorMessages, VerifyEmailSeverErrorMessages } from '@/utils/constants';
+import { useCounter } from '@/hooks/useCounter';
 import palette from '@/style/palette';
+import {
+  EMAIL_VERIFICATION_EXPIRATION,
+  LoginServerErrorMessages,
+  VerifyEmailSeverErrorMessages,
+} from '@/utils/constants';
 
 const initialForm = {
   username: '',
@@ -26,13 +31,19 @@ const initialForm = {
 export default function RegisterForm() {
   const auth = useContext(AuthContext);
   const { initializeAuth } = useContext(AuthDispatchContext);
-  const { submitAuth, verifyEmail } = useAuth();
+  const { registerAuth, verifyEmail } = useAuth();
   const userData = useContext(UserContext);
   const { checkUser } = useUser();
   const loading = useContext(LoadingContext);
   const [form, setForm] = useState(initialForm);
   const [error, setError] = useState({ state: false, message: '' });
   const [showPassword, setShowPassword] = useState({ password: false, passwordConfirm: false });
+  const [openAuthCode, setOpenAuthCode] = useState(false);
+  const { count, startCount, stopCount, resetCount, getTimeFromCount } = useCounter({
+    initialSeconds: EMAIL_VERIFICATION_EXPIRATION,
+    interval: 1000,
+  });
+  const [time, setTime] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,6 +60,7 @@ export default function RegisterForm() {
     if (auth.response) {
       // 유저 체크
       checkUser();
+      stopCount();
     }
     setError({ state: false, message: '' });
   }, [auth.response, auth.error]);
@@ -66,11 +78,23 @@ export default function RegisterForm() {
       return;
     }
     if (auth.verifyResponse) {
-      // 수정 필요한 부분
-      console.log(auth.verifyResponse);
+      // 처음 인증 코드 발송 시
+      if (!openAuthCode) {
+        setOpenAuthCode(true);
+        startCount();
+      } else {
+        resetCount();
+      }
+      console.log(auth.verifyResponse.msg);
     }
     setError({ state: false, message: '' });
   }, [auth.verifyResponse, auth.verifyError]);
+
+  useEffect(() => {
+    if (count === 0) return stopCount();
+    const [, minutes, seconds] = getTimeFromCount(count);
+    setTime({ minutes, seconds });
+  }, [count]);
 
   const onChange = useCallback(({ target }) => {
     setForm(form => {
@@ -81,6 +105,11 @@ export default function RegisterForm() {
   const closeErrorBox = useCallback(async () => {
     setError({ state: false, message: '' });
   }, []);
+
+  const onKeyDown = e => {
+    if (e.key !== 'Enter') return;
+    onSubmit(e);
+  };
 
   const onSubmit = async e => {
     e.preventDefault();
@@ -96,7 +125,12 @@ export default function RegisterForm() {
       });
       return;
     }
-    submitAuth({ field: 'register', username: form.username, password: form.password });
+    registerAuth({
+      username: form.username,
+      password: form.password,
+      email: form.email,
+      authCode: form.authCode,
+    });
   };
 
   const clickShowPasswordButton = useCallback(e => {
@@ -114,6 +148,11 @@ export default function RegisterForm() {
     async e => {
       e.preventDefault();
       await closeErrorBox();
+      const regex = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}$/;
+      if (!regex.test(form.email)) {
+        setError({ state: true, message: '이메일 형식을 확인해주세요.' });
+        return;
+      }
       verifyEmail({ email: form.email });
     },
     [form.email]
@@ -131,7 +170,7 @@ export default function RegisterForm() {
 
   return (
     <>
-      <S_Wrapper>
+      <S_Wrapper onKeyDown={onKeyDown}>
         <InputBox
           title={'아이디'}
           name={'username'}
@@ -160,20 +199,26 @@ export default function RegisterForm() {
         <S_EmailContainer>
           <S_Wrapper2>
             <InputBox title={'이메일'} name={'email'} value={form.email} onChange={onChange} autoComplete={'email'} />
-            <S_RedButton size={'medium'} onClick={clickEmailVerifyButton}>
+            <S_RedButton size={'medium'} onClick={clickEmailVerifyButton} disabled={!form.email || loading.verifyEmail}>
               인증코드 요청
             </S_RedButton>
           </S_Wrapper2>
-          <S_Wrapper3>
-            <InputBox
-              title={'인증코드'}
-              name={'authCode'}
-              value={form.authCode}
-              onChange={onChange}
-              autoComplete={'one-time-code'}
-            />
-            <S_Timer>5분 남았습니다.</S_Timer>
-          </S_Wrapper3>
+          {openAuthCode && (
+            <S_Wrapper3>
+              <InputBox
+                title={'인증코드'}
+                name={'authCode'}
+                value={form.authCode}
+                onChange={onChange}
+                autoComplete={'one-time-code'}
+              />
+              <S_Timer>
+                {count
+                  ? `${time?.minutes}분 ${time?.seconds}초 후에 만료됩니다.`
+                  : '만료되었습니다. 다시 요청해주세요.'}
+              </S_Timer>
+            </S_Wrapper3>
+          )}
         </S_EmailContainer>
         <S_CyanButton type="submit" size={'fullWidth'} disabled={loading.register} onClick={onSubmit}>
           회원가입 <LoadingSpinner visible={loading.register} width={'20px'} color={`red`} />
@@ -222,6 +267,18 @@ const S_Wrapper3 = styled.div`
   ${({ theme }) => theme.mixin.flexBox({ direction: 'column', align: 'flex-start' })}
   > *:not(:last-child) {
     margin-bottom: 5px;
+  }
+  animation: popUp 0.2s ease-in-out 0s 1 normal forwards;
+  @keyframes popUp {
+    0% {
+      max-height: 0;
+    }
+    30% {
+      max-height: 30px;
+    }
+    100% {
+      max-height: 500px;
+    }
   }
 `;
 
