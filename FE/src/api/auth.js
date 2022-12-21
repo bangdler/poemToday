@@ -15,3 +15,5 @@ export const changePassword = ({ existPassword, newPassword }) =>
   client.patch('/api/auth/password', { existPassword, newPassword });
 
 export const verifyEmail = ({ email }) => client.post('/api/auth/verifyEmail', { email });
+
+export const forgotPassword = ({ username, email }) => client.post('/api/auth/forgotPassword', { username, email });

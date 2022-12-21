@@ -145,5 +145,17 @@ export const useAuth = () => {
     }
     finishLoading({ field: 'verifyEmail' });
   });
-  return { loginAuth, registerAuth, resignAuth, changePassword, verifyEmail };
+
+  const forgotPassword = useCallback(async ({ username, email }) => {
+    startLoading({ field: 'forgotPassword' });
+    try {
+      const response = await authApi.forgotPassword({ username, email });
+      authSuccess({ response: response.data });
+    } catch (e) {
+      authFail({ error: e });
+    }
+    finishLoading({ field: 'forgotPassword' });
+  });
+
+  return { loginAuth, registerAuth, resignAuth, changePassword, verifyEmail, forgotPassword };
 };

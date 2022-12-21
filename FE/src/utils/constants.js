@@ -49,6 +49,14 @@ export const VerifyEmailSeverErrorMessages = {
   504: '서버 요청 실패(게이트웨이 시간초과)',
 };
 
+export const ForgotPasswordSeverErrorMessages = {
+  400: '잘못된 아이디 혹은 이메일 형식입니다.',
+  403: '등록되지 않은 아이디 혹은 이메일입니다.',
+  404: '서버에서 메일을 보내지 못했습니다.',
+  500: '서버 응답 오류',
+  504: '서버 요청 실패(게이트웨이 시간초과)',
+};
+
 export const CategoryColors = {
   자작시: palette.yellow[2],
   사랑시: palette.red[1],

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Edit from '@/pages/Edit';
+import ForgotPassword from '@/pages/ForgotPassword';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import MyPage from '@/pages/MyPage';
@@ -25,6 +26,7 @@ export default function Router() {
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot" element={<ForgotPassword />} />
         <Route path="/write" element={<Write />} />
         <Route path="/edit/@:username/:poemId" element={<Edit />} />
       </Routes>

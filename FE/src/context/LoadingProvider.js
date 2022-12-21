@@ -11,6 +11,7 @@ const initialLoading = {
   resign: false,
   changePassword: false,
   verifyEmail: false,
+  forgotPassword: false,
   write: false,
   read: false,
   remove: false,
