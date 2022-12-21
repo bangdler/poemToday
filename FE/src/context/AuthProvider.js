@@ -83,10 +83,10 @@ export const useAuth = () => {
   const { authSuccess, authFail, verifySuccess, verifyFail } = useContext(AuthDispatchContext);
 
   // login, register 모두 사용 가능
-  const submitAuth = useCallback(async ({ field, username, password }) => {
-    startLoading({ field });
+  const loginAuth = useCallback(async ({ username, password }) => {
+    startLoading({ field: 'login' });
     try {
-      const response = await authApi[field]({
+      const response = await authApi.login({
         username,
         password,
       });
@@ -94,7 +94,23 @@ export const useAuth = () => {
     } catch (e) {
       authFail({ error: e });
     }
-    finishLoading({ field });
+    finishLoading({ field: 'login' });
+  }, []);
+
+  const registerAuth = useCallback(async ({ username, password, email, authCode }) => {
+    startLoading({ field: 'register' });
+    try {
+      const response = await authApi.register({
+        username,
+        password,
+        email,
+        authCode,
+      });
+      authSuccess({ response: response.data });
+    } catch (e) {
+      authFail({ error: e });
+    }
+    finishLoading({ field: 'register' });
   }, []);
 
   const resignAuth = useCallback(async () => {
@@ -129,5 +145,5 @@ export const useAuth = () => {
     }
     finishLoading({ field: 'verifyEmail' });
   });
-  return { submitAuth, resignAuth, changePassword, verifyEmail };
+  return { loginAuth, registerAuth, resignAuth, changePassword, verifyEmail };
 };

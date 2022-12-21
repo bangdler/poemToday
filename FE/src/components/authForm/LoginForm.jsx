@@ -22,7 +22,7 @@ const initialForm = {
 export default function LoginForm() {
   const auth = useContext(AuthContext);
   const { initializeAuth } = useContext(AuthDispatchContext);
-  const { submitAuth } = useAuth();
+  const { loginAuth } = useAuth();
   const userData = useContext(UserContext);
   const { checkUser } = useUser();
   const loading = useContext(LoadingContext);
@@ -72,7 +72,7 @@ export default function LoginForm() {
       setError({ state: true, message: '빈 칸을 모두 입력하세요.' });
       return;
     }
-    submitAuth({ field: 'login', username: form.username, password: form.password });
+    loginAuth({ username: form.username, password: form.password });
   };
 
   const clickShowPasswordButton = useCallback(
