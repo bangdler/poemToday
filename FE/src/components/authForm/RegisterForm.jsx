@@ -47,7 +47,7 @@ export default function RegisterForm() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    initializeAuth();
+    // initializeAuth();
     return () => initializeAuth();
   }, []);
 

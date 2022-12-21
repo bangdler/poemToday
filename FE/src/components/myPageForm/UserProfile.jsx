@@ -48,7 +48,7 @@ export default function UserProfile() {
   }, []);
 
   useEffect(() => {
-    initializeAuth();
+    // initializeAuth();
     return () => initializeAuth();
   }, []);
 
@@ -58,9 +58,9 @@ export default function UserProfile() {
       setError({ state: true, message: LoginServerErrorMessages[errorStatus] });
       return;
     }
-    if (auth.response === 'Resign Success') {
+    if (auth.response?.msg === 'Resign Success') {
       //탈퇴 완료
-      console.log(auth.response);
+      console.log(auth.response.msg);
       navigate('/');
     }
     setError({ state: false, message: '' });
@@ -73,7 +73,7 @@ export default function UserProfile() {
           <S_ProfileContainer>
             <h2>유저 프로필</h2>
             <p>User name : {userData.user?.username}</p>
-            <p>작성한 글 수 : {poemListData.poemList?.length}개</p>
+            <p>작성한 글 수 : {poemListData.total}개</p>
           </S_ProfileContainer>
           <S_ProfileButtons>
             <S_CyanButton size={'medium'} onClick={onClickChangePassword}>

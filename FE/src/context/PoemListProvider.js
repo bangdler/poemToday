@@ -10,7 +10,7 @@ const initialPoemListData = {
   poemList: [],
   error: null,
   lastPage: null,
-  total: null,
+  total: 0,
 };
 
 const poemListReducer = (state, action) => {

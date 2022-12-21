@@ -31,7 +31,7 @@ export default function ChangePasswordForm({ closeChangePasswordForm }) {
   const [error, setError] = useState({ state: false, message: '' });
 
   useEffect(() => {
-    initializeAuth();
+    // initializeAuth();
     return () => initializeAuth();
   }, []);
 
@@ -41,9 +41,9 @@ export default function ChangePasswordForm({ closeChangePasswordForm }) {
       setError({ state: true, message: LoginServerErrorMessages[errorStatus] });
       return;
     }
-    if (auth.response === 'ChangePassword Success') {
+    if (auth.response?.msg === 'ChangePassword Success') {
       //변경 완료
-      console.log(auth.response);
+      console.log(auth.response.msg);
       closeChangePasswordForm();
     }
     setError({ state: false, message: '' });

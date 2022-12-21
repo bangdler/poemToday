@@ -9,7 +9,7 @@ const PROFILE_TAB = '유저프로필';
 const MY_POEM_TAB = '내가 작성한 글';
 
 export default function MyPageForm() {
-  const tabMenu = [PROFILE_TAB, MY_POEM_TAB];
+  const tabMenu = [MY_POEM_TAB, PROFILE_TAB];
   const [selectTab, setSelectTab] = useState(tabMenu[0]);
 
   const onClickTab = useCallback(({ target }) => {
@@ -64,5 +64,5 @@ const S_Layout = styled.div`
   padding: 1.5rem;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.mode.textColor};
-  background: ${({ theme }) =>  theme.mode.cardColor };
+  background: ${({ theme }) => theme.mode.cardColor};
 `;

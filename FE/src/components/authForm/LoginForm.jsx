@@ -32,7 +32,7 @@ export default function LoginForm() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    initializeAuth();
+    // initializeAuth();
     return () => initializeAuth();
   }, []);
 
@@ -119,6 +119,9 @@ export default function LoginForm() {
           <StyleLink to={'/register'} size={'small'}>
             회원가입
           </StyleLink>
+          <StyleLink to={'/forgot'} size={'small'}>
+            비밀번호 찾기
+          </StyleLink>
         </S_Container>
       </S_Wrapper>
       <ErrorBox visible={error.state} errorMessage={error.message} onClick={closeErrorBox} />
@@ -133,10 +136,16 @@ const S_Wrapper = styled.form`
   > * {
     margin: 10px 0;
   }
+  > button {
+    margin-top: 50px;
+  }
 `;
 
 const S_Container = styled.div`
   width: 100%;
   padding-right: 1rem;
   ${({ theme }) => theme.mixin.flexBox({ justify: 'flex-end' })}
+  > *:not(:last-child) {
+    margin-right: 20px;
+  }
 `;
