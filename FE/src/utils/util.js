@@ -54,7 +54,7 @@ export const setLocalStorage = (key, value) => {
 
 export const getLocalStorage = key => {
   try {
-    return localStorage.getItem(key);
+    return JSON.parse(localStorage.getItem(key));
   } catch (e) {
     console.log('localStorage is not working');
   }

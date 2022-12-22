@@ -9,21 +9,21 @@ import ChangePasswordForm from '@/components/myPageForm/ChangePasswordForm';
 import { AuthContext, AuthDispatchContext, useAuth } from '@/context/AuthProvider';
 import { LoadingContext } from '@/context/LoadingProvider';
 import { PoemListContext } from '@/context/PoemListProvider';
-import { UserContext } from '@/context/UserProvider';
 import Palette from '@/style/palette';
 import { LoginServerErrorMessages } from '@/utils/constants';
+import { getLocalStorage } from '@/utils/util';
 
 export default function UserProfile() {
   const auth = useContext(AuthContext);
   const { initializeAuth } = useContext(AuthDispatchContext);
   const { resignAuth } = useAuth();
-  const userData = useContext(UserContext);
   const poemListData = useContext(PoemListContext);
   const loading = useContext(LoadingContext);
   const [error, setError] = useState({ state: false, message: '' });
   const [resignConfirmModal, setResignConformModal] = useState(false);
   const navigate = useNavigate();
   const [changePasswordForm, setChangePasswordForm] = useState(false);
+  const profile = getLocalStorage('profile');
 
   const onResign = useCallback(() => setResignConformModal(true), []);
 
@@ -46,6 +46,11 @@ export default function UserProfile() {
   const closeChangePasswordForm = useCallback(() => {
     setChangePasswordForm(false);
   }, []);
+
+  const getPublishedDate = responseDate => {
+    const koreaDate = new Date(responseDate).toLocaleString();
+    return koreaDate.substring(0, koreaDate.length - 10);
+  };
 
   useEffect(() => {
     // initializeAuth();
@@ -72,8 +77,10 @@ export default function UserProfile() {
         <>
           <S_ProfileContainer>
             <h2>유저 프로필</h2>
-            <p>User name : {userData.user?.username}</p>
+            <p>Username : {profile.username}</p>
             <p>작성한 글 수 : {poemListData.total}개</p>
+            <p>가입일 : {getPublishedDate(profile.createdDate)}</p>
+            <p>이메일 : {profile.email}</p>
           </S_ProfileContainer>
           <S_ProfileButtons>
             <S_CyanButton size={'medium'} onClick={onClickChangePassword}>

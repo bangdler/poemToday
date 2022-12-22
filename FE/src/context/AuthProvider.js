@@ -2,6 +2,7 @@ import React, { createContext, useReducer, useMemo, useCallback, useContext } fr
 
 import * as authApi from '@/api/auth.js';
 import { LoadingDispatchContext } from '@/context/LoadingProvider';
+import { setLocalStorage } from '@/utils/util';
 
 export const AuthContext = createContext();
 export const AuthDispatchContext = createContext();
@@ -90,6 +91,7 @@ export const useAuth = () => {
         username,
         password,
       });
+      setLocalStorage('profile', response.data);
       authSuccess({ response: response.data });
     } catch (e) {
       authFail({ error: e });

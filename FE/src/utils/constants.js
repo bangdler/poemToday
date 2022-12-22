@@ -51,8 +51,8 @@ export const VerifyEmailSeverErrorMessages = {
 
 export const ForgotPasswordSeverErrorMessages = {
   400: '잘못된 아이디 혹은 이메일 형식입니다.',
-  403: '등록되지 않은 아이디 혹은 이메일입니다.',
-  404: '서버에서 메일을 보내지 못했습니다.',
+  404: '등록되지 않은 아이디입니다.',
+  409: '인증 요청 메일과 다른 메일입니다.',
   500: '서버 응답 오류',
   504: '서버 요청 실패(게이트웨이 시간초과)',
 };

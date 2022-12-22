@@ -74,6 +74,7 @@ export const useUser = () => {
     } catch (e) {
       checkUserFail({ error: e });
       removeLocalStorage('user');
+      removeLocalStorage('profile');
     }
     finishLoading({ field: 'check' });
   }, []);
@@ -84,6 +85,7 @@ export const useUser = () => {
       await authApi.logout();
       setUser({ user: null });
       removeLocalStorage('user');
+      removeLocalStorage('profile');
     } catch (e) {
       // 로그아웃 api 가 실패해도 로그아웃 된 것처럼 보여주게 했었지만 사실상 token 이 쿠키에 남아있으므로 로그아웃처리를 하면 안될듯.
       // setUser({ user: null });
