@@ -2,8 +2,7 @@ import Joi from 'joi';
 import mongoose from 'mongoose';
 
 import Poem from '../models/poem.js';
-import { LENGTH_OF_SHORT_BODY, NUMBER_OF_LIST } from '../utils/constants.js';
-import { shortenQuillTypeBody } from '../utils/shortenQuillTypeBody.js';
+import { NUMBER_OF_LIST } from '../utils/constants.js';
 
 const { ObjectId } = mongoose.Types;
 

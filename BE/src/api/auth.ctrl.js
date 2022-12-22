@@ -246,12 +246,12 @@ export const forgotPassword = async ctx => {
     // 있는 유저인지 확인
     const user = await User.findByUsername(username);
     if (!user) {
-      ctx.status = 403;
+      ctx.status = 404;
       return;
     }
     // 이메일이 같은지 확인
     if (user.email !== email) {
-      ctx.status = 403;
+      ctx.status = 409;
       return;
     }
     // 임시비밀번호 생성 후 이메일로 전송, db 저장
