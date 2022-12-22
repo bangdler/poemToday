@@ -16,7 +16,7 @@ export default function Home() {
       checkUser();
       return;
     }
-    setUser({ user: JSON.parse(user) });
+    setUser({ user });
     checkUser();
   }, []);
 
