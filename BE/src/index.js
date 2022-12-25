@@ -14,6 +14,7 @@ const port = PORT || 4000;
 const app = new Koa();
 const router = new Router();
 
+mongoose.set('strictQuery', false);
 mongoose
   .connect(MONGO_URI)
   .then(() => {
