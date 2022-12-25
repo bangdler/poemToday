@@ -3,6 +3,6 @@ REPOSITORY=/home/ec2-user/build_be/BE
 
 cd $REPOSITORY
 
-npm install
+sudo /usr/bin/npm
 
-pm2 start src
+sudo /usr/bin/pm2 start src
