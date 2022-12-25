@@ -38,6 +38,8 @@ jobs:
           echo PORT=${{ secrets.PORT }} >> .env
           echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+          echo NODEMAILER_USER=${{ secrets.NODEMAILER_USER }} >> .env
+          echo NODEMAILER_PASSWORD=${{ secrets.NODEMAILER_PASSWORD }} >> .env
           cat .env
 
       - name: build server files
@@ -45,3 +47,23 @@ jobs:
         run: |
           npm ci
           npm run build --if-present
+
+      - name: zip file
+        run: zip -r poemToday_be.zip ./BE/src ./scripts ./appspec.yml ./BE/.env ./BE/package.json
+
+      - name: AWS configure credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
+      - name: upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./poemToday_be.zip s3://poemtoday/deploy/
+
+      - name: deploy with AWS codeDeploy
+        run: aws deploy create-deployment
+          --application-name poemToday_server
+          --deployment-config-name CodeDeployDefault.OneAtATime
+          --deployment-group-name GROUP
+          --s3-location bucket=poemtoday,bundleType=zip,key=deploy/poemToday_be.zip
