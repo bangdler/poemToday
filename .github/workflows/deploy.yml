@@ -63,7 +63,7 @@ jobs:
 
       - name: deploy with AWS codeDeploy
         run: aws deploy create-deployment
-          --application-name poemToday_server
+          --application-name poem-codedeploy
           --deployment-config-name CodeDeployDefault.OneAtATime
-          --deployment-group-name GROUP
+          --deployment-group-name backend
           --s3-location bucket=poemtoday,bundleType=zip,key=deploy/poemToday_be.zip
