@@ -31,16 +31,14 @@ jobs:
         run: npm -v
 
       - name: create env file
-        working-directory: ./BE
         run: |
           pwd
-          touch .env
+          touch ./BE/.env
           echo PORT=${{ secrets.PORT }} >> .env
           echo MONGODB_URI=${{ secrets.MONGODB_URI }} >> .env
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
           echo NODEMAILER_USER=${{ secrets.NODEMAILER_USER }} >> .env
           echo NODEMAILER_PASSWORD=${{ secrets.NODEMAILER_PASSWORD }} >> .env
-          cat .env
 
       - name: build server files
         working-directory: ./BE
