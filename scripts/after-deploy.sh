@@ -3,6 +3,6 @@ REPOSITORY=/home/ec2-user/build_be/BE
 
 cd $REPOSITORY
 
-npm install
+sudo npm install
 
-pm2 start src
+sudo pm2 start src/index.js

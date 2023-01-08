@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -31,17 +31,16 @@ jobs:
         run: npm -v
 
       - name: create env file
-        working-directory: ./
+        working-directory: ./BE
         run: |
-          pwd
           touch .env
           echo PORT=${{ secrets.PORT }} >> .env
-          echo MONGO_URI=${{ secrets.MONGO_URI }} >> .env
+          echo MONGO_URI=${{ secrets.MONGODB_URI }} >> .env
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
           echo NODEMAILER_USER=${{ secrets.NODEMAILER_USER }} >> .env
           echo NODEMAILER_PASSWORD=${{ secrets.NODEMAILER_PASSWORD }} >> .env
           cat .env
-          ls
+          ls -al
 
       - name: build server files
         working-directory: ./BE
@@ -51,8 +50,7 @@ jobs:
 
       - name: zip file
         run: |
-          ls
-          zip -r poemToday_be.zip ./BE/src ./scripts ./appspec.yml ./.env ./BE/package.json
+          zip -r poemToday_be.zip ./BE/.env ./BE/src ./scripts ./appspec.yml ./BE/package.json
 
       - name: AWS configure credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -68,5 +66,5 @@ jobs:
         run: aws deploy create-deployment
           --application-name poem-codedeploy
           --deployment-config-name CodeDeployDefault.OneAtATime
-          --deployment-group-name backend
+          --deployment-group-name poemToday
           --s3-location bucket=poemtoday,bundleType=zip,key=deploy/poemToday_be.zip
