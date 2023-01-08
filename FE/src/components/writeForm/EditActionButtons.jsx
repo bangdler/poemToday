@@ -51,7 +51,7 @@ export default function EditActionButtons({ field, poemForm, id }) {
     if (poemForm.response === null) return;
     console.log('전송완료');
     console.log(poemForm.response);
-    navigate(-1);
+    navigate('/');
     return () => initializePoem({ field });
   }, [poemForm.response]);
 
