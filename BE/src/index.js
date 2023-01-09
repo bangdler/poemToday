@@ -2,6 +2,7 @@ import cors from '@koa/cors';
 import dotenv from 'dotenv';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
+import proxy from 'koa-proxies';
 import Router from 'koa-router';
 import mongoose from 'mongoose';
 
@@ -10,7 +11,7 @@ import jwtMiddleware from './utils/jwtMiddleware.js';
 
 dotenv.config();
 
-const { PORT, MONGO_URI } = process.env;
+const { PORT, MONGO_URI, CLIENT_HOST } = process.env;
 const port = PORT || 4000;
 const app = new Koa();
 const router = new Router();
@@ -33,6 +34,14 @@ mongoose
 // // CORS 허용
 // app.proxy = true; // true 일때 proxy 헤더들을 신뢰함
 app.use(cors());
+
+app.use(
+  proxy('/', {
+    target: CLIENT_HOST,
+    changeOrigin: true,
+    logs: true,
+  })
+);
 
 router.use('/api', api.routes());
 
