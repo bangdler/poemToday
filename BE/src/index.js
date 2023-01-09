@@ -1,3 +1,4 @@
+import cors from '@koa/cors';
 import dotenv from 'dotenv';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
@@ -22,6 +23,16 @@ mongoose
   .catch(e => {
     console.error(e);
   });
+
+// CORS 옵션
+let corsOptions = {
+  origin: process.env.CLIENT_HOST,
+  credentials: true,
+};
+
+// CORS 허용
+app.proxy = true; // true 일때 proxy 헤더들을 신뢰함
+app.use(cors(corsOptions));
 
 router.use('/api', api.routes());
 

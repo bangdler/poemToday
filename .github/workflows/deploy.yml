@@ -39,6 +39,7 @@ jobs:
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
           echo NODEMAILER_USER=${{ secrets.NODEMAILER_USER }} >> .env
           echo NODEMAILER_PASSWORD=${{ secrets.NODEMAILER_PASSWORD }} >> .env
+          echo CLIENT_HOST=${{ secrets.CLIENT_HOST }} >> .env
           cat .env
           ls -al
 
