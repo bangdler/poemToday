@@ -37,6 +37,7 @@ jobs:
           cat .env
 
       - name: Build
+        working-directory: ./FE
         run: npm run build
 
       - name: AWS configure credentials
@@ -48,7 +49,7 @@ jobs:
 
       # 현재 build된 폴더에 접근 후 s3 버킷인 poemtoday-front에 파일 업로드
       - name: S3 Deploy
-        run: aws s3 sync ./dist s3://poemtoday-front/ --acl public-read --delete
+        run: aws s3 sync ./FE/dist s3://poemtoday-front/ --acl public-read --delete
 
       # 새로 리소스를 업데이트할 때 기존 캐시 무효화
       - name: Invalidate CloudFront Cache
