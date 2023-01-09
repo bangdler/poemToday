@@ -3,19 +3,13 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const dotenv = require('dotenv');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 
 dotenv.config();
 
-const port = process.env.PORT || 3000;
-
 module.exports = {
   name: 'React-webpack-setting', // 웹팩 설정 이름
-
-  // 개발환경
-  mode: 'development',
-
-  devtool: 'inline-source-map',
 
   resolve: {
     alias: {
@@ -48,11 +42,6 @@ module.exports = {
         },
       },
       {
-        //style-loader, css-loader 규칙 설정
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
         test: /\.(png|jpg|gif)$/,
         use: 'file-loader',
       },
@@ -75,18 +64,6 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': JSON.stringify(process.env),
     }),
+    new MiniCssExtractPlugin(),
   ],
-
-  // 개발 서버 설정
-  devServer: {
-    historyApiFallback: true,
-    host: 'localhost',
-    port: port,
-    open: true, // open page when start
-    proxy: {
-      '/api/*': {
-        target: 'http://localhost:4000',
-      },
-    },
-  },
 };
