@@ -38,14 +38,16 @@ jobs:
 
       - name: Build
         working-directory: ./FE
-        run: npm run build
+        run: |
+          npm ci
+          npm run build
 
       - name: AWS configure credentials
         uses: aws-actions/configure-aws-credentials@v1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.FRONT_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.FRONT_AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ap-northeast-2
+        with:
+          aws-access-key-id: ${{ secrets.FRONT_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.FRONT_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
 
       # 현재 build된 폴더에 접근 후 s3 버킷인 poemtoday-front에 파일 업로드
       - name: S3 Deploy
