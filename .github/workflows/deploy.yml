@@ -1,0 +1,55 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: deploy
+
+on:
+  push:
+    branches: [fe_deploy]
+  pull_request:
+    branches: [fe_deploy]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.17.0]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - name: Checkout source code.
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Check Npm -v
+        run: npm -v
+
+      - name: Setting .env
+        working-directory: ./FE
+        run: |
+          echo "API_SERVER=${{ secrets.FRONT_API_SERVER }}" >> .env
+          cat .env
+
+      - name: Build
+        run: npm run build
+
+      - name: AWS configure credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.FRONT_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.FRONT_AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ap-northeast-2
+
+      # 현재 build된 폴더에 접근 후 s3 버킷인 poemtoday-front에 파일 업로드
+      - name: S3 Deploy
+        run: aws s3 sync ./dist s3://poemtoday-front/ --acl public-read --delete
+
+      # 새로 리소스를 업데이트할 때 기존 캐시 무효화
+      - name: Invalidate CloudFront Cache
+        uses: aws cloudfront create-invalidation --distribution-id ${{ secrets.FRONT_DISTRIBUTION_ID }} --paths '/*'
