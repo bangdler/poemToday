@@ -6,6 +6,8 @@ const client = axios.create({
   paramsSerializer: {
     serialize: params => stringify(params, { arrayFormat: 'repeat' }),
   },
+  withCredentials: true,
+  timeout: 66000,
 });
 
 export default client;
