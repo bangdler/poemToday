@@ -105,6 +105,8 @@ export const login = async ctx => {
     ctx.cookies.set(ACCESS_TOKEN, token, {
       maxAge: JWT_EXPIRATION_TYPE_COOKIE,
       httpOnly: true,
+      sameSite: 'none',
+      secure: true,
     });
   } catch (e) {
     ctx.throw(500, e);
