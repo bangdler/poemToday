@@ -27,6 +27,7 @@ mongoose
 // CORS 옵션
 let corsOptions = {
   origin: '*',
+  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
   credentials: true,
 };
 
