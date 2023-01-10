@@ -6,17 +6,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 
-dotenv.config();
+dotenv.config({
+  path: path.resolve(__dirname, process.env.NODE_ENV === 'production' ? '.env' : '.env.development'),
+});
 
 module.exports = {
   name: 'React-webpack-setting', // 웹팩 설정 이름
-
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-    },
-    extensions: ['.js', '.jsx'],
-  },
 
   // 애플리케이션 시작 경로
   entry: path.resolve(__dirname, 'src/index.jsx'),
@@ -26,6 +21,13 @@ module.exports = {
     path: path.join(__dirname, 'dist'), //빌드 위치
     filename: 'app.js', //웹팩 빌드 후 최종적으로 만들어질 파일
     publicPath: '/',
+  },
+
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+    extensions: ['.js', '.jsx'],
   },
 
   module: {

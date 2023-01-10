@@ -1,12 +1,12 @@
 {
-  "name": "react-boilerplate",
+  "name": "poemToday",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack serve --open --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js",
+    "start": "NODE_ENV=development webpack serve --open --config webpack.dev.conf.js",
+    "build": "NODE_ENV=production webpack --config webpack.prod.conf.js",
     "start:server": "node server/server.js"
   },
   "repository": {
