@@ -24,10 +24,17 @@ mongoose
     console.error(e);
   });
 
+const whiteList = [process.env.CLIENT_HOST, process.env.LOCAL_HOST];
+
+const checkOriginAgainstWhitelist = ctx => {
+  const requestOrigin = ctx.accept.headers.origin;
+  if (!whiteList.includes(requestOrigin)) return ctx.throw(`🙈 ${requestOrigin} is not a valid origin`);
+  return requestOrigin;
+};
+
 // CORS 옵션
 let corsOptions = {
-  origin: '*',
-  allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
+  origin: checkOriginAgainstWhitelist,
   credentials: true,
 };
 
