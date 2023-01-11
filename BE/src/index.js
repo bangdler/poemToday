@@ -24,18 +24,20 @@ mongoose
     console.error(e);
   });
 
-const whiteList = [process.env.CLIENT_HOST, process.env.LOCAL_HOST];
-
-const checkOriginAgainstWhitelist = ctx => {
-  const requestOrigin = ctx.accept.headers.origin;
-  if (!whiteList.includes(requestOrigin)) return ctx.throw(`🙈 ${requestOrigin} is not a valid origin`);
-  return requestOrigin;
-};
+// const whiteList = [process.env.CLIENT_HOST, process.env.LOCAL_HOST];
+//
+// const checkOriginAgainstWhitelist = ctx => {
+//   const requestOrigin = ctx.accept.headers.origin;
+//   if (!whiteList.includes(requestOrigin)) return ctx.throw(`🙈 ${requestOrigin} is not a valid origin`);
+//   return requestOrigin;
+// };
 
 // CORS 옵션
 let corsOptions = {
-  origin: checkOriginAgainstWhitelist,
+  origin: '*',
   credentials: true,
+  sameSite: 'none',
+  secure: true,
 };
 
 app.use(cors(corsOptions));
@@ -43,6 +45,12 @@ app.use(cors(corsOptions));
 router.use('/api', api.routes());
 
 app.use(bodyParser());
+
+app.use((ctx, next) => {
+  ctx.cookies.secure = true;
+  return next();
+});
+
 // 토큰 검증 미들웨어
 app.use(jwtMiddleware);
 
