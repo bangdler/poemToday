@@ -38,6 +38,7 @@ let corsOptions = {
   credentials: true,
   sameSite: 'none',
   secure: true,
+  exposeHeaders: ['last-page', 'result-total'],
 };
 
 app.use(cors(corsOptions));
