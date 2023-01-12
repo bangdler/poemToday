@@ -108,6 +108,7 @@ export const useAuth = () => {
         email,
         authCode,
       });
+      setLocalStorage('profile', response.data);
       authSuccess({ response: response.data });
     } catch (e) {
       authFail({ error: e });
