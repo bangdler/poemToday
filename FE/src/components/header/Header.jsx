@@ -38,7 +38,7 @@ export default function Header() {
     <>
       <S_Header position={position}>
         <S_Wrapper>
-          <Logo name={'Today Poem'} link={'/'} blindText={'홈으로 이동합니다.'} />
+          <Logo name={'Poem Today'} link={'/'} blindText={'홈으로 이동합니다.'} />
           <GNB user={userData.user} />
           <UtilArea user={userData.user} logoutUser={logoutUser} />
         </S_Wrapper>
