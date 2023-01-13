@@ -1,6 +1,7 @@
 const path = require('path');
 
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const dotenv = require('dotenv');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -11,7 +12,7 @@ dotenv.config({
 });
 
 module.exports = {
-  name: 'React-webpack-setting', // 웹팩 설정 이름
+  name: 'poemToday', // 웹팩 설정 이름
 
   // 애플리케이션 시작 경로
   entry: path.resolve(__dirname, 'src/index.jsx'),
@@ -67,5 +68,10 @@ module.exports = {
       'process.env': JSON.stringify(process.env),
     }),
     new MiniCssExtractPlugin(),
+    new CopyPlugin({
+      patterns: [
+        { from: 'public/meta' }, // meta 폴더를 dist 에 복사
+      ],
+    }),
   ],
 };
