@@ -1,32 +1,25 @@
 import React from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 
-import AuthProvider from '@/context/AuthProvider';
-import LoadingProvider from '@/context/LoadingProvider';
-import PoemListProvider from '@/context/PoemListProvider';
-import PoemProvider from '@/context/PoemProvider';
+import BaseMeta from '@/components/metaComponents/BaseMeta';
+import ContextsProvider from '@/context/ContextsProvider';
 import { ThemeProvider } from '@/context/ThemeProvider';
-import UserProvider from '@/context/UserProvider';
 import Router from '@/Router';
 import { GlobalStyle } from '@/style/global';
 
 function App() {
   return (
-    <div className="app">
-      <ThemeProvider>
-        <LoadingProvider>
-          <UserProvider>
-            <AuthProvider>
-              <PoemListProvider>
-                <PoemProvider>
-                  <GlobalStyle />
-                  <Router />
-                </PoemProvider>
-              </PoemListProvider>
-            </AuthProvider>
-          </UserProvider>
-        </LoadingProvider>
-      </ThemeProvider>
-    </div>
+    <HelmetProvider>
+      <div className="app">
+        <ThemeProvider>
+          <ContextsProvider>
+            <BaseMeta />
+            <GlobalStyle />
+            <Router />
+          </ContextsProvider>
+        </ThemeProvider>
+      </div>
+    </HelmetProvider>
   );
 }
 
