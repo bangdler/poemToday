@@ -8,7 +8,7 @@ export default function Login() {
   return (
     <>
       <LoginRegisterLayout>
-        <Logo name={'Today Poem'} link={'/'} blindText={'홈으로 이동합니다.'} />
+        <Logo name={'Poem Today'} link={'/'} blindText={'홈으로 이동합니다.'} />
         <LoginForm />
       </LoginRegisterLayout>
     </>
