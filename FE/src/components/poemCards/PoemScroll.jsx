@@ -55,7 +55,7 @@ export default function PoemScroll() {
 
   return (
     <S_Wrapper>
-      <CategoryFilter initializeScroll={initializeScroll} />
+      <CategoryFilter />
       <S_CardContainer>
         {poemList.map(poemCard => (
           <PoemCard
@@ -107,4 +107,5 @@ const S_Error = styled.p`
 
 const S_Target = styled.div`
   height: 1px;
+  background: #e74c3c;
 `;

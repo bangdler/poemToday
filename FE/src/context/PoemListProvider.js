@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useMemo, useCallback, useContext } from 'react';
+import React, { createContext, useReducer, useMemo, useCallback, useContext, useEffect } from 'react';
 
 import * as poemsApi from '@/api/poems';
 import { LoadingDispatchContext } from '@/context/LoadingProvider';
@@ -6,11 +6,21 @@ import { LoadingDispatchContext } from '@/context/LoadingProvider';
 export const PoemListContext = createContext();
 export const PoemListDispatchContext = createContext();
 
+const calculateNumOfList = () => {
+  const $bodyWidth = document.body.offsetWidth;
+  const $appWidth = $bodyWidth > 1024 ? Math.min(1824, $bodyWidth * 0.9) : Math.max(768, $bodyWidth * 0.8);
+  const poemWidth = 240;
+  const margin = 0.9;
+  const numOfList = Math.floor(($appWidth * margin) / poemWidth) * 2;
+  return numOfList;
+};
+
 const initialPoemListData = {
   poemList: [],
   error: null,
   lastPage: null,
   total: 0,
+  numOfList: calculateNumOfList(),
 };
 
 const poemListReducer = (state, action) => {
@@ -88,13 +98,14 @@ export default function PoemListProvider({ children }) {
 }
 
 export const usePoemList = () => {
+  const { numOfList } = useContext(PoemListContext);
   const { getListSuccess, getListFail, addListSuccess } = useContext(PoemListDispatchContext);
   const { startLoading, finishLoading } = useContext(LoadingDispatchContext);
 
-  const getPoemListFromServer = useCallback(async ({ page, username, category }) => {
+  const getPoemListFromServer = useCallback(async ({ page, username, category, number = numOfList }) => {
     startLoading({ field: 'list' });
     try {
-      const response = await poemsApi.list({ page, username, category });
+      const response = await poemsApi.list({ page, username, category, number });
       getListSuccess({
         poemList: response.data,
         lastPage: parseInt(response.headers['last-page'], 10),
@@ -107,10 +118,10 @@ export const usePoemList = () => {
     finishLoading({ field: 'list' });
   }, []);
 
-  const searchPoemListFromServer = useCallback(async ({ text, page }) => {
+  const searchPoemListFromServer = useCallback(async ({ text, page, number = numOfList }) => {
     startLoading({ field: 'list' });
     try {
-      const response = await poemsApi.search({ text, page });
+      const response = await poemsApi.search({ text, page, number });
       getListSuccess({
         poemList: response.data,
         lastPage: parseInt(response.headers['last-page'], 10),
@@ -123,10 +134,10 @@ export const usePoemList = () => {
     finishLoading({ field: 'list' });
   }, []);
 
-  const addPoemListFromServer = useCallback(async ({ page, username, category }) => {
+  const addPoemListFromServer = useCallback(async ({ page, username, category, number = numOfList }) => {
     startLoading({ field: 'list' });
     try {
-      const response = await poemsApi.list({ page, username, category });
+      const response = await poemsApi.list({ page, username, category, number });
       addListSuccess({
         poemList: response.data,
         lastPage: parseInt(response.headers['last-page'], 10),
