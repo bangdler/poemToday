@@ -3,6 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { S_CyanButton } from '@/components/commonStyled/styleButtons';
 import CategoryFilter from '@/components/poemCards/CategoryFilter';
 import PoemCard from '@/components/poemCards/PoemCard';
 import { LoadingContext } from '@/context/LoadingProvider';
@@ -20,9 +21,10 @@ export default function PoemScroll() {
   const [searchParams] = useSearchParams();
   const { poemId } = useParams();
   const target = useRef();
+  const [onInfiniteScroll, setOnInfiniteScroll] = useState(false);
 
   const addPoemList = () => {
-    if (!isLastPage && !poemId && lastPage !== null) {
+    if (!isLastPage && !poemId && onInfiniteScroll) {
       initializePoemListError();
       addPoemListFromServer({ page: page + 1, category });
       setPage(prev => prev + 1);
@@ -41,9 +43,15 @@ export default function PoemScroll() {
     navigate(`/${id}`);
   }, []);
 
+  const clickInfiniteScrollBtn = useCallback(() => {
+    setOnInfiniteScroll(true);
+    setIsFetching(true);
+  }, []);
+
   const initializeScroll = () => {
     setPage(1);
     setIsLastPage(false);
+    setOnInfiniteScroll(false);
   };
 
   useEffect(() => {
@@ -68,6 +76,11 @@ export default function PoemScroll() {
           />
         ))}
       </S_CardContainer>
+      {!onInfiniteScroll && (
+        <S_CyanButton2 size={'medium'} onClick={clickInfiniteScrollBtn}>
+          계속 보기
+        </S_CyanButton2>
+      )}
       <S_ErrorWrapper visible={loading.list || error}>
         <S_Error visible={error}>{GetPoemListServerErrorMessages[error?.response.status]}</S_Error>
         <LoadingSpinner visible={loading.list} width={'100px'} color={`red`} />
@@ -94,6 +107,10 @@ const S_CardContainer = styled.div`
   justify-content: center;
 `;
 
+const S_CyanButton2 = styled(S_CyanButton)`
+  margin: 0 auto;
+`;
+
 const S_ErrorWrapper = styled.div`
   ${({ theme }) => theme.mixin.flexBox({})}
   display: ${({ visible }) => (visible ? 'flex' : 'none')};
@@ -107,5 +124,4 @@ const S_Error = styled.p`
 
 const S_Target = styled.div`
   height: 1px;
-  background: #e74c3c;
 `;
