@@ -4,8 +4,8 @@
 name: deploy-front
 
 on:
-  push:
-    branches: [fe_deploy]
+#  push:
+#    branches: [fe_deploy]
   pull_request:
     branches: [fe_deploy]
 

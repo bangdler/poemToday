@@ -3,6 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { S_CyanButton } from '@/components/commonStyled/styleButtons';
 import CategoryFilter from '@/components/poemCards/CategoryFilter';
 import PoemCard from '@/components/poemCards/PoemCard';
 import { LoadingContext } from '@/context/LoadingProvider';
@@ -12,7 +13,7 @@ import { GetPoemListServerErrorMessages } from '@/utils/constants';
 
 export default function PoemScroll() {
   const { poemList, error, lastPage } = useContext(PoemListContext);
-  const { initializePoemList, initializePoemListError } = useContext(PoemListDispatchContext);
+  const { initializePoemListError } = useContext(PoemListDispatchContext);
   const { addPoemListFromServer, getPoemListFromServer } = usePoemList();
   const loading = useContext(LoadingContext);
   const [page, setPage] = useState(1);
@@ -20,13 +21,14 @@ export default function PoemScroll() {
   const [searchParams] = useSearchParams();
   const { poemId } = useParams();
   const target = useRef();
+  const [onInfiniteScroll, setOnInfiniteScroll] = useState(false);
 
   const addPoemList = () => {
-    if (!isLastPage && !poemId && lastPage !== null) {
-      initializePoemListError();
-      addPoemListFromServer({ page: page + 1, category });
-      setPage(prev => prev + 1);
-      setIsLastPage(page + 1 >= lastPage);
+    // 에러가 발생한 경우에는 다시 같은 페이지 요청, error 초기화하여 에러 메세지 삭제
+    if (error) initializePoemListError();
+    if (!isLastPage && !poemId && onInfiniteScroll) {
+      const startPublishedDate = poemList[0].publishedDate;
+      addPoemListFromServer({ page, category, startPublishedDate });
     }
     setIsFetching(false);
   };
@@ -41,21 +43,34 @@ export default function PoemScroll() {
     navigate(`/${id}`);
   }, []);
 
+  const clickInfiniteScrollBtn = useCallback(() => {
+    setOnInfiniteScroll(true);
+    setIsFetching(true);
+  }, []);
+
   const initializeScroll = () => {
     setPage(1);
     setIsLastPage(false);
+    setOnInfiniteScroll(false);
   };
 
   useEffect(() => {
     if (poemId) return;
     getPoemListFromServer({ page: 1, category });
     initializeScroll();
-    return () => initializePoemList();
+    return () => initializePoemListError();
   }, [searchParams]);
+
+  useEffect(() => {
+    if (!error && poemList.length !== 0) {
+      setPage(prev => prev + 1);
+      setIsLastPage(page >= lastPage);
+    }
+  }, [poemList.length, error]);
 
   return (
     <S_Wrapper>
-      <CategoryFilter initializeScroll={initializeScroll} />
+      <CategoryFilter />
       <S_CardContainer>
         {poemList.map(poemCard => (
           <PoemCard
@@ -68,6 +83,11 @@ export default function PoemScroll() {
           />
         ))}
       </S_CardContainer>
+      {!onInfiniteScroll && (
+        <S_CyanButton2 size={'medium'} onClick={clickInfiniteScrollBtn}>
+          계속 보기
+        </S_CyanButton2>
+      )}
       <S_ErrorWrapper visible={loading.list || error}>
         <S_Error visible={error}>{GetPoemListServerErrorMessages[error?.response.status]}</S_Error>
         <LoadingSpinner visible={loading.list} width={'100px'} color={`red`} />
@@ -92,6 +112,10 @@ const S_CardContainer = styled.div`
   grid-auto-flow: row;
   justify-items: center;
   justify-content: center;
+`;
+
+const S_CyanButton2 = styled(S_CyanButton)`
+  margin: 0 auto;
 `;
 
 const S_ErrorWrapper = styled.div`
