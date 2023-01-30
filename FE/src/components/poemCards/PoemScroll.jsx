@@ -13,7 +13,7 @@ import { GetPoemListServerErrorMessages } from '@/utils/constants';
 
 export default function PoemScroll() {
   const { poemList, error, lastPage } = useContext(PoemListContext);
-  const { initializePoemList, initializePoemListError } = useContext(PoemListDispatchContext);
+  const { initializePoemListError } = useContext(PoemListDispatchContext);
   const { addPoemListFromServer, getPoemListFromServer } = usePoemList();
   const loading = useContext(LoadingContext);
   const [page, setPage] = useState(1);
@@ -24,11 +24,11 @@ export default function PoemScroll() {
   const [onInfiniteScroll, setOnInfiniteScroll] = useState(false);
 
   const addPoemList = () => {
+    // 에러가 발생한 경우에는 다시 같은 페이지 요청, error 초기화하여 에러 메세지 삭제
+    if (error) initializePoemListError();
     if (!isLastPage && !poemId && onInfiniteScroll) {
-      initializePoemListError();
-      addPoemListFromServer({ page: page + 1, category });
-      setPage(prev => prev + 1);
-      setIsLastPage(page + 1 >= lastPage);
+      const startPublishedDate = poemList[0].publishedDate;
+      addPoemListFromServer({ page, category, startPublishedDate });
     }
     setIsFetching(false);
   };
@@ -58,7 +58,15 @@ export default function PoemScroll() {
     if (poemId) return;
     getPoemListFromServer({ page: 1, category });
     initializeScroll();
+    return () => initializePoemListError();
   }, [searchParams]);
+
+  useEffect(() => {
+    if (!error && poemList.length !== 0) {
+      setPage(prev => prev + 1);
+      setIsLastPage(page >= lastPage);
+    }
+  }, [poemList.length, error]);
 
   return (
     <S_Wrapper>

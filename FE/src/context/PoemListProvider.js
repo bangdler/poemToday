@@ -183,21 +183,24 @@ export const usePoemList = () => {
     finishLoading({ field: 'list' });
   }, []);
 
-  const addPoemListFromServer = useCallback(async ({ page, username, category, number = numOfList }) => {
-    startLoading({ field: 'list' });
-    try {
-      const response = await poemsApi.list({ page, username, category, number });
-      addListSuccess({
-        poemList: response.data,
-        lastPage: parseInt(response.headers['last-page'], 10),
-        total: parseInt(response.headers['result-total'], 10),
-      });
-    } catch (e) {
-      console.log(e);
-      getListFail({ error: e });
-    }
-    finishLoading({ field: 'list' });
-  }, []);
+  const addPoemListFromServer = useCallback(
+    async ({ page, username, category, number = numOfList, startPublishedDate }) => {
+      startLoading({ field: 'list' });
+      try {
+        const response = await poemsApi.list({ page, username, category, number, startPublishedDate });
+        addListSuccess({
+          poemList: response.data,
+          lastPage: parseInt(response.headers['last-page'], 10),
+          total: parseInt(response.headers['result-total'], 10),
+        });
+      } catch (e) {
+        console.log(e);
+        getListFail({ error: e });
+      }
+      finishLoading({ field: 'list' });
+    },
+    []
+  );
 
   return { getPoemListFromServer, searchPoemListFromServer, addPoemListFromServer };
 };

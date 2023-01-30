@@ -7,7 +7,7 @@ import { S_Category } from '@/components/commonStyled/styleDivs';
 import { CategoryColors, GetPoemByIdServerErrorMessages } from '@/utils/constants';
 
 export default function PoemDetailContents({ getPoemResponse, getPoemError, loading }) {
-  const getPublishedDate = responseDate => {
+  const transformDate = responseDate => {
     const koreaDate = new Date(responseDate).toLocaleString();
     return koreaDate.substring(0, koreaDate.length - 3);
   };
@@ -21,7 +21,8 @@ export default function PoemDetailContents({ getPoemResponse, getPoemError, load
           <S_Wrapper>
             <S_Author>저자: {getPoemResponse.author}</S_Author>
             <S_Writer>작성자: {getPoemResponse.user.username}</S_Writer>
-            <S_Date>작성일시: {getPublishedDate(getPoemResponse.publishedDate)}</S_Date>
+            <S_Date>작성일시: {transformDate(getPoemResponse.publishedDate)}</S_Date>
+            {getPoemResponse.updateDate && <S_Date>수정일시: {transformDate(getPoemResponse.updateDate)}</S_Date>}
             {!!getPoemResponse.category.length && (
               <S_CategoryContainer>
                 {getPoemResponse.category.map((it, idx) => (

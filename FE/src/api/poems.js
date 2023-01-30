@@ -1,7 +1,7 @@
 import client from '@/api/client';
 
-export const list = ({ page, username, category, number }) =>
-  client.get(`/api/poems`, { params: { page, username, category, number } });
+export const list = ({ page, username, category, number, startPublishedDate }) =>
+  client.get(`/api/poems`, { params: { page, username, category, number, startPublishedDate } });
 
 export const write = ({ title, author, body, category }) =>
   client.post('/api/poems', { title, author, body, category });
