@@ -70,7 +70,7 @@ export const write = async ctx => {
 
 // get - poem 목록 조회
 export const list = async ctx => {
-  const { username, category, page, number } = ctx.query;
+  const { username, category, page, number, startPublishedDate } = ctx.query;
 
   const curPage = parseInt(page || '1', 10);
   const curNumber = parseInt(number || '8', 10);
@@ -83,6 +83,7 @@ export const list = async ctx => {
   const query = {
     ...(username ? { 'user.username': username } : {}),
     ...(category ? { category: { $in: category } } : {}),
+    ...(startPublishedDate ? { publishedDate: { $lte: startPublishedDate } } : {}),
   };
 
   try {
@@ -151,7 +152,7 @@ export const update = async ctx => {
       id,
       {
         ...ctx.request.body,
-        publishedDate: Date.now(),
+        updateDate: Date.now(),
       },
       { new: true }
     ).exec();

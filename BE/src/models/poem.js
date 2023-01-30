@@ -11,6 +11,10 @@ const PoemSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  updateDate: {
+    type: Date,
+    default: null,
+  },
   user: {
     _id: mongoose.Types.ObjectId,
     username: String,
