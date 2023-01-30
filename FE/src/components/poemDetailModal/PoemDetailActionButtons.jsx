@@ -6,6 +6,7 @@ import ConfirmModal from '@/components/common/ConfirmModal';
 import ErrorBox from '@/components/common/ErrorBox';
 import { S_Button, S_CyanButton, S_RedButton } from '@/components/commonStyled/styleButtons';
 import { LoadingContext } from '@/context/LoadingProvider';
+import { PoemListDispatchContext } from '@/context/PoemListProvider';
 import { PoemDispatchContext, usePoem } from '@/context/PoemProvider';
 import { DeletePoemByIdServerErrorMessages } from '@/utils/constants';
 
@@ -20,6 +21,7 @@ export default function PoemDetailActionButtons({
 }) {
   const { setPoemData } = useContext(PoemDispatchContext);
   const { removePoemByIdFromServer } = usePoem();
+  const { removePoemFromList } = useContext(PoemListDispatchContext);
   const loading = useContext(LoadingContext);
   const navigate = useNavigate();
   const [error, setError] = useState({ state: false, message: '' });
@@ -53,6 +55,7 @@ export default function PoemDetailActionButtons({
 
   useEffect(() => {
     if (removePoemResponse === null) return;
+    removePoemFromList({ id: poemId });
     navigate(-1);
   }, [removePoemResponse]);
 

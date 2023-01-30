@@ -7,12 +7,14 @@ import ErrorBox from '@/components/common/ErrorBox';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { S_CyanButton } from '@/components/commonStyled/styleButtons';
 import { LoadingContext } from '@/context/LoadingProvider';
+import { PoemListDispatchContext } from '@/context/PoemListProvider';
 import { PoemDispatchContext, usePoem } from '@/context/PoemProvider';
 import { UpdatePoemByIdServerErrorMessages } from '@/utils/constants';
 
 export default function EditActionButtons({ field, poemForm, id }) {
   const { updatePoemByIdToServer } = usePoem();
   const { initializePoem, initializeError } = useContext(PoemDispatchContext);
+  const { updatePoemFromList } = useContext(PoemListDispatchContext);
   const loading = useContext(LoadingContext);
   const navigate = useNavigate();
   const [error, setError] = useState({ state: false, message: '' });
@@ -49,16 +51,13 @@ export default function EditActionButtons({ field, poemForm, id }) {
 
   useEffect(() => {
     if (poemForm.response === null) return;
-    console.log('전송완료');
-    console.log(poemForm.response);
-    navigate('/');
+    updatePoemFromList({ id, poem: poemForm.response });
+    navigate(-1);
     return () => initializePoem({ field });
   }, [poemForm.response]);
 
   useEffect(() => {
     if (poemForm.error === null) return;
-    console.log('전송실패');
-    console.log(poemForm.error);
     const errorStatus = poemForm.error.response.status;
     if (errorStatus === '401') {
       setLoginAlertModal(true);

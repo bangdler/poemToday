@@ -48,8 +48,6 @@ export default function WriteActionButtons({ field, poemForm }) {
 
   useEffect(() => {
     if (poemForm.response === null) return;
-    console.log('전송완료');
-    console.log(poemForm.response);
     navigate(-1);
 
     return () => initializePoem({ field });
@@ -57,8 +55,6 @@ export default function WriteActionButtons({ field, poemForm }) {
 
   useEffect(() => {
     if (poemForm.error === null) return;
-    console.log('전송실패');
-    console.log(poemForm.error);
     const errorStatus = poemForm.error.response.status;
     if (errorStatus === '401') {
       setLoginAlertModal(true);

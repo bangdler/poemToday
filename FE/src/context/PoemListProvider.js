@@ -40,6 +40,24 @@ const poemListReducer = (state, action) => {
         lastPage: action.lastPage,
         total: action.total,
       };
+    case 'REMOVE_POEM':
+      return {
+        ...state,
+        poemList: state.poemList.filter(poem => poem._id !== action.id),
+        lastPage: Math.ceil((state.total - 1) / state.numOfList),
+        total: state.total - 1,
+      };
+    case 'UPDATE_POEM':
+      return {
+        ...state,
+        poemList: state.poemList.map(poem => {
+          if (poem._id === action.id) {
+            return action.poem;
+          } else {
+            return poem;
+          }
+        }),
+      };
     default:
       return state;
   }
@@ -85,9 +103,40 @@ export default function PoemListProvider({ children }) {
     });
   }, []);
 
+  const removePoemFromList = useCallback(({ id }) => {
+    poemListDataDispatch({
+      type: 'REMOVE_POEM',
+      id,
+    });
+  }, []);
+
+  const updatePoemFromList = useCallback(({ id, poem }) => {
+    poemListDataDispatch({
+      type: 'UPDATE_POEM',
+      id,
+      poem,
+    });
+  }, []);
+
   const memoizedPoemListDispatches = useMemo(
-    () => ({ initializePoemList, getListSuccess, getListFail, initializePoemListError, addListSuccess }),
-    [initializePoemList, getListSuccess, getListFail, initializePoemListError, addListSuccess]
+    () => ({
+      initializePoemList,
+      getListSuccess,
+      getListFail,
+      initializePoemListError,
+      addListSuccess,
+      removePoemFromList,
+      updatePoemFromList,
+    }),
+    [
+      initializePoemList,
+      getListSuccess,
+      getListFail,
+      initializePoemListError,
+      addListSuccess,
+      removePoemFromList,
+      updatePoemFromList,
+    ]
   );
 
   return (

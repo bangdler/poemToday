@@ -58,7 +58,6 @@ export default function PoemScroll() {
     if (poemId) return;
     getPoemListFromServer({ page: 1, category });
     initializeScroll();
-    return () => initializePoemList();
   }, [searchParams]);
 
   return (
