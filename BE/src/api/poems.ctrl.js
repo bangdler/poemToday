@@ -2,7 +2,6 @@ import Joi from 'joi';
 import mongoose from 'mongoose';
 
 import Poem from '../models/poem.js';
-import { NUMBER_OF_LIST } from '../utils/constants.js';
 
 const { ObjectId } = mongoose.Types;
 
@@ -71,9 +70,10 @@ export const write = async ctx => {
 
 // get - poem 목록 조회
 export const list = async ctx => {
-  const { username, category, page } = ctx.query;
+  const { username, category, page, number, startPublishedDate } = ctx.query;
 
   const curPage = parseInt(page || '1', 10);
+  const curNumber = parseInt(number || '8', 10);
 
   if (curPage < 1) {
     ctx.status = 400;
@@ -83,18 +83,19 @@ export const list = async ctx => {
   const query = {
     ...(username ? { 'user.username': username } : {}),
     ...(category ? { category: { $in: category } } : {}),
+    ...(startPublishedDate ? { publishedDate: { $lte: startPublishedDate } } : {}),
   };
 
   try {
     const poems = await Poem.find(query)
       .sort({ publishedDate: -1, _id: -1 })
-      .limit(NUMBER_OF_LIST)
-      .skip((curPage - 1) * NUMBER_OF_LIST)
+      .limit(curNumber)
+      .skip((curPage - 1) * curNumber)
       .exec();
     // 마지막 페이지 알려주기
     const poemCount = await Poem.countDocuments(query).exec();
     ctx.set('Result-Total', Math.ceil(poemCount));
-    ctx.set('Last-Page', Math.ceil(poemCount / NUMBER_OF_LIST));
+    ctx.set('Last-Page', Math.ceil(poemCount / curNumber));
     // body 200자 이상 제한하기
     // 인스턴스 형태에서 json 으로 변환하여 사용해야함. 이 방법 또는 .skip() 뒤에 .lean() 추가하여 사용
     ctx.body = poems;
@@ -151,7 +152,7 @@ export const update = async ctx => {
       id,
       {
         ...ctx.request.body,
-        publishedDate: Date.now(),
+        updateDate: Date.now(),
       },
       { new: true }
     ).exec();
@@ -166,9 +167,10 @@ export const update = async ctx => {
 };
 
 export const search = async ctx => {
-  const { text, page } = ctx.query;
+  const { text, page, number } = ctx.query;
 
   const curPage = parseInt(page || '1', 10);
+  const curNumber = parseInt(number || '8', 10);
 
   if (curPage < 1) {
     ctx.status = 400;
@@ -182,13 +184,13 @@ export const search = async ctx => {
   try {
     const poems = await Poem.find(query)
       .sort({ publishedDate: -1, _id: -1 })
-      .limit(NUMBER_OF_LIST)
-      .skip((curPage - 1) * NUMBER_OF_LIST)
+      .limit(curNumber)
+      .skip((curPage - 1) * curNumber)
       .exec();
     // 마지막 페이지 알려주기
     const poemCount = await Poem.countDocuments(query).exec();
     ctx.set('Result-Total', Math.ceil(poemCount));
-    ctx.set('Last-Page', Math.ceil(poemCount / NUMBER_OF_LIST));
+    ctx.set('Last-Page', Math.ceil(poemCount / curNumber));
     ctx.body = poems;
   } catch (e) {
     ctx.throw(500, e);

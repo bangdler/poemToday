@@ -4,8 +4,8 @@
 name: deploy
 
 on:
-  push:
-    branches: [be_deploy]
+#  push:
+#    branches: [be_deploy]
   pull_request:
     branches: [be_deploy]
 
